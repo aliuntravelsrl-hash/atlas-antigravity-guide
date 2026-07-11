@@ -78,24 +78,42 @@ Archivos relevantes por stack: `SOUL.md`, `REHIDRATACION.md`, `ALCANCE.md`
 - Cierre arquitectónico formal de la superficie interna en la web pública (`aliuntravelsrl.com`). Desactivación de `AdminLink.jsx` y desconexión de 29 rutas administrativas de `src/App.jsx` (migradas al subdominio/red dedicada).
 - Consolidación de Chatwoot como chat oficial y remoción del widget de Kommo CRM del frontend público.
 
-**Infraestructura y Stacks VPS2**
-- Ejecución avanzada de la rehidratación de `SOUL.md`, `REHIDRATACION.md` y `ALCANCE.md` en los 5 stacks de agentes Hermes (`hermes-ops`, `hermes-commercial`, `hermes-marketing`, `ariadne-data`, `hermes-qa`) bajo Swarm.
-- Aplicación de Docker update restart policy (`--restart=no`) en stack local Supabase y contenedores legacy en VPS1.
-- Flujo transaccional de excursiones verificado.
+**Infraestructura y Stacks VPS2 (Rehidratación Swarm)**
+- Implementación del script maestro `rehidratacion-auto.sh` en `/opt/data/scripts/` de VPS 2 y configuración de wrappers `rehidratar.sh` en los 4 agentes (`hermes-commercial`, `hermes-marketing`, `ariadne-data`, `hermes-qa`).
+- Sincronización y delimitación de tareas en archivos `ALCANCE.md` para cada stack y configuración de 5 cron jobs nativos que garantizan la ejecución de la rehidratación cada 30 minutos.
+- Integración automática del estado online en la tabla `personal_ia` de Supabase Cloud.
+
+**Optimización y Telemetría VPS 1**
+- Configuración de la restart policy `--restart=no` en el stack local de Supabase y los 4 contenedores legacy de Chatwoot detenidos.
+- Despliegue de script de recolección de métricas (disco, RAM, load) apuntando a la tabla `vps_metrics`.
+- Modificación del hook `useMarketingKPIs.js` para extraer telemetría conversacional de Chatwoot en tiempo real y renderizado mediante `ChatwootTelemetry.jsx` (Recharts) en la vista de WhatsApp de `App.jsx` y `Sidebar.jsx`.
+
+**Widget de Chat y Registro de Pasarelas**
+- Remoción del widget heredado de Kommo CRM (eliminando el componente `KommoWidget.jsx` y depurando `App.jsx`).
+- Registro automático del webhook oficial en Chatwoot (ID: 2) para el bot Hermes.
+- Cache-Control de Chatwoot configurado con un max-age de 365 días en la cabecera.
+
+**Mesa de Control y Reservas de Excursiones**
+- Creación de `AdminExcursionBookingsPanel.jsx` para el monitoreo de reservas.
+- Registro de ruta en `AppShell.jsx` y vinculación en el menú lateral de `HorizonsLayout.jsx`.
+- Despliegue del compilado `atlas_admin_compilado.zip` en Hostinger y reinicio de la app Passenger.
 
 **Rescate Visual y Enriquecimiento de Hoteles (Health Score 7/7 — 🟢 READY TO SELL)**
 Se completó la depuración de placeholders genéricos, inyección de fotos reales (CDN de Booking/Expedia/Scene7) y normalización de datos (habitaciones, temporadas, tarifas 2026, políticas y restaurantes) en Supabase para los siguientes complejos:
-1.  **Lopesan Caoba Lagoon Resort, Spa & Casino** (`20f915c7-8e2e-41ab-9ace-fec759b64f51`) — 10 fotos reales, 6 servicios, 5 restaurantes, habitaciones en bucket y Temporada 2026 activa.
-2.  **Be Live Collection Marien** (`332657c0-a75b-4580-8a77-55f058ff01ec`) — 8 fotos oficiales, 16 categorías de habitaciones mapeadas con interiores del estándar real, 11 restaurantes/bares oficiales con URLs propias del dominio del hotel.
-3.  **Sunscape Coco Punta Cana** (`8bbc304d-fb21-4ee2-a78c-bceb90583c4f`) — 12 fotos reales, 9 categorías de habitaciones con precios y fotos del dominio oficial, tarifario 2026 y 13 restaurantes/bares.
+1.  **Lopesan Caoba Lagoon Resort, Spa & Casino** (`20f915c7-8e2e-41ab-9ace-fec759b64f51`) — 10 fotos reales (laguna, spa, teatro), 6 servicios (Cenote Lagoon, Panchito Club), 5 restaurantes (Inari, La Bohème), habitaciones y Temporada 2026 activa.
+2.  **Be Live Collection Marien** (`332657c0-a75b-4580-8a77-55f058ff01ec`) — 8 fotos oficiales, 16 categorías de habitaciones con interiores del estándar real (Majestic/Catalonia/Meliá), 11 restaurantes/bares oficiales con fotos reales del dominio (Mylos, Oralé, Rodizio) libres de TripAdvisor.
+3.  **Sunscape Coco Punta Cana** (`8bbc304d-fb21-4ee2-a78c-bceb90583c4f`) — 12 fotos reales, 9 categorías de habitaciones con precios y fotos del dominio oficial, tarifario 2026 y 13 restaurantes/bares oficiales.
 4.  **Sunscape Dominicus La Romana** (`2080f7c9-2ffb-4ff0-9781-d8341b866765`) — 15 fotos de alta resolución, 6 categorías de habitaciones reales con tarifas activas, 15 restaurantes/bares y políticas 2026.
-5.  **Bahia Principe Explorer Legend** / *Fantasia Punta Cana* (`2490ce7a-02fe-495c-a9cb-3f0565a4bd2a`) — 21 fotos únicas (sin duplicados CDN), 3 categorías con fotos de interior reales de la web oficial, 5 restaurantes y metadatos de alias de mapeo API correctos.
-6.  **Bahia Principe Luxury Esmeralda** (`db00338f-9404-4cbf-a2fb-98479ab47bed`) — 20 fotos reales, 2 categorías de habitaciones (incluyendo Swim Up), 9 restaurantes configurados y tarifas 2026.
+5.  **Bahia Principe Explorer Legend** / *Fantasia Punta Cana* (`2490ce7a-02fe-495c-a9cb-3f0565a4bd2a`) — 21 fotos únicas (sin duplicados CDN), 3 categorías con fotos de interior reales de la web oficial, 5 restaurantes reales (Garden Circus, Il Paradiso) y metadatos de alias de mapeo API correctos.
+6.  **Bahia Principe Luxury Esmeralda** (`db00338f-9404-4cbf-a2fb-98479ab47bed`) — 20 fotos reales, 2 categorías de habitaciones (incluyendo Swim Up), 9 restaurantes reales (Naan, Taíno, Yurta) y tarifas 2026.
 7.  **Bahia Principe Grand Aquamarine** (`d54473c3-9964-458c-a26c-72a0c1407e10`) — Creado desde cero. 19 fotos únicas, 2 habitaciones oficiales, 5 restaurantes y tarifas 2026.
-8.  **Bahia Principe Luxury Ambar** (`c84e6f0d-90e2-4eec-a19a-3bbb9c0ea9e0`) — 20 fotos de alta resolución, 2 habitaciones con fotos del interior, 6 restaurantes con descripciones e imágenes reales y tarifas 2026.
+8.  **Bahia Principe Luxury Ambar** (`c84e6f0d-90e2-4eec-a19a-3bbb9c0ea9e0`) — 20 fotos de alta resolución, 2 habitaciones con fotos del interior, 6 restaurantes reales con descripciones e imágenes reales y tarifas 2026.
 9.  **Bahia Principe Grand Punta Cana** (`2db11109-511d-47c2-9ed3-1c31f6392b70`) — 20 fotos desduplicadas (sin hashes del CDN), 2 categorías con fotos interiores reales, 5 restaurantes reales de la propiedad.
 10. **Bahia Principe Grand La Romana** (`d0383dcd-47c9-48d8-bed8-c8012c3f9a1a`) — 20 fotos desduplicadas de la hermosa bahía y el resort, 2 categorías reales, 3 restaurantes y tarifas 2026.
 11. **Barceló Bávaro Palace** (`2d49fd1f-0de0-4c61-bdd9-f7bdb5542ab5`) — 20 fotos desduplicadas y de alta resolución (Scene7/Expedia), depuración de 17 categorías corruptas antiguas y consolidación de las 8 categorías de habitaciones oficiales con tarifas.
+12. **Occidental Caribe** (`20f915c7-8e2e-41ab-9ace-fec759b64f51`) — Identificación de campos extendidos del frontend (cuisine, schedule, location, dress_code). Inyección de fotos gastronómicas oficiales (`OCARI_GAST_`) en Supabase y verificación de 7 restaurantes.
+13. **Occidental Punta Cana** — Inyección de 8 habitaciones (10 assets) y 13 restaurantes/bares/snacks (16 assets) con el prefijo `OPCANA_`. Saneamiento y reconstrucción de la galería general en Supabase (libre de Booking y CORS).
+14. **Barceló Bávaro Beach (Adults Only)** — Mapeo de 12 habitaciones y 5 restaurantes/bares utilizando Scene7 oficial Barceló con el prefijo `BBAVB_`. Galería saneada y reconstruida libre de CORS y crash de video.
 
 ---
 
