@@ -118,7 +118,8 @@ Se completó la depuración de placeholders genéricos, inyección de fotos real
 16. **Emotions by Hodelpa Juan Dolio** (`6a8ca8ea-7193-4adf-81ec-a1a423d961fb`) — 10 restaurantes/bares oficiales refinados desde `/restaurantes.html` (Ergo's, Amici, Orégano, Lolita, Bambú, Bígaro, etc.) y 19 habitaciones saneadas con fotos oficiales reales de `media.booking-channel.com` (CDN Hodelpa).
 17. **Hodelpa Garden Suites** (`92c1d70a-1333-4810-af87-9541de83480a`) — 5 suites oficiales reales (Honeymoon Suite, Royal Suite, Deluxe Garden View, Deluxe Pool View y Suite Estándar Garden) y 2 restaurantes (Fairway Grill y La Reserva Bar) con imágenes oficiales del CDN Hodelpa (`media.booking-channel.com`).
 18. **Santo Domingo Bay** (`33e19288-e397-4581-a7fe-3f251c6610ca`) — 6 restaurantes de firma (La Famiglia, Kibō, Mr. Rogers Cocktail Lounge, etc.) y 4 habitaciones oficiales reales actualizadas (eliminando 3 duplicadas obsoletas) con fotos oficiales de la web (`santodomingobay.com/assets/`).
-19. **HM Whala! Boca Chica** (`b54c6215-8fbd-44f5-af21-32c77b633225`) — Rescate integral desde cero. Creación e inyección de sus 5 habitaciones oficiales reales y 3 restaurantes/bares (incluyendo el icónico Restaurante Alma de Boca Chica sobre el mar) con imágenes oficiales del CDN de Mirai y Elementor.
+19. **HM Whala! Boca Chica** (`b54c6215-8fbd-44f5-af21-32c77b633225`) — Rescate integral desde cero. Creación e inyección de sus 5 habitaciones oficiales reales y 3 restaurantes/bares (incluyendo el icónico Restaurante Alma de Boca Chica sobre el mar) con imágenes oficiales del CDN de Mirai y Elementor. Se completó el Health Score 7/7 inyectando geolocalización, contacto, políticas de cancelación/niños, galería de 9 imágenes del hotel y Hero Video (`whala_bocachica.mp4`).
+
 
 ---
 
