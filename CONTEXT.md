@@ -62,46 +62,42 @@ Archivos relevantes por stack: `SOUL.md`, `REHIDRATACION.md`, `ALCANCE.md`
 
 ---
 
-## 📈 5. Estado de avance — 29 JUN 2026
+## 📈 5. Estado de avance — 11 JUL 2026
 
 ### ✅ Completado esta sesión
 
-**Integración Chatwoot & Hermes**
-- Widget Chatwoot implementado en `atlas-booking-frontend-v2/index.html` (commit `3192a3f`)
-- Widget Kommo eliminado de `public/index.html`, build compilado y desplegado a Hostinger (commit `05f5e93`)
+**Estabilización y Seguridad del Frontend (F5-SEC)**
+- Actualización de seguridad del core a **Vite 6** (`vite@6.4.3`) y **React Router DOM v6** (`react-router-dom@6.30.4`) para mitigar vulnerabilidades CVE-2026-53571 y CVE-2026-40181.
+- Eliminación de `public/index.html` que generaba conflictos 404 al sobreescribir el build de Vite 6.
+- Estandarización de nombres de archivos e importaciones inconsistentes con case-sensitivity (ej. unificación a `errorHandler.js` y `pdfGenerator.js`).
+- Creación de componentes SEO, validadores y utilidades faltantes que rompían la build (ej. `SchemaMarkup.jsx`, `RichResultsValidator.jsx`, `PerformanceMonitor.jsx`, `TravelAgencySchema.jsx`).
+- Limpieza y eliminación de stubs y rutas obsoletas de cruceros (`CrucerosPage` y `CrucerosSearchPage`).
+- Estabilización del workflow de GitHub Actions para despliegue automático a Hostinger (`aliuntravelsrl.com`).
 
-**Registro manual y métodos de pago**
-- `BookingOpsPanel.jsx` sincronizado y desplegado en `atlas.aliuntravelsrl.com`
-- Lógica de divisas dinámica: `DO` → DOP locales, internacionales → USD vía `useExchangeRate.js`
+**Gobernanza y Separación de Interfaces**
+- Cierre arquitectónico formal de la superficie interna en la web pública (`aliuntravelsrl.com`). Desactivación de `AdminLink.jsx` y desconexión de 29 rutas administrativas de `src/App.jsx` (migradas al subdominio/red dedicada).
+- Consolidación de Chatwoot como chat oficial y remoción del widget de Kommo CRM del frontend público.
 
-**Mesa de Control de Excursiones**
-- `AdminExcursionBookingsPanel.jsx` creado con monitoreo en tiempo real
-- Ruta `/admin/excursion-bookings` registrada en `AppShell.jsx`
-- Sidebar actualizado: "Reservas Excursiones 🌊" y "Reservas Hoteles 🏨"
-- Desplegado en Hostinger (commit `6f976f7`)
+**Infraestructura y Stacks VPS2**
+- Ejecución avanzada de la rehidratación de `SOUL.md`, `REHIDRATACION.md` y `ALCANCE.md` en los 5 stacks de agentes Hermes (`hermes-ops`, `hermes-commercial`, `hermes-marketing`, `ariadne-data`, `hermes-qa`) bajo Swarm.
+- Aplicación de Docker update restart policy (`--restart=no`) en stack local Supabase y contenedores legacy en VPS1.
+- Flujo transaccional de excursiones verificado.
 
 ---
 
 ## 📋 6. Pendientes críticos — próxima sesión
 
-### P1 — Pruebas E2E Excursiones
-Validar flujo completo: picker de reserva → Mesa de Control → emisión de voucher PDF vía webhook `WF_EXCURSION_DOC`.
+### P1 — Resolución de Conflicto en `atlas_payments`
+Corregir discrepancias entre la estructura plana obsoleta (v1.0 con depósitos 30/70 hardcoded) y la estructura normalizada relacional de producción (con vinculación FK a `bookings.id` y flexibilidad de montos/monedas).
 
-### P2 — Actualizar SOUL.md en los 5 stacks VPS2
-- **Fuente:** `aliun-rrhh-v2/SOUL_HERMES_OPS_v2.md`
-- **Destino:** `/opt/data/atlas-hermes-v2/stacks/{slug}/SOUL.md`
-- **Slugs:** `hermes-ops`, `hermes-commercial`, `hermes-marketing`, `ariadne-data`, `hermes-qa`
+### P2 — Fase Inicial de Adaptadores B2B (Ratehawk Sandbox)
+Comenzar la Fase 0/1 del roadmap de B2B: validación de credenciales sandbox de Ratehawk, creación del adaptador de búsqueda en n8n y normalización al esquema común ATLAS.
 
-### P3 — Crear REHIDRATACION.md + ALCANCE.md en 4 stacks
-Usar estructura de `hermes-ops` como base. Aplica a: `hermes-commercial`, `hermes-marketing`, `ariadne-data`, `hermes-qa`.
+### P3 — Auditoría de Webhooks e Integraciones Post-Cierre Admin
+Inspeccionar webhooks de Kommo y flujos de n8n para asegurar que no intenten invocar endpoints de administración deshabilitados de la web principal y que se redirijan al flujo relacional correspondiente.
 
-### P4 — Docker restart policy VPS1
-Ejecutar `docker update --restart=no` en:
-- Stack local Supabase (`n8n_supabase-*`)
-- 4 contenedores Chatwoot legacy detenidos
-
-### P5 — Rescate visual de hoteles
-Continuar depuración de hoteles con imágenes rotas en Supabase → migrar galerías al bucket `hotel-media` → actualizar `gallery_urls`.
+### P4 — Continuación de Rescate Visual de Hoteles (Supabase)
+Mantener la migración de fotos de hoteles maestros con imágenes rotas hacia el bucket `hotel-media` y actualizar `gallery_urls` en Supabase.
 
 ---
 
