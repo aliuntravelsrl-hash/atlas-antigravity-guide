@@ -116,7 +116,8 @@ Se completó la depuración de placeholders genéricos, inyección de fotos real
 14. **Barceló Bávaro Beach (Adults Only)** — Mapeo de 12 habitaciones y 5 restaurantes/bares utilizando Scene7 oficial Barceló con el prefijo `BBAVB_`. Galería saneada y reconstruida libre de CORS y crash de video.
 15. **Coral Costa Caribe Beach Resort** (`6bccee79-9f3a-4f68-9873-a9d3f33722b8`) — 9 restaurantes/bares oficiales y 8 habitaciones saneadas con fotos reales interiores de su dominio.
 16. **Emotions by Hodelpa Juan Dolio** (`6a8ca8ea-7193-4adf-81ec-a1a423d961fb`) — 10 restaurantes/bares oficiales refinados desde `/restaurantes.html` (Ergo's, Amici, Orégano, Lolita, Bambú, Bígaro, etc.) y 19 habitaciones saneadas con fotos oficiales reales de `media.booking-channel.com` (CDN Hodelpa).
-
+17. **Hodelpa Garden Suites** (`92c1d70a-1333-4810-af87-9541de83480a`) — 5 suites oficiales reales (Honeymoon Suite, Royal Suite, Deluxe Garden View, Deluxe Pool View y Suite Estándar Garden) y 2 restaurantes (Fairway Grill y La Reserva Bar) con imágenes oficiales del CDN Hodelpa (`media.booking-channel.com`).
+18. **Santo Domingo Bay** (`33e19288-e397-4581-a7fe-3f251c6610ca`) — 6 restaurantes de firma (La Famiglia, Kibō, Mr. Rogers Cocktail Lounge, etc.) y 4 habitaciones oficiales reales actualizadas (eliminando 3 duplicadas obsoletas) con fotos oficiales de la web (`santodomingobay.com/assets/`).
 
 ---
 
