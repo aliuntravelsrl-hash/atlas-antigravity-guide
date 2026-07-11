@@ -114,6 +114,9 @@ Se completó la depuración de placeholders genéricos, inyección de fotos real
 12. **Occidental Caribe** (`20f915c7-8e2e-41ab-9ace-fec759b64f51`) — Identificación de campos extendidos del frontend (cuisine, schedule, location, dress_code). Inyección de fotos gastronómicas oficiales (`OCARI_GAST_`) en Supabase y verificación de 7 restaurantes.
 13. **Occidental Punta Cana** — Inyección de 8 habitaciones (10 assets) y 13 restaurantes/bares/snacks (16 assets) con el prefijo `OPCANA_`. Saneamiento y reconstrucción de la galería general en Supabase (libre de Booking y CORS).
 14. **Barceló Bávaro Beach (Adults Only)** — Mapeo de 12 habitaciones y 5 restaurantes/bares utilizando Scene7 oficial Barceló con el prefijo `BBAVB_`. Galería saneada y reconstruida libre de CORS y crash de video.
+15. **Coral Costa Caribe Beach Resort** (`6bccee79-9f3a-4f68-9873-a9d3f33722b8`) — 9 restaurantes/bares oficiales y 8 habitaciones saneadas con fotos reales interiores de su dominio.
+16. **Emotions by Hodelpa Juan Dolio** (`6a8ca8ea-7193-4adf-81ec-a1a423d961fb`) — 10 restaurantes/bares oficiales refinados desde `/restaurantes.html` (Ergo's, Amici, Orégano, Lolita, Bambú, Bígaro, etc.) y 19 habitaciones saneadas con fotos oficiales reales de `media.booking-channel.com` (CDN Hodelpa).
+
 
 ---
 
