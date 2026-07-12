@@ -12,6 +12,7 @@
 | [`ROADMAP_B2B_PAGOS.md`](./ROADMAP_B2B_PAGOS.md) | Integración APIs B2B (Ratehawk, TBO) y pasarelas de pago (AZUL) |
 | [`docs/ATLAS_ARQUITECTURA_COGNITIVA_CORE1_MOTOR2_v1.md`](./docs/ATLAS_ARQUITECTURA_COGNITIVA_CORE1_MOTOR2_v1.md) | Blueprint Core 1 + Motor 2: flujos, RPCs, relaciones Supabase |
 | [`docs/PLAN_EJECUCION_CORE1_ATLAS_v1.md`](./docs/PLAN_EJECUCION_CORE1_ATLAS_v1.md) | Plan de ejecución con cirugías quirúrgicas de frontend |
+| [`docs/WALKTHROUGH_RESCATE_VISUAL_FASE1.md`](./docs/WALKTHROUGH_RESCATE_VISUAL_FASE1.md) | Bitácora y walkthrough del Rescate Visual de la Fase 1 |
 
 ---
 
