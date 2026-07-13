@@ -39,6 +39,7 @@ Este documento registra las acciones realizadas durante la sesión de rehidratac
   - Se inyectó la lógica de scroll Parallax y desvanecimiento de textos con `framer-motion` para que el banner del destino seleccionado (ej: `/destinos/samana`) reaccione con profundidad al scroll del usuario.
 - **Footer Global (Redes Sociales):**
   - Se inyectó el enlace oficial a la página de Facebook de Aliun Travel (`https://www.facebook.com/aliuntravels`) en el icono de Facebook de [src/components/GlobalFooter.jsx](file:///c:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/components/GlobalFooter.jsx), configurando su apertura en pestaña nueva (`target="_blank"`).
+  - Se importó el icono de `Tiktok` de `lucide-react` y se agregó el botón con el enlace oficial de TikTok (`https://www.tiktok.com/@aliuntravelsrl`) con apertura en pestaña nueva.
 
 ---
 
