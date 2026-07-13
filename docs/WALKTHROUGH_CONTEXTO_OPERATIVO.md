@@ -30,6 +30,9 @@ Este documento registra las acciones realizadas durante la sesión de rehidratac
 - **Banner Principal del Hero (Parallax Dinámico + Imagen Familiar):**
   - Se inyectó la imagen familiar de la playa (`hero-family.jpg`) como el fondo principal del Hero.
   - Se implementó el efecto de profundidad Parallax dinámico utilizando `framer-motion` (`useScroll` y `useTransform`), desplazando el fondo al 40% de la velocidad de scroll normal y aplicando un desvanecimiento de opacidad del contenido del Hero.
+- **Hero del Catálogo de Destinos (Parallax Dinámico + Imagen Pareja):**
+  - Se inyectó la imagen de la pareja en la piscina (`destinos-hero.jpg`) como el fondo principal del banner de destinos en [src/pages/DestinationsPage.jsx](file:///c:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/DestinationsPage.jsx).
+  - Se implementó la lógica de scroll Parallax tridimensional con `framer-motion` sincronizando el desplazamiento de la imagen de fondo y la opacidad de los textos descriptivos.
 
 ---
 
