@@ -18,10 +18,15 @@ Este documento registra las acciones realizadas durante la sesión de rehidratac
 ### 3. Creación del Plan de Migración de Pagos
 - Se creó [docs/MIGRACION_PAGOS_SUPABASE.md](file:///c:/Users/Admin/Downloads/atlas-antigravity-guide/docs/MIGRACION_PAGOS_SUPABASE.md) con el script SQL de normalización de la tabla de pagos y directivas SEV0 de la clave `service_role`.
 
-### 4. Innovación Visual en el Home (Coverflow 3D)
+### 4. Innovación Visual en el Home (Coverflow 3D y Ofertas Especiales)
 - **Instalación y Configuración:** Se instaló la biblioteca Swiper en el frontend (`atlas-booking-frontend-v2`) solucionando las dependencias huérfanas de `@babel/generator`.
-- **Desarrollo en Sandbox:** Se diseñó el prototipo interactivo con efecto Coverflow en 3D para la visualización de los destinos locales, tomando como benchmark el slider de destinos populares de la OTA ShareTrip.
-- **Implementación y Despliegue:** Se reemplazó el componente estático plano original en [src/components/CategoryCards.jsx](file:///c:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/components/CategoryCards.jsx) por el nuevo slider de Swiper 3D Coverflow. Se adaptó el CSS de desvanecimiento y contraste para que los slides adyacentes de fondo claro se atenuaran, enfocando de forma dinámica el destino activo en el centro.
+- **Carrusel de Destinos Populares (Coverflow 3D):**
+  - Se diseñó un carrusel 3D Coverflow para los destinos locales en [src/components/CategoryCards.jsx](file:///c:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/components/CategoryCards.jsx).
+  - Se duplicó la lista a 14 elementos para garantizar un loop infinito perfecto, aplicando estilos CSS nativos para fijar las dimensiones a `280px` por `380px` evitando colapsos visuales.
+- **Carrusel de Ofertas Especiales (Loop Lineal Plano):**
+  - Se reemplazó el grid estático en [src/components/OffersSection.jsx](file:///c:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/components/OffersSection.jsx) por un carrusel plano de Swiper con loop continuo de derecha a izquierda (estilo *Best Hotels* de ShareTrip).
+  - Se inyectó un subtítulo y descripción corta en español.
+  - Se agregó navegación con flechas laterales flotantes y paginación de marca en tono dorado (`#D4AF37`).
 
 ---
 
