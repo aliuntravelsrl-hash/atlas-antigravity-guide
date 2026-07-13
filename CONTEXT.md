@@ -46,10 +46,12 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 ## 🌳 4. Las 8 Ramas del Árbol Maestro de Conceptos (Notion)
 
 ### RAMA 1 — Estructura Institucional
+- **Referencia Notion:** `37b293f46b2481b6be89d31a754d1f5e` (Visión Enterprise)
 - **Estado:** Parcialmente implementada.
 - **Foco:** Formalizar a **Ariadne** como fuente financiera oficial (CFO) y definir cobertura del rol legal (CLO).
 
 ### RAMA 2 — Stack Técnico (ATLAS Ecosystem)
+- **Referencia Notion:** `atlas-cableados` + `RRHH-IA v3.0`
 - **Estado:** Operativo con **Swarm v3.0 (Modelo Dispatcher)**.
 - **Flujo:** `ATLAS-TECH` orquesta → `atlas_tasks` (autorizado_por) → agentes ejecutan → `logs_operativos` → Director solo atiende escalaciones.
 - **Correcciones recientes:** Eliminación del bucle *Telegram Watchdog* en hermes-commercial y purga de 9 crons no autorizados en hermes-ops.
@@ -59,10 +61,12 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 - **Foco:** Continuar rescate visual por fases. Las integraciones de APIs B2B (TBO/Tripsnstay) están en standby hasta la obtención del RNC.
 
 ### RAMA 4 — Motor de Excursiones
+- **Referencia Notion:** `37b293f46b24804b82b5c0252406da89`
 - **Estado:** Fase 5-6 operativa. Fases 3-4 bloqueadas por RNC.
 - **Pendiente:** Implementar RPC `funnel_excursiones` en Supabase y validación E2E con la primera reserva real.
 
 ### RAMA 5 — Motor de Marketing (Motor de Atracción)
+- **Referencia Notion:** `388293f46b2481cf8849c0f2eec84f1b` (ROADMAP Motor Atracción) y `367293f46b248128921cd2497ef86398` (R.E.P.L.I.C.A.)
 - **Estado:** Fase 1 al 50%. VPS3 es el cuello de botella actual.
 - **Stack:** Publicación directa vía Meta Graph API (Blotato descartado). Generación de ofertas mediante `WF-MKT-GENERATE-OFFER-v3` + Gemini.
 - **Pendiente:** Reconectar token Meta (MKT-1) y construir `WF-CONTENT-PUBLISH-v1` (texto + imagen estática).
@@ -71,6 +75,7 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 - **Estado:** Activo con **Chatwoot** como receptor oficial.
 
 ### RAMA 7 — Finanzas & Trazabilidad Legal
+- **Referencia Notion:** `37f293f46b248113baedfe919cf20e09` (Estrategia Financiera) y `atlas-payments-v2`
 - **Estado:** **CRÍTICO / Desalineado**.
 - **Discrepancia detectada:** Registros planos en la tabla de pagos antigua (`atlas_payments_flat`) sin FK a `bookings.id`.
 - **Acciones Urgentes:**
