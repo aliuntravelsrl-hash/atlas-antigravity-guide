@@ -34,6 +34,9 @@ Este documento registra las acciones realizadas durante la sesión de rehidratac
   - Se inyectó la imagen de la pareja en la piscina (`destinos-hero.jpg`) como el fondo principal del banner de destinos en [src/pages/DestinationsPage.jsx](file:///c:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/DestinationsPage.jsx).
   - Se implementó la lógica de scroll Parallax tridimensional con `framer-motion` sincronizando el desplazamiento de la imagen de fondo y la opacidad de los textos descriptivos.
   - Se integró la barra de búsqueda `GlobalSearchBar` directamente dentro del contenido del Hero, eliminando el comportamiento *sticky* (fijado arriba) para que suba de forma fluida y natural al hacer scroll.
+- **Hero de Fichas de Destino Individuales (Parallax Dinámico + Imagen Samaná):**
+  - Se configuró la imagen local del resort de lujo de Samaná (`samana-hero.jpg`) en el mapeo de metadatos estáticos en [src/pages/DestinationPage.jsx](file:///c:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/DestinationPage.jsx).
+  - Se inyectó la lógica de scroll Parallax y desvanecimiento de textos con `framer-motion` para que el banner del destino seleccionado (ej: `/destinos/samana`) reaccione con profundidad al scroll del usuario.
 
 ---
 
