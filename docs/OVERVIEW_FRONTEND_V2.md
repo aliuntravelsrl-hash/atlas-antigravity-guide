@@ -62,8 +62,26 @@ Este documento ordena y mapea los frentes de trabajo y ramas de desarrollo del �
 
 ---
 
-## 🎯 Próximos Pasos Técnicos en el Frontend
+## 🎯 Mapa Quirúrgico de Código (GPS)
 
-1. **Estabilización de Rutas:** Asegurar que la migración del Core a **React Router DOM v6** no rompa las redirecciones de checkout.
-2. **Proxy de Imágenes:** Validar que todas las imágenes externas de hoteles carguen bajo HTTPS y utilicen proxies seguros para evitar advertencias de contenido mixto en el navegador del cliente.
-3. **Checkout de Excursión:** Diseñar el primer formulario E2E de reservas de excursiones en coordinación con el RPC de Supabase.
+Este mapa detalla la correspondencia exacta de cada frente técnico con los archivos físicos de la aplicación `atlas-booking-frontend-v2`, su estado actual y restricciones operativas.
+
+| Frente / Concepto | Ruta de Archivo Físico | Estado Actual | Reglas Específicas / Qué NO tocar |
+|---|---|---|---|
+| **Catálogo General & Búsqueda** (Rama 3) | `src/pages/HotelCatalogPage.jsx`<br>`src/pages/HotelsPage.jsx` | **✅ Operativo** | Cargar datos desde Supabase filtrando por estado activo. |
+| **Ficha de Hotel y Menús** (Rama 3) | `src/pages/HotelFullPage.jsx`<br>`src/pages/HotelPage.jsx`<br>`src/pages/HotelDetailPage.jsx` | **✅ Operativo** (Health Score 7/7 en complejos de la Fase 1) | **NO TOCAR** la lógica de filtrado de restaurantes; debe unificarse según los registros del hotel principal. |
+| **Flujo de Reserva de Hotel** (Rama 3) | `src/pages/booking/RoomSelection.jsx`<br>`src/pages/booking/GuestDetails.jsx`<br>`src/pages/booking/ReviewBooking.jsx`<br>`src/pages/booking/Confirm.jsx` | **✅ Operativo** (Flujo nativo conectado a Supabase) | **NO TOCAR** la lógica de cálculo de precios del lado del cliente en `ReviewBooking.jsx`; debe basarse en el RPC `calcular_cotizacion`. |
+| **Catálogo de Excursiones** (Rama 4) | `src/pages/ExcursionsPage.jsx`<br>`src/pages/ExcursionStandalonePage.jsx` | **✅ Operativo** (Visual y filtros de zona) | Mantener consistencia con el diseño de grid de excursiones. |
+| **Ficha y Detalle de Excursión** (Rama 4) | `src/pages/ExcursionDetailPage.jsx` | **✅ Operativo** (Visual) | **PENDIENTE:** Conectar el botón de reserva al RPC de checkout de excursiones. |
+| **Detalle de Oferta de Marketing** (Rama 5) | `src/pages/oferta/OfertaDetalle.jsx` | **✅ Operativo** (Carga datos dinámicos) | Hacer el JOIN con `hotels_master` para asegurar imágenes reales. |
+| **Flujo de Reserva por Oferta** (Rama 5) | `src/pages/oferta/OfertaBooking.jsx`<br>`src/pages/reserva/ReservaOferta.jsx`<br>`src/pages/reserva/CheckoutOferta.jsx`<br>`src/pages/reserva/OfertaConfirm.jsx` | **✅ Operativo** | **NO TOCAR** el flag `source = 'atlas_offer'` al registrar la reserva en Supabase. |
+| **Pasarela de Pagos & Checkout** (Rama 7) | `src/pages/checkout/CheckoutPage.jsx`<br>`src/pages/checkout/CheckoutRedirectHandler.jsx` | **⚠️ En espera (Bloqueado por RNC)** | **REGLA SEV0:** Prohibido utilizar la key `service_role` de Supabase. El flujo de aprobación debe completarse mediante un Webhook de n8n. |
+| **Mis Reservas (Cliente)** (Rama 7) | `src/pages/mis-reservas.jsx` | **✅ Operativo** | Consultas limitadas a través de RLS por UID autenticado del usuario. |
+
+---
+
+## ⚙️ Directivas para Modificación Quirúrgica
+
+1. **Inspección Previa:** Antes de editar cualquier archivo de la tabla anterior, validar en `src/App.jsx` cómo está declarada su ruta.
+2. **Higiene de Contenido Mixto:** Todas las URLs de imágenes inyectadas deben usar protocolo HTTPS o ser procesadas por el proxy `images.weserv.nl`.
+3. **Validación del Build:** Tras modificar cualquier archivo de React, es obligatorio correr `npm run build` localmente en la carpeta del frontend para asegurar que el bundler (Vite 6) no falle debido a importaciones rotas o problemas de sintaxis.
