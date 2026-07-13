@@ -22,7 +22,7 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 |---|---|---|
 | **Supabase** | Project ID: `oyihiyivdhfxpyiwnmqk` | SSOT absoluto (Cerebro operativo) |
 | **n8n** | `https://n8n-n8n.xaruuo.easypanel.host` | Puente de automatizaciones y ruteo |
-| **OpenClaw UI** | `https://musculo-aliun.tail02a864.ts.net/` | Interfaz (Acceso exclusivo vía Tailscale) |
+| **OpenClaw UI** | `https://musculo-aliun.tail02a864.ts.net/` | Interfaz (Acceso exclusivo vía Tailscale VPN) |
 | **VPS 1** | `72.61.12.170` | EasyPanel, n8n, Gotenberg y frontends |
 | **VPS 2** | `2.24.198.231` | Swarm v3.0 (5 agentes Hermes: ops, commercial, marketing, data, qa) |
 | **VPS 3** | *Pendiente Contratar (Boston Hostinger)* | Requerido para stack de ComfyUI + WAN 2.2 |
@@ -95,6 +95,7 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 2. **Supabase FK:** NUNCA insertar registros en la tabla de pagos que no estén asociados mediante clave foránea a un booking ID existente.
 3. **Seguridad (SEV0):** Prohibido almacenar claves `service_role` o tokens de API en repositorios de código o frontend. Deben inyectarse mediante variables de entorno en el backend/n8n.
 4. **Higiene de Swarm:** No se permiten crons en los agentes Hermes que no estén explícitamente autorizados en `aliun-rrhh-v2`.
+5. **Validación Visual en Sandbox (Crítica):** Antes de cualquier despliegue en producción, todo cambio estructural visual debe ser ejecutado y testeado en el Sandbox. El desarrollador debe mostrar la estructura HTML o previsualización del cambio al Director para evaluar la experiencia visual y recibir su aprobación explícita.
 
 ---
 

@@ -55,7 +55,7 @@ Este documento consolida el mapa de archivos físicos, repositorios, ubicaciones
 | **Esquema de Pagos** | Tabla: `public.atlas_payments` | **✅ Normalizada** (Clave FK obligatoria) | **PROHIBIDO** insertar registros planos sin FK válida a `bookings.id`. |
 | **Histórico Legacy** | Tabla: `public.atlas_payments_flat` | **❌ Deprecada** | No usar para nuevos desarrollos. Se purgará tras la migración. |
 | **Vista Contable** | Vista: `public.transactions` | **✅ Operativo** (SELECT de atlas_payments) | Usada para el cuadre contable y auditoría de pasarelas. |
-| **Escudo Financiero** | RPC: `calcular_margen` | **✅ Operativo** | Calcula markup y neto de manera centralizada. |
+| **Escudo Financiero** | RPC: `calcular_margen` | **✅ Operativo** | Calculates markup y neto de manera centralizada. |
 | **Cotizador Core** | RPC: `calcular_cotizacion` | **✅ Operativo** | Utilizado por el buscador principal del frontend. |
 | **Funnel Excursiones** | RPC: `funnel_excursiones` | **⚠️ Pendiente** | Integrará el inventario local con los estados de reserva de excursión. |
 
@@ -64,4 +64,5 @@ Este documento consolida el mapa de archivos físicos, repositorios, ubicaciones
 ## ⚙️ 5. Reglas Generales de Navegación del Desarrollador (Antigravity)
 
 1. **Consulta el GPS Primero:** Antes de realizar cualquier cambio en un componente o tabla, verifica esta guía para confirmar su ruta física y su estado de bloqueo (ej. RNC).
-2. **Registro de Cambios (Cierre Verificable):** Tras culminar una sesión, actualiza las rutas o estados modificados en este archivo y en `CONTEXT.md`, crea el commit y realiza el `git push` al repositorio `atlas-antigravity-guide`.
+2. **Validación Visual en Sandbox (Obligatoria):** Antes de desplegar cualquier cambio visual o estructural de la UI en producción, se debe desarrollar en Sandbox y mostrar el HTML de previsualización al Director para su evaluación y aprobación explícita.
+3. **Registro de Cambios (Cierre Verificable):** Tras culminar una sesión, actualiza las rutas o estados modificados en este archivo y en `CONTEXT.md`, crea el commit y realiza el `git push` al repositorio `atlas-antigravity-guide`.
