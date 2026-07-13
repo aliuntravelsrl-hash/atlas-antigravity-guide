@@ -11,12 +11,13 @@ Este documento consolida el mapa de archivos físicos, repositorios, ubicaciones
 
 | Concepto / Frente | Ruta en Código | Estado Operativo | Restricción / Qué NO tocar |
 |---|---|---|---|
-| **Buscador & Cotizador** | `src/pages/booking/RoomSelection.jsx`<br>`src/pages/DestinationDynamicPage.jsx` | **✅ Operativo** (Conectado a RPC `calcular_cotizacion`) | **NO TOCAR** la lógica de validación de fechas; debe respetar el huso horario local de RD. |
-| **Flujo de Huéspedes** | `src/pages/booking/GuestDetails.jsx`<br>`src/pages/booking/ReviewBooking.jsx` | **✅ Operativo** | **NO TOCAR** los campos del formulario (cédula/pasaporte, email, teléfono); son requeridos por políticas hoteleras. |
-| **Checkout & Pasarela** | `src/pages/checkout/CheckoutPage.jsx`<br>`src/pages/checkout/CheckoutRedirectHandler.jsx` | **⚠️ En espera (RNC)** | **REGLA SEV0:** Prohibido utilizar `service_role` key de Supabase. El cobro y verificación se delega a n8n. |
-| **Ficha del Hotel** | `src/pages/HotelFullPage.jsx`<br>`src/pages/HotelPage.jsx` | **✅ Operativo** (Fase 1 completada) | **NO TOCAR** el renderizador de galerías de fotos. Debe usar proxy HTTPS `images.weserv.nl`. |
-| **Catálogo de Excursiones** | `src/pages/ExcursionsPage.jsx`<br>`src/pages/ExcursionDetailPage.jsx` | **✅ Operativo** (Solo catálogo visual) | **PENDIENTE:** Conectar el checkout final al RPC `funnel_excursiones`. |
+| **Catálogo General & Búsqueda** | `src/pages/HotelCatalogPage.jsx`<br>`src/pages/HotelsPage.jsx` | **✅ Operativo** | Cargar datos desde Supabase filtrando por estado activo. |
+| **Carrusel de Destinos Populares** | `src/components/CategoryCards.jsx` | **✅ Operativo** (Migrado a Swiper 3D Coverflow) | **NO TOCAR** el fondo degradado claro para mantener consistencia visual con el Home y el estilo ShareTrip. |
+| **Ficha del Hotel** | `src/pages/HotelFullPage.jsx`<br>`src/pages/HotelPage.jsx`<br>`src/pages/HotelDetailPage.jsx` | **✅ Operativo** (Fase 1 completada) | **NO TOCAR** el renderizador de galerías de fotos. Debe usar proxy HTTPS `images.weserv.nl`. |
+| **Flujo de Reserva de Hotel** | `src/pages/booking/RoomSelection.jsx`<br>`src/pages/booking/GuestDetails.jsx`<br>`src/pages/booking/ReviewBooking.jsx`<br>`src/pages/booking/Confirm.jsx` | **✅ Operativo** (Flujo nativo conectado a Supabase) | **NO TOCAR** la lógica de cálculo de precios del lado del cliente en `ReviewBooking.jsx`; debe basarse en el RPC `calcular_cotizacion`. |
+| **Catálogo de Excursiones** | `src/pages/ExcursionsPage.jsx`<br>`src/pages/ExcursionStandalonePage.jsx` | **✅ Operativo** (Solo catálogo visual) | **PENDIENTE:** Conectar el checkout final al RPC `funnel_excursiones`. |
 | **Gestión de Ofertas** | `src/pages/oferta/OfertaDetalle.jsx`<br>`src/pages/reserva/ReservaOferta.jsx` | **✅ Operativo** | **NO TOCAR** el flag de origen `source = 'atlas_offer'` en el INSERT del booking. |
+| **Pasarela de Pagos & Checkout** | `src/pages/checkout/CheckoutPage.jsx`<br>`src/pages/checkout/CheckoutRedirectHandler.jsx` | **⚠️ En espera (RNC)** | **REGLA SEV0:** Prohibido utilizar `service_role` key de Supabase. El cobro y verificación se delega a n8n. |
 
 ---
 
