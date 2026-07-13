@@ -11,6 +11,7 @@ Este documento consolida el mapa de archivos físicos, repositorios, ubicaciones
 
 | Concepto / Frente | Ruta en Código | Estado Operativo | Restricción / Qué NO tocar |
 |---|---|---|---|
+| **Banner Principal (Hero)** | `src/components/Hero.jsx` | **✅ Operativo** (Parallax Dinámico + Imagen Familiar) | **NO TOCAR** la imagen local `/hero-family.jpg` ni la animación del scroll de framer-motion. |
 | **Catálogo General & Búsqueda** | `src/pages/HotelCatalogPage.jsx`<br>`src/pages/HotelsPage.jsx` | **✅ Operativo** | Cargar datos desde Supabase filtrando por estado activo. |
 | **Carrusel de Destinos Populares** | `src/components/CategoryCards.jsx` | **✅ Operativo** (Migrado a Swiper 3D Coverflow) | **NO TOCAR** el fondo degradado claro para mantener consistencia visual con el Home y el estilo ShareTrip. |
 | **Carrusel de Ofertas Especiales** | `src/components/OffersSection.jsx` | **✅ Operativo** (Migrado a Swiper lineal con loop infinito) | **NO TOCAR** la lógica de duplicación si las ofertas son < 6 para evitar fallas del loop en producción. |

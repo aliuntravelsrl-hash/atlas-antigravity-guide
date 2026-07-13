@@ -27,6 +27,9 @@ Este documento registra las acciones realizadas durante la sesión de rehidratac
   - Se reemplazó el grid estático en [src/components/OffersSection.jsx](file:///c:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/components/OffersSection.jsx) por un carrusel plano de Swiper con loop continuo de derecha a izquierda (estilo *Best Hotels* de ShareTrip).
   - Se inyectó un subtítulo y descripción corta en español.
   - Se agregó navegación con flechas laterales flotantes y paginación de marca en tono dorado (`#D4AF37`).
+- **Banner Principal del Hero (Parallax Dinámico + Imagen Familiar):**
+  - Se inyectó la imagen familiar de la playa (`hero-family.jpg`) como el fondo principal del Hero.
+  - Se implementó el efecto de profundidad Parallax dinámico utilizando `framer-motion` (`useScroll` y `useTransform`), desplazando el fondo al 40% de la velocidad de scroll normal y aplicando un desvanecimiento de opacidad del contenido del Hero.
 
 ---
 
