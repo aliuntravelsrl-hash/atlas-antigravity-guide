@@ -59,6 +59,8 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 ### RAMA 3 — Motor de Hoteles
 - **Estado:** Operativo (79 hoteles activos, 25 tarifas manuales).
 - **Foco:** Continuar rescate visual por fases. Las integraciones de APIs B2B (TBO/Tripsnstay) están en standby hasta la obtención del RNC.
+- **Doctrina de Mapeo & Inventario (Anatomía Notion):** Al conectar APIs de proveedores B2B en el futuro, es obligatorio implementar una capa de consolidación y mapeo de inventario (delegada en servicios tipo Giata o Gimmonix, o mediante tablas de equivalencias en Supabase) para evitar duplicidad de propiedades y discrepancias en nombres de habitaciones (Room Mapping).
+- **Modelo Comercial:** Operar bajo el modelo de *Tarifa Neta (Net Rate) con Markup* autogestionado por el motor mediante el RPC de cotizaciones, garantizando el control de márgenes e integridad del pricing.
 
 ### RAMA 4 — Motor de Excursiones
 - **Referencia Notion:** `37b293f46b24804b82b5c0252406da89`
@@ -78,6 +80,7 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 - **Referencia Notion:** `37f293f46b248113baedfe919cf20e09` (Estrategia Financiera) y `atlas-payments-v2`
 - **Estado:** **CRÍTICO / Desalineado**.
 - **Discrepancia detectada:** Registros planos en la tabla de pagos antigua (`atlas_payments_flat`) sin FK a `bookings.id`.
+- **Doctrina Merchant of Record (MoR) (Anatomía Notion):** Aliun Travel actúa técnicamente como MoR del ecosistema de reservas. Por lo tanto, el "Payment API Handshake" orquestado por n8n debe garantizar trazabilidad financiera fidedigna y vinculación dura a través de claves foráneas con las reservas (`bookings.id`).
 - **Acciones Urgentes:**
   1. Deprecar y eliminar `atlas_payments_flat`.
   2. Implementar nueva tabla relacional `atlas_payments` con vinculación de clave foránea obligatoria a `bookings.id` (transacciones sin FK prohibidas).
