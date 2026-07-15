@@ -81,6 +81,7 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 - **Estado:** **CRÍTICO / Desalineado**.
 - **Discrepancia detectada:** Registros planos en la tabla de pagos antigua (`atlas_payments_flat`) sin FK a `bookings.id`.
 - **Doctrina Merchant of Record (MoR) (Anatomía Notion):** Aliun Travel actúa técnicamente como MoR del ecosistema de reservas. Por lo tanto, el "Payment API Handshake" orquestado por n8n debe garantizar trazabilidad financiera fidedigna y vinculación dura a través de claves foráneas con las reservas (`bookings.id`).
+- **Segmentación de Ingresos (Arquitectura OTA Notion):** El sistema contable y la vista `public.transactions` deben clasificar claramente el flujo financiero de cada reserva en: Costo Neto (pago a proveedor), Markup (margen comercial) y Service Fee (cargo fijo de gestión/emisión) para una conciliación precisa.
 - **Acciones Urgentes:**
   1. Deprecar y eliminar `atlas_payments_flat`.
   2. Implementar nueva tabla relacional `atlas_payments` con vinculación de clave foránea obligatoria a `bookings.id` (transacciones sin FK prohibidas).
@@ -89,6 +90,8 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 
 ### RAMA 8 — Expansión Futura
 - **Foco:** Merchant of Record (MoR) completo, pasarela AZUL, e integración de catálogo dinámico B2B post-RNC.
+- **IBE de Vuelos & GDS (Arquitectura OTA Notion):** Para la futura integración de marcas blancas de vuelos a través de GDS (Sabre/Amadeus), el modelo de base de datos de reservas de Supabase debe prever campos para código PNR, segmentos de vuelo y proveedor externo.
+- **Empaquetamiento Dinámico:** Toda combinación futura de Vuelo + Hotel o Excursión + Hotel en el frontend debe cumplir con la doctrina de *Precios Combinados Ocultos* (tarifas combinadas opacas sin desglose de costo individual de cara al cliente) para respetar los acuerdos de paridad tarifaria (Rate Parity) de los proveedores.
 
 ---
 
