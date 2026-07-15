@@ -41,6 +41,8 @@ Este documento registra las acciones realizadas durante la sesión de rehidratac
   - Se inyectó el enlace oficial a la página de Facebook de Aliun Travel (`https://www.facebook.com/aliuntravels`) en el icono de Facebook de [src/components/GlobalFooter.jsx](file:///c:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/components/GlobalFooter.jsx), configurando su apertura en pestaña nueva (`target="_blank"`).
   - Se solucionó un error de importación en caliente inyectando el SVG nativo oficial de TikTok directamente en lugar de usar lucide-react, garantizando máxima compatibilidad, y se configuró el enlace de TikTok (`https://www.tiktok.com/@aliuntravelsrl`) con apertura en pestaña nueva.
   - Se importó el icono de `Youtube` de `lucide-react` y se agregó el botón con el enlace oficial del canal de YouTube de Aliun Travel (`https://www.youtube.com/@aliuntravelsrl`) con apertura en pestaña nueva.
+- **Alineación de Pagos en Panel de Administración (atlas-admin-v2):**
+  - Se corrigió el servicio `paymentService.js` en [src/services/paymentService.js](file:///c:/Users/Admin/Downloads/-atlas-admin-v2/src/services/paymentService.js) para que use la tabla real de producción `atlas_payments` en lugar del endpoint no existente `payments`, adaptando todas las columnas y restricciones de tipo de pago y estado para reconectar y hacer funcionar los botones de pago del back-office.
 
 ---
 
