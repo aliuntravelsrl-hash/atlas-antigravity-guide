@@ -43,6 +43,12 @@ Este documento registra las acciones realizadas durante la sesión de rehidratac
   - Se importó el icono de `Youtube` de `lucide-react` y se agregó el botón con el enlace oficial del canal de YouTube de Aliun Travel (`https://www.youtube.com/@aliuntravelsrl`) con apertura en pestaña nueva.
 - **Alineación de Pagos en Panel de Administración (atlas-admin-v2):**
   - Se corrigió el servicio `paymentService.js` en [src/services/paymentService.js](file:///c:/Users/Admin/Downloads/-atlas-admin-v2/src/services/paymentService.js) para que use la tabla real de producción `atlas_payments` en lugar del endpoint no existente `payments`, adaptando todas las columnas y restricciones de tipo de pago y estado para reconectar y hacer funcionar los botones de pago del back-office.
+- **Corrección de Ruteo SPA y Enlaces de CRM:**
+  - Se modificó el archivo [server.js](file:///c:/Users/Admin/Downloads/-atlas-admin-v2/server.js) para cambiar el comodín de ruteo de Express de `*all` a `*`, resolviendo de inmediato el 404 del servidor Hostinger al acceder a rutas SPA profundas.
+  - Se reemplazó `window.location.href` por `useNavigate` en [AdminBookingsPanel.jsx](file:///c:/Users/Admin/Downloads/-atlas-admin-v2/src/components/admin/AdminBookingsPanel.jsx) para evitar recargas bruscas al gestionar pagos.
+  - Se redirigieron los enlaces del CRM a `/crm/pipeline` y se añadió un `useEffect` en [PipelineKanban.jsx](file:///c:/Users/Admin/Downloads/-atlas-admin-v2/src/components/marketing/PipelineKanban.jsx) para auto-filtrar leads por el query string `search`.
+- **Solución de Cables Sueltos en Webhooks (Slug de Hotel):**
+  - Se corrigieron las consultas select de Supabase en [AdminBookingsPanel.jsx](file:///c:/Users/Admin/Downloads/-atlas-admin-v2/src/components/admin/AdminBookingsPanel.jsx) y [PaymentGatewayPage.jsx](file:///c:/Users/Admin/Downloads/-atlas-admin-v2/src/components/admin/PaymentGatewayPage.jsx) para que incluyan la columna `slug` de `hotels_master` (que antes se omitía), evitando que los webhooks de n8n (como `aliun-voucher`) colapsen al no recibir el slug.
 
 ---
 
