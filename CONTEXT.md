@@ -76,6 +76,7 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 ### RAMA 6 — Canal de Atención & CRM
 - **Canal de Atención:** Activo con **Chatwoot** como receptor oficial.
 - **CRM Interno (Pipeline Kanban):** Gestionado de forma nativa directamente en `/crm/pipeline` sobre las tablas `crm_leads` y `crm_activities` en Supabase (independiente de Kommo). Consultar el mapa y flujos detallados en [AUDITORIA_CRM_INTERNO.md](file:///c:/Users/Admin/Downloads/atlas-antigravity-guide/docs/AUDITORIA_CRM_INTERNO.md).
+- **CRM Dashboard (Métricas y Recibos):** Módulo analítico nativo en `/crm/dashboard` que procesa leads, tratos (`crm_deals`) y genera recibos PDF en caliente. Consultar detalle en [AUDITORIA_CRM_DASHBOARD.md](file:///c:/Users/Admin/Downloads/atlas-antigravity-guide/docs/AUDITORIA_CRM_DASHBOARD.md).
 
 ### RAMA 7 — Finanzas & Trazabilidad Legal
 - **Referencia Notion:** `37f293f46b248113baedfe919cf20e09` (Estrategia Financiera) y `atlas-payments-v2`
