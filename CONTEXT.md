@@ -87,6 +87,7 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
   2. Implementar nueva tabla relacional `atlas_payments` con vinculación de clave foránea obligatoria a `bookings.id` (transacciones sin FK prohibidas).
   3. Crear la vista `public.transactions` para auditoría contable.
   4. **FIN-002 SEV0:** Mover `service_role` key de Supabase a variables de entorno estrictas antes de activar AZUL.
+- **Mapa y Auditoría del Motor de Ingresos:** Consultar la arquitectura y mapeo completo de componentes de la pasarela y tabla de reservas en [AUDITORIA_MAPA_BOOKINGS.md](file:///c:/Users/Admin/Downloads/atlas-antigravity-guide/docs/AUDITORIA_MAPA_BOOKINGS.md).
 
 ### RAMA 8 — Expansión Futura
 - **Foco:** Merchant of Record (MoR) completo, pasarela AZUL, e integración de catálogo dinámico B2B post-RNC.
