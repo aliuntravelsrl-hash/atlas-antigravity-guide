@@ -73,8 +73,9 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 - **Stack:** Publicación directa vía Meta Graph API (Blotato descartado). Generación de ofertas mediante `WF-MKT-GENERATE-OFFER-v3` + Gemini.
 - **Pendiente:** Reconectar token Meta (MKT-1) y construir `WF-CONTENT-PUBLISH-v1` (texto + imagen estática).
 
-### RAMA 6 — Canal de Atención
-- **Estado:** Activo con **Chatwoot** como receptor oficial.
+### RAMA 6 — Canal de Atención & CRM
+- **Canal de Atención:** Activo con **Chatwoot** como receptor oficial.
+- **CRM Interno (Pipeline Kanban):** Gestionado de forma nativa directamente en `/crm/pipeline` sobre las tablas `crm_leads` y `crm_activities` en Supabase (independiente de Kommo). Consultar el mapa y flujos detallados en [AUDITORIA_CRM_INTERNO.md](file:///c:/Users/Admin/Downloads/atlas-antigravity-guide/docs/AUDITORIA_CRM_INTERNO.md).
 
 ### RAMA 7 — Finanzas & Trazabilidad Legal
 - **Referencia Notion:** `37f293f46b248113baedfe919cf20e09` (Estrategia Financiera) y `atlas-payments-v2`
