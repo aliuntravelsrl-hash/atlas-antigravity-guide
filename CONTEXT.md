@@ -102,6 +102,11 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 3. **Seguridad (SEV0):** Prohibido almacenar claves `service_role` o tokens de API en repositorios de código o frontend. Deben inyectarse mediante variables de entorno en el backend/n8n.
 4. **Higiene de Swarm:** No se permiten crons en los agentes Hermes que no estén explícitamente autorizados en `aliun-rrhh-v2`.
 5. **Validación Visual en Sandbox (Crítica):** Antes de cualquier despliegue en producción, todo cambio estructural visual debe ser ejecutado y testeado en el Sandbox. El desarrollador debe mostrar la estructura HTML o previsualización del cambio al Director para evaluar la experiencia visual y recibir su aprobación explícita.
+6. **Despliegue de atlas-admin-v2 (Conflicto de Deploys en Hostinger):** 
+   - **Causa Raíz:** Hacer `git push` a `main` en `atlas-admin-v2` dispara automáticamente un constructor de Git en Hostinger que limpia `public_html/` y deja el sitio roto con error `403 Forbidden` por falta de archivos o permisos inadecuados.
+   - **Solución Obligatoria:** Tras cualquier push en `atlas-admin-v2`, compilar localmente (`npm run build`), empaquetar `dist/` en `dist.tar.gz` (`tar -czf dist.tar.gz -C dist .`) y subir por SCP para extraerlo directamente en `domains/atlas.aliuntravelsrl.com/public_html/`.
+   - **Permisos de Apache:** Posterior a la extracción en `public_html/`, es mandatorio reaplicar permisos correctos (`find ... -type d -exec chmod 755 {} \;` y `find ... -type f -exec chmod 644 {} \;`) para evitar bloqueos de LiteSpeed/Apache.
+   - **Comodín de Express 5:** En `server.js` (si corre en Node), el comodín de Express 5 debe configurarse estrictamente como `*all` o `(.*)` para evitar el PathError y caída de Node que genera el comodín clásico `*`.
 
 ---
 
