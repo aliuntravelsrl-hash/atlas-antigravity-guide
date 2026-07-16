@@ -49,6 +49,8 @@ Este documento registra las acciones realizadas durante la sesión de rehidratac
   - Se redirigieron los enlaces del CRM a `/crm/pipeline` y se añadió un `useEffect` en [PipelineKanban.jsx](file:///c:/Users/Admin/Downloads/-atlas-admin-v2/src/components/marketing/PipelineKanban.jsx) para auto-filtrar leads por el query string `search`.
 - **Solución de Cables Sueltos en Webhooks (Slug de Hotel):**
   - Se corrigieron las consultas select de Supabase en [AdminBookingsPanel.jsx](file:///c:/Users/Admin/Downloads/-atlas-admin-v2/src/components/admin/AdminBookingsPanel.jsx) y [PaymentGatewayPage.jsx](file:///c:/Users/Admin/Downloads/-atlas-admin-v2/src/components/admin/PaymentGatewayPage.jsx) para que incluyan la columna `slug` de `hotels_master` (que antes se omitía), evitando que los webhooks de n8n (como `aliun-voucher`) colapsen al no recibir el slug.
+- **Ajuste de RAG de Imagen (Evitación de Bloqueo por Hotlink):**
+  - Se detectó que el hotel `Lifestyle Tropical Beach` (`lifestyle-tropical-beach`) apuntaba en la columna `about_image` de Supabase a una URL del dominio oficial del hotel (`lifestyletropicalbeach.com`). Este servidor bloqueaba las descargas de agentes externos (como PDFMonkey y Telegram) mediante políticas de Hotlink Protection, haciendo que el voucher llegara sin imagen. Se actualizó el campo en Supabase con una imagen de resort de playa tropical de alta definición optimizada y libre de restricciones del CDN de Unsplash.
 
 ---
 
