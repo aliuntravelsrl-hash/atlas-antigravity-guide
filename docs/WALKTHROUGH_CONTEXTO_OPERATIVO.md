@@ -1,11 +1,30 @@
 # Walkthrough — Actualización de Contexto Operativo
-**Fecha:** 13 de Julio de 2026 | **Estado:** Completado y Commit Realizado
+**Fecha:** 16 de Julio de 2026 | **Estado:** Completado y Sincronizado en Producción
 
-Este documento registra las acciones realizadas durante la sesión de rehidratación, sincronización de contexto canónico e innovación visual en el ecosistema ATLAS.
+Este documento registra las acciones realizadas durante las sesiones de rehidratación, sincronización de contexto canónico, saneamiento multimedia e innovación funcional en el ecosistema ATLAS.
 
 ---
 
-## 🛠️ Acciones Realizadas
+## 🚀 Sesión 16 JUL 2026: Saneamiento Wyndham Alltra & Selector de Resorts Inteligente
+
+### 1. Rehidratación Relacional Oficial (Supabase Cloud)
+Siguiendo las pautas de integridad del Molde de Hierro, se saneó la base de datos de producción de Supabase para **Wyndham Alltra Punta Cana** (`19ad3048-9db7-4da2-aedb-0c29409451b1`) eliminando placeholders de IA y vinculando su CDN oficial (`https://www.puntacanawyndhamalltra.com/...`):
+- **Visibilidad:** Establecido `publish = true` en `hotels_master` y `hotels` para habilitar el hotel de inmediato en el catálogo de producción.
+- **Servicios Relacionales:** Inyectados 9 servicios oficiales en la tabla `hotel_media` con `scope = 'services'` e iconos de Lucide, ejecutando el RPC `sync_hotel_services_mirror_dual` para sincronizarlos al campo `services_data` en los mirrors.
+- **Restaurantes Oficiales:** Poblados los 6 restaurantes oficiales (Larimar Buffet, Umi, Costa Azul, Bella, Agave, Cosecha) con nombres, tipos, descripciones y fotos reales de platos en `restaurants_data` (JSONB).
+- **Habitaciones y Tarifas:** Limpiadas e inyectadas las 4 categorías reales de habitaciones en la tabla `rooms` de Supabase (`Habitación Standard`, `Premium Vista Parcial`, `Club Level Suite con Jacuzzi` y `One-Bedroom Suite`) con precios reales y fotos del CDN asociadas.
+- **Video Hero:** Registrado el video real del hotel en las columnas `hero_video` y `video_url` con el ID de YouTube oficial (`0qYPjLVdxEc`).
+
+### 2. Selector de Resorts Inteligente (Filtro Sidebar & Barra Global)
+- **Search Context (`SearchContext.jsx`):** Agregada la propiedad `hotelName` al estado global de reservas, sincronizándolo bidireccionalmente con los parámetros de la URL (`?hotelName=...`) para que las búsquedas sean compartibles de extremo a extremo.
+- **Hook de Búsqueda (`useSearchFilter.js`):** Implementada la coincidencia parcial e insensible a mayúsculas del nombre y slug del hotel para filtrar el listado en vivo.
+- **Filtro Sidebar (`FiltersSidebar.jsx`):** Diseñado un input de búsqueda elegante con autocompletador/dropdown inteligente de resorts que muestra las sugerencias disponibles de la prop `hotels={allHotels}` y se oculta al hacer click exterior.
+- **Buscador Horizontal Global (`GlobalSearchBar.jsx`):** Integrado el autocompletador de resorts dentro del campo de entrada de la Home y cabecera de destinos. Ahora muestra sugerencias duales (Zonas con icono 📍 y Hoteles específicos con icono 🏨 y su zona respectiva). Al buscar un resort, se redirecciona al cliente al listado de destinos con el query string de `hotelName` pre-cargado.
+- **Página de Wyndham Alltra (`WyndhamAlltraPuntaCanaPage.jsx`):** Actualizada la página estática del hotel para sincronizar los arrays y referencias fijas (servicios, galería, habitaciones con foto real, y video hero oficial) y alinearse con la base de datos relacional.
+
+---
+
+## 🛠️ Acciones Realizadas (Sesiones Anteriores)
 
 ### 1. Actualización e Higiene de CONTEXT.md
 - Se modificó [CONTEXT.md](file:///c:/Users/Admin/Downloads/atlas-antigravity-guide/CONTEXT.md) para reflejar las **8 Ramas del Árbol Maestro de Conceptos** extraído de Notion.
