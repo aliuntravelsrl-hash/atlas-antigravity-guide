@@ -1,5 +1,6 @@
 # 🧠 CONTEXT — Antigravity (ATLAS Ecosistema)
-**Actualizado:** 13 JUL 2026 | SSOT Cognitivo y Técnico
+**Actualizado:** 17 JUL 2026 | SSOT Cognitivo y Técnico
+**Última actualización por:** Computer (Perplexity) — cobertura por timeout Antigravity (Google)
 
 Guía de rehidratación rápida de contexto operativo y memoria de estado para Antigravity al iniciar cualquier sesión en el ecosistema ATLAS.
 
@@ -32,14 +33,14 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 
 ## 📂 3. Repositorios bajo responsabilidad de Antigravity
 
-- `atlas-booking-frontend-v2` - Web pública de reservas (`aliuntravelsrl.com`).
-- `atlas-admin-v2` - Panel de administración (`atlas.aliuntravelsrl.com`).
-- `atlas-sales-mcp` - Servidor MCP de herramientas de ventas.
-- `atlas-cableados` - Documentación de infraestructura y redes.
-- `atlas-marketing-v2` - Motor de ofertas de marketing (en construcción).
-- `aliun-rrhh-v2` - Doctrina y SOUL.md de agentes Hermes.
-- `musculo-vps` - Scripts y docker-compose de VPS2.
-- `atlas-antigravity-guide` - **Este repo** — contexto y guía de Antigravity (SSOT de contexto).
+- `atlas-booking-frontend-v2` — Web pública de reservas (`aliuntravelsrl.com`).
+- `-atlas-admin-v2` — Panel de administración (`atlas.aliuntravelsrl.com`). **⚠️ El nombre tiene prefijo dash en GitHub.**
+- `atlas-sales-mcp` — Servidor MCP de herramientas de ventas.
+- `atlas-cableados` — Documentación de infraestructura y redes.
+- `atlas-marketing-v2` — Motor de ofertas de marketing (en construcción).
+- `aliun-rrhh-v2` — Doctrina y SOUL.md de agentes Hermes.
+- `musculo-vps` — Scripts y docker-compose de VPS2.
+- `atlas-antigravity-guide` — **Este repo** — contexto y guía de Antigravity (SSOT de contexto).
 
 ---
 
@@ -58,9 +59,10 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 
 ### RAMA 3 — Motor de Hoteles
 - **Estado:** Operativo (79 hoteles activos, 25 tarifas manuales).
+- **Fase 1 Rescate Visual:** ✅ Completada (Puerto Plata, Juan Dolio, Boca Chica — ver `WALKTHROUGH_RESCATE_VISUAL_FASE1.md`).
 - **Foco:** Continuar rescate visual por fases. Las integraciones de APIs B2B (TBO/Tripsnstay) están en standby hasta la obtención del RNC.
-- **Doctrina de Mapeo & Inventario (Anatomía Notion):** Al conectar APIs de proveedores B2B en el futuro, es obligatorio implementar una capa de consolidación y mapeo de inventario (delegada en servicios tipo Giata o Gimmonix, o mediante tablas de equivalencias en Supabase) para evitar duplicidad de propiedades y discrepancias en nombres de habitaciones (Room Mapping).
-- **Modelo Comercial:** Operar bajo el modelo de *Tarifa Neta (Net Rate) con Markup* autogestionado por el motor mediante el RPC de cotizaciones, garantizando el control de márgenes e integridad del pricing.
+- **Doctrina de Mapeo & Inventario:** Al conectar APIs de proveedores B2B en el futuro, es obligatorio implementar una capa de consolidación y mapeo de inventario (delegada en servicios tipo Giata o Gimmonix, o mediante tablas de equivalencias en Supabase) para evitar duplicidad de propiedades y discrepancias en nombres de habitaciones.
+- **Modelo Comercial:** Operar bajo el modelo de *Tarifa Neta (Net Rate) con Markup* autogestionado por el motor mediante el RPC de cotizaciones.
 
 ### RAMA 4 — Motor de Excursiones
 - **Referencia Notion:** `37b293f46b24804b82b5c0252406da89`
@@ -75,27 +77,24 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 
 ### RAMA 6 — Canal de Atención & CRM
 - **Canal de Atención:** Activo con **Chatwoot** como receptor oficial.
-- **CRM Interno (Pipeline Kanban):** Gestionado de forma nativa directamente en `/crm/pipeline` sobre las tablas `crm_leads` y `crm_activities` en Supabase (independiente de Kommo). Consultar el mapa y flujos detallados en [AUDITORIA_CRM_INTERNO.md](file:///c:/Users/Admin/Downloads/atlas-antigravity-guide/docs/AUDITORIA_CRM_INTERNO.md).
-- **CRM Dashboard (Métricas y Recibos):** Módulo analítico nativo en `/crm/dashboard` que procesa leads, tratos (`crm_deals`) y genera recibos PDF en caliente. Consultar detalle en [AUDITORIA_CRM_DASHBOARD.md](file:///c:/Users/Admin/Downloads/atlas-antigravity-guide/docs/AUDITORIA_CRM_DASHBOARD.md).
-- **Integridad Relacional CRM-Booking:** La tabla `crm_deals` posee la columna `booking_id` y `bookings` posee `lead_id` para enlaces duros de comisiones y recibos. Actualmente en producción el 100% de `crm_deals.booking_id` es `null`, forzando cruce aproximado de texto en recibos. Consultar plan de solución en [AUDITORIA_RELACION_CRM_BOOKING.md](file:///c:/Users/Admin/Downloads/atlas-antigravity-guide/docs/AUDITORIA_RELACION_CRM_BOOKING.md).
+- **CRM Interno (Pipeline Kanban):** Gestionado de forma nativa en `/crm/pipeline` sobre `crm_leads` y `crm_activities` en Supabase. Ver `AUDITORIA_CRM_INTERNO.md`.
+- **CRM Dashboard (Métricas y Recibos):** Módulo analítico en `/crm/dashboard` — procesa leads, `crm_deals` y genera recibos PDF. Ver `AUDITORIA_CRM_DASHBOARD.md`.
+- **Integridad Relacional CRM-Booking:** `crm_deals.booking_id` es `null` en el 100% de registros de producción — cruce aproximado por texto activo. Ver `AUDITORIA_RELACION_CRM_BOOKING.md`.
+- **Vinculación automática (17 JUL):** `AdminBookingsPanel` crea o busca automáticamente en `crm_leads` al guardar datos del cliente de una reserva. Clasificación dinámica de origen (`manual` vs `web_booking`).
 
 ### RAMA 7 — Finanzas & Trazabilidad Legal
-- **Referencia Notion:** `37f293f46b248113baedfe919cf20e09` (Estrategia Financiera) y `atlas-payments-v2`
+- **Referencia Notion:** `37f293f46b248113baedfe919cf20e09` y `atlas-payments-v2`
 - **Estado:** **CRÍTICO / Desalineado**.
-- **Discrepancia detectada:** Registros planos en la tabla de pagos antigua (`atlas_payments_flat`) sin FK a `bookings.id`.
-- **Doctrina Merchant of Record (MoR) (Anatomía Notion):** Aliun Travel actúa técnicamente como MoR del ecosistema de reservas. Por lo tanto, el "Payment API Handshake" orquestado por n8n debe garantizar trazabilidad financiera fidedigna y vinculación dura a través de claves foráneas con las reservas (`bookings.id`).
-- **Segmentación de Ingresos (Arquitectura OTA Notion):** El sistema contable y la vista `public.transactions` deben clasificar claramente el flujo financiero de cada reserva en: Costo Neto (pago a proveedor), Markup (margen comercial) y Service Fee (cargo fijo de gestión/emisión) para una conciliación precisa.
 - **Acciones Urgentes:**
   1. Deprecar y eliminar `atlas_payments_flat`.
-  2. Implementar nueva tabla relacional `atlas_payments` con vinculación de clave foránea obligatoria a `bookings.id` (transacciones sin FK prohibidas).
+  2. Implementar nueva tabla relacional `atlas_payments` con FK obligatoria a `bookings.id`.
   3. Crear la vista `public.transactions` para auditoría contable.
   4. **FIN-002 SEV0:** Mover `service_role` key de Supabase a variables de entorno estrictas antes de activar AZUL.
-- **Mapa y Auditoría del Motor de Ingresos:** Consultar la arquitectura y mapeo completo de componentes de la pasarela y tabla de reservas en [AUDITORIA_MAPA_BOOKINGS.md](file:///c:/Users/Admin/Downloads/atlas-antigravity-guide/docs/AUDITORIA_MAPA_BOOKINGS.md).
 
 ### RAMA 8 — Expansión Futura
-- **Foco:** Merchant of Record (MoR) completo, pasarela AZUL, e integración de catálogo dinámico B2B post-RNC.
-- **IBE de Vuelos & GDS (Arquitectura OTA Notion):** Para la futura integración de marcas blancas de vuelos a través de GDS (Sabre/Amadeus), el modelo de base de datos de reservas de Supabase debe prever campos para código PNR, segmentos de vuelo y proveedor externo.
-- **Empaquetamiento Dinámico:** Toda combinación futura de Vuelo + Hotel o Excursión + Hotel en el frontend debe cumplir con la doctrina de *Precios Combinados Ocultos* (tarifas combinadas opacas sin desglose de costo individual de cara al cliente) para respetar los acuerdos de paridad tarifaria (Rate Parity) de los proveedores.
+- **Foco:** Merchant of Record (MoR) completo, pasarela AZUL, catálogo dinámico B2B post-RNC.
+- **IBE de Vuelos & GDS:** Prever campos PNR, segmentos de vuelo y proveedor externo en el modelo de datos.
+- **Empaquetamiento Dinámico:** Precios combinados opacos (sin desglose de costo individual).
 
 ---
 
@@ -105,13 +104,27 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 2. **Supabase FK:** NUNCA insertar registros en la tabla de pagos que no estén asociados mediante clave foránea a un booking ID existente.
 3. **Seguridad (SEV0):** Prohibido almacenar claves `service_role` o tokens de API en repositorios de código o frontend. Deben inyectarse mediante variables de entorno en el backend/n8n.
 4. **Higiene de Swarm:** No se permiten crons en los agentes Hermes que no estén explícitamente autorizados en `aliun-rrhh-v2`.
-5. **Validación Visual en Sandbox (Crítica):** Antes de cualquier despliegue en producción, todo cambio estructural visual debe ser ejecutado y testeado en el Sandbox. El desarrollador debe mostrar la estructura HTML o previsualización del cambio al Director para evaluar la experiencia visual y recibir su aprobación explícita.
-6. **Despliegue de atlas-admin-v2 (Conflicto de Deploys en Hostinger):** 
-   - **Causa Raíz:** Hacer `git push` a `main` en `atlas-admin-v2` dispara automáticamente un constructor de Git en Hostinger que limpia `public_html/` y deja el sitio roto con error `403 Forbidden` por falta de archivos o permisos inadecuados.
-   - **Solución Obligatoria:** Tras cualquier push en `atlas-admin-v2`, compilar localmente (`npm run build`), empaquetar `dist/` en `dist.tar.gz` (`tar -czf dist.tar.gz -C dist .`) y subir por SCP para extraerlo directamente en `domains/atlas.aliuntravelsrl.com/public_html/`.
-   - **Permisos de Apache:** Posterior a la extracción en `public_html/`, es mandatorio reaplicar permisos correctos (`find ... -type d -exec chmod 755 {} \;` y `find ... -type f -exec chmod 644 {} \;`) para evitar bloqueos de LiteSpeed/Apache.
-   - **Comodín de Express 5:** En `server.js` (si corre en Node), el comodín de Express 5 debe configurarse estrictamente como `*all` o `(.*)` para evitar el PathError y caída de Node que genera el comodín clásico `*`.
+5. **Validación Visual en Sandbox (Crítica):** Antes de cualquier despliegue en producción, todo cambio estructural visual debe ser ejecutado y testeado en el Sandbox. El desarrollador debe mostrar la previsualización al Director y recibir aprobación explícita.
+6. **Despliegue de `-atlas-admin-v2` — CI/CD AUTOMÁTICO vía GitHub Actions (actualizado 17 JUL 2026):**
+   - **Estado actual:** El deploy es 100% automático. Cualquier `git push` a `main` dispara el workflow `.github/workflows/deploy.yml` que: instala dependencias → build Vite → empaqueta `dist/` en tar.gz → sube por SCP a Hostinger → extrae y aplica permisos → valida el deploy.
+   - **NO se debe** compilar localmente ni subir por SCP manualmente — el CI lo hace solo.
+   - **Build time:** ~60-75 segundos. Verificar en GitHub Actions antes de concluir que hubo un error.
+   - **Force redeploy:** Para forzar un rebuild sin cambio de código, editar `deploy-trigger.txt` en la raíz del repo y hacer push.
+   - **Secrets configurados en GitHub Actions:** `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `HOSTINGER_SSH_KEY`, `HOSTINGER_PORT`, `HOSTINGER_HOST`, `HOSTINGER_USER`.
+   - **Secret FALTANTE:** `VITE_SUPABASE_SERVICE_KEY` — sin esto `supabaseAdmin` opera con anon key (funcional pero sin bypass RLS real). Pendiente agregar en GitHub → Settings → Secrets.
+   - **Patrón de pantalla blanca post-deploy:** Si build CI = `success` pero pantalla blanca → es deploy parcial (MIME mismatch). Verificar con `curl -sI https://atlas.aliuntravelsrl.com/assets/index-*.js | grep content-type`. Si responde `text/html` en lugar de `text/javascript` → hacer force redeploy. Ver historial de incidente 17 JUL en `MAPA_GPS.md`.
+
+---
+
+## 📋 6. Estado de Agentes Externos (17 JUL 2026)
+
+| Agente | Estado | Notas |
+|--------|--------|-------|
+| **Antigravity** | ⛔ Time-out Google (rate limit) | No disponible hasta que Google libere los límites. Computer cubre operaciones críticas. |
+| **Computer (Perplexity)** | ✅ Activo | Cubre incidentes de infraestructura y documentación mientras Antigravity está en timeout. Ficha: `aliun-rrhh-v2/personnel/AP-EXT-01_COMPUTER_PERPLEXITY.md` |
+| **ATLAS-TECH (Claude Sonnet 4.6)** | ✅ Activo | Desktop. Orquesta el swarm vía `atlas_tasks`. |
 
 ---
 
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
+*Última actualización: Computer (Perplexity) — 17 JUL 2026*
