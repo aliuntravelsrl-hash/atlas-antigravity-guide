@@ -169,5 +169,111 @@ Este documento consolida el mapa de archivos físicos, repositorios, ubicaciones
 
 ---
 
+## ⚙️ 8. Patrones CI/CD — deploy.yml (`-atlas-admin-v2`)
+
+### Anatomía del workflow (versión estable — commit `0b92c12f`)
+
+```
+push → main
+  ├─ Checkout
+  ├─ Setup Node 20
+  ├─ npm install --legacy-peer-deps
+  ├─ Build (Vite)            ← env vars VITE_* inyectadas aquí
+  ├─ Verify build output     ← dist/index.html + dist/assets presentes
+  ├─ Setup SSH
+  ├─ Package (tar czf)
+  ├─ Upload (scp → /tmp/)
+  ├─ Atomic deploy (SSH)     ← staging → swap quirúrgico → health check inline
+  └─ Cleanup SSH key
+```
+
+### Patrón de fallo #1 — White screen por MIME mismatch (deploy parcial)
+
+**Síntoma:** build CI = success, pantalla blanca, DevTools: `MIME type of "text/html"` en bundle JS.
+**Causa:** deploy parcial — `index.html` nuevo llegó al servidor, `/assets/` no sincronizó.
+El `.htaccess` catch-all devuelve `index.html` para cualquier ruta no encontrada → MIME incorrecto.
+**Diagnóstico:**
+```bash
+curl -sI https://atlas.aliuntravelsrl.com/assets/index-*.js | grep content-type
+# Si responde text/html → deploy parcial
+```
+**Fix:** force redeploy — editar `deploy-trigger.txt` y push a main.
+**Incidente:** 17 JUL 2026 — commits `af0e4ac7` / `26cd90cf`.
+
+---
+
+### Patrón de fallo #2 — White screen por env var ausente en workflow
+
+**Síntoma:** build CI = success, pantalla blanca, NO hay MIME error — el JS carga pero la app no monta.
+**Causa:** variable `VITE_*` existe como GitHub Secret pero **no está declarada en el `env:` del step Build**.
+Vite compila el `import.meta.env.VITE_X` como `undefined` literal — el cliente Supabase (u otra lib)
+recibe `undefined` como URL/key y crashea silenciosamente en runtime.
+**Diagnóstico:**
+```bash
+# Descargar bundle y buscar si la URL de Supabase está incrustada
+curl -s https://atlas.aliuntravelsrl.com/assets/index-*.js | grep -o "oyihiyivdhfxpyiwnmqk"
+# Si no aparece → la env var no llegó al build
+```
+**Fix:** agregar la variable al step Build en deploy.yml:
+```yaml
+- name: Build
+  run: npm run build
+  env:
+    VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+    VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+    VITE_SUPABASE_SERVICE_KEY: ${{ secrets.VITE_SUPABASE_SERVICE_KEY }}   # ← agregar aquí
+```
+**Regla:** cada vez que se agregue un nuevo secret a GitHub Actions, verificar que también
+esté en el `env:` del step Build. El secret existir en GitHub NO es suficiente — Vite no lo ve
+si no está explícitamente en `env:`.
+**Incidente:** 17 JUL 2026 — commit `8ea63e31`.
+
+---
+
+### Patrón de fallo #3 — 403 Forbidden por chmod sobre TARGET con rutas fantasma
+
+**Síntoma:** build CI = success, deploy = success en logs, pero sitio devuelve `HTTP/2 403`.
+**Causa:** `find "$TARGET" -exec chmod 644 {} \;` aplicado sobre el directorio completo de producción.
+Hostinger tiene una carpeta `.builds/source/repository/dist/` con symlinks o rutas rotas → `find`
+falla con exit 1 bajo `set -euo pipefail` → el script muere a mitad → algunos archivos quedan
+con permisos incorrectos (ej. 000) → el servidor web no puede leerlos → 403.
+**Fix:** `chmod` SOLO sobre staging (archivos nuevos), NUNCA sobre el TARGET completo.
+Swap quirúrgico — copiar solo los archivos que cambian:
+```bash
+# CORRECTO: permisos sobre staging antes del swap
+find "$STAGING" -type d -exec chmod 755 {} \;
+find "$STAGING" -type f -exec chmod 644 {} \;
+
+# Swap: solo index.html + .htaccess + assets/
+rm -f  "$TARGET/index.html" "$TARGET/.htaccess"
+rm -rf "$TARGET/assets"
+cp -p  "$STAGING/index.html" "$TARGET/index.html"
+cp -p  "$STAGING/.htaccess"  "$TARGET/.htaccess"
+cp -rp "$STAGING/assets"     "$TARGET/assets"
+
+# NUNCA: find "$TARGET" -exec chmod ... — puede matar permisos en prod
+```
+**Regla:** el TARGET en Hostinger tiene subdirectorios gestionados por el propio servidor
+(`.builds/`, `api-toolbox/`, `sounds/`). El deploy solo debe tocar lo que Vite produce.
+**Incidente:** 17 JUL 2026 — fix final commit `0b92c12f`.
+
+---
+
+### Variables de entorno requeridas en Build (checklist)
+
+| Secret GitHub | Declarado en `env:` Build | Propósito |
+|---|---|---|
+| `VITE_SUPABASE_URL` | ✅ sí | URL del proyecto Supabase |
+| `VITE_SUPABASE_ANON_KEY` | ✅ sí | Cliente público (anon) |
+| `VITE_SUPABASE_SERVICE_KEY` | ✅ sí (desde 17 JUL) | supabaseAdmin — bypass RLS |
+| `HOSTINGER_SSH_KEY` | — (solo en steps SSH) | Acceso SSH al servidor |
+| `HOSTINGER_HOST` | — | Host Hostinger |
+| `HOSTINGER_PORT` | — | Puerto SSH |
+| `HOSTINGER_USER` | — | Usuario SSH |
+
+> Si agregas un nuevo `VITE_*` secret: (1) agregarlo en GitHub Secrets, (2) declararlo en `env:` del step Build. Ambos pasos son obligatorios.
+
+---
+
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
-*Última sesión documentada por: Computer (Perplexity) — 17 JUL 2026 — Cobertura de Antigravity (time-out Google)*
+*Última sesión documentada por: Computer (Perplexity) — 17 JUL 2026 — Patrones CI/CD documentados (white screen v2, 403, env vars)*
