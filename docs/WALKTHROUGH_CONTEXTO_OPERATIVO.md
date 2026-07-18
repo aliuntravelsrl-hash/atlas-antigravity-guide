@@ -27,6 +27,11 @@ Para asegurar la consistencia funcional y versiones del motor de reservas y cobr
 - **Reserva Pública (`atlas-booking-frontend-v2`):** Se mapeó el flujo de captura de Leads, validación estricta de nacionalidad en el checkout (`GuestDetailsForm`), el summary de la cotización y la llamada a la RPC de pagos (`atlas_register_payment_v2`).
 - **Control Administrativo (`-atlas-admin-v2`):** Se mapeó la lógica del panel operativo de reservas manuales (`BookingOpsPanel`), la emisión segmentada de facturas por nacionalidad dominicana vs extranjera (`FacturadorPanel`, Fix B-4) y el dashboard de monitoreo financiero (`MissionControlLive`).
 
+### 5. Integración del MCP de Ventas y Matriz de Pertenencia (atlas-sales-mcp)
+Se clonó e integró el repositorio oficial del servidor de herramientas de ventas del Swarm:
+- **Herramientas y Owners:** Mapeadas las 19 herramientas del MCP distribuidas en 4 agentes activos: `registrar_deposito` (exclusiva del Director), `stale_payments` (Hermes Ops), Commercial Tools (Hermes Commercial) y Marketing Tools (Hermes Marketing).
+- **Flujo Transaccional:** Se consolidó el protocolo post-v1.4.0 (Comprobante → Review → Aprobación de Depósito en Supabase RPC → Liberación de Voucher vía Gotenberg y WhatsApp).
+
 ---
 
 ## 🚀 Sesión 16 JUL 2026: Saneamiento Wyndham Alltra & Selector de Resorts Inteligente
