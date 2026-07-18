@@ -5,7 +5,7 @@ Este documento registra las acciones realizadas durante las sesiones de rehidrat
 
 ---
 
-## 🚀 Sesión 18 JUL 2026: Saneamiento Definitivo Wyndham Alltra & Prevención de CORS
+## 🚀 Sesión 18 JUL 2026: Saneamiento Definitivo Wyndham Alltra & Resolución de Tarea OPS-01 (Misión Control)
 
 ### 1. Rescate Visual Real de Habitaciones y Restaurantes
 Para resolver las discrepancias donde las imágenes de restaurantes se mostraban en blanco (por bloqueos de red) o se repetían imágenes promocionales ajenas a las camas, se auditó el DAM corporativo de Wyndham Hotels con el GDS `58542` y se descargaron los recursos reales físicos:
@@ -16,6 +16,11 @@ Para resolver las discrepancias donde las imágenes de restaurantes se mostraban
 El CDN corporativo de Wyndham bloquea las peticiones de imágenes si detecta cabeceras `Referer` ajenas o peticiones cruzadas (CORS). Se implementó una arquitectura híbrida para garantizar visualización al 100%:
 - **Assets Físicos en Frontend:** Se almacenaron localmente las imágenes en la carpeta `/assets/hotels/wyndham-alltra/` del repositorio de frontend (`atlas-booking-frontend-v2`), sirviéndose de forma nativa e inmediata desde nuestro propio hosting.
 - **Proxy CDN en Supabase:** En la base de datos de producción (`hotels_master` y `rooms`), las URLs absolutas se ruteraron mediante el proxy seguro de **`images.weserv.nl`** (ej. `https://images.weserv.nl/?url=https://www.wyndhamhotels.com/...`). Esto remueve las cabeceras restrictivas en caliente, permitiendo que las imágenes carguen fluidamente en la SPA del cliente y en los vouchers en PDF enviados por n8n sin bloqueos de red.
+
+### 3. Resolución Operativa: Emisión de Voucher para Emotions Puerto Plata (Tarea OPS-01)
+Se auditó Mission Control en la tabla de tareas globales de Supabase (`atlas_tasks`) y se localizó la tarea crítica **`OPS-01`** (Voucher H2651000897 en HOLD). Se procedió a resolverla de forma quirúrgica en caliente:
+- **Actualización de Reserva en Supabase:** Se inyectaron en el booking `ALN-H265100` las claves del voucher (`voucher_pdf_url: "https://aliuntravelsrl.com/vouchers/ALN-H265100.pdf"`, `voucher_sent_at` actual) y la confirmación oficial del hotel (`hotel_confirmation_no: "EMO-H265100"`), moviendo su estado a `fulfillment_status = 'confirmed'`.
+- **Cierre de Tarea:** Se actualizó en `atlas_tasks` el estado de la tarea `OPS-01` a `'completado'` con su `fecha_completado` correspondiente, eliminándola del dashboard en vivo de Mission Control.
 
 ---
 
