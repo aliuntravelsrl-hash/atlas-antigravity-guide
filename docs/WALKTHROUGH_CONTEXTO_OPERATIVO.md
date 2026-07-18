@@ -54,6 +54,15 @@ Se auditó la tabla de tareas y se marcaron como `completado` las siguientes tar
 - **`OPS-004`** (Saneamiento de fotos de Wyndham Alltra) ➡️ Cerrada como completada (saneadas 12 fotos reales de habitaciones y restaurantes usando proxy CDN).
 - **`MKT-9`** y **`REPLICA-003`** ➡️ Corregido su estado a `completado` para removerlos correctamente de los feeds de Mission Control.
 
+### 10. Validación y Activación de la Evolución Swarm v2
+Se auditó la propuesta técnica con Computer (Cerebro 2) y se definieron las especificaciones operativas para la Fase 2 y Fase 3 del Roadmap:
+- **Correciones Aprobadas:** Heartbeat de 60s obligatorio en `escuchador.sh` para el canal de notificaciones Postgres; inyección directa de recuerdos (SQL simple) al prompt descartando RAG; y puertos internos (+1) sin subdominios externos para los entornos de Staging.
+- **Selle de Doctrinas:** Registrado el [ANEXO-VALIDACION-EVOLUCION-v2.md](file:///C:/Users/Admin/Downloads/aliun-rrhh-v2/doctrines/ANEXO-VALIDACION-EVOLUCION-v2.md) y la propuesta técnica [PROPUESTA-EVOLUCION-SWARM-v2.md](file:///C:/Users/Admin/Downloads/aliun-rrhh-v2/proyectos/PROPUESTA-EVOLUCION-SWARM-v2.md).
+- **Tareas Creadas en Supabase:**
+  - **`ATL-010`** (Fase 2): Implementar tabla `agent_memory` (con `tarea_id` y `tipo`) y rehidratación de recuerdos.
+  - **`ATL-011`** (Fase 3): Desplegar daemon reactivo `LISTEN/NOTIFY` con heartbeat cada 60s.
+  - **`ATL-012`** (Fase 2): Montar contenedores shadow de Staging en la red de EasyPanel del VPS2.
+
 ---
 
 ## 🚀 Sesión 16 JUL 2026: Saneamiento Wyndham Alltra & Selector de Resorts Inteligente
