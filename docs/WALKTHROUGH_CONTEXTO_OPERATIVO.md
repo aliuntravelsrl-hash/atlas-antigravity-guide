@@ -32,6 +32,11 @@ Se clonó e integró el repositorio oficial del servidor de herramientas de vent
 - **Herramientas y Owners:** Mapeadas las 19 herramientas del MCP distribuidas en 4 agentes activos: `registrar_deposito` (exclusiva del Director), `stale_payments` (Hermes Ops), Commercial Tools (Hermes Commercial) y Marketing Tools (Hermes Marketing).
 - **Flujo Transaccional:** Se consolidó el protocolo post-v1.4.0 (Comprobante → Review → Aprobación de Depósito en Supabase RPC → Liberación de Voucher vía Gotenberg y WhatsApp).
 
+### 6. Integración del Repositorio de Personal de Ariadne Data (Ariadne-Data)
+Se clonó e integró el repositorio oficial que define la arquitectura y el comportamiento de la analista de datos del Swarm:
+- **Definición y Atribución:** Analizados los documentos constitutivos (`soul.md`, `skill.md`, `department.md`, `tools.md` y `architecture.md`).
+- **Propósito:** Ariadne Data transforma los logs transaccionales, eventos de Supabase y pipelines de reservas en reportes de conversión y comportamiento del cliente para la optimización comercial del Swarm.
+
 ---
 
 ## 🚀 Sesión 16 JUL 2026: Saneamiento Wyndham Alltra & Selector de Resorts Inteligente
