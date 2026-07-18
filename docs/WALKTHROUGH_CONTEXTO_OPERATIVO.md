@@ -37,6 +37,11 @@ Se clonó e integró el repositorio oficial que define la arquitectura y el comp
 - **Definición y Atribución:** Analizados los documentos constitutivos (`soul.md`, `skill.md`, `department.md`, `tools.md` y `architecture.md`).
 - **Propósito:** Ariadne Data transforma los logs transaccionales, eventos de Supabase y pipelines de reservas en reportes de conversión y comportamiento del cliente para la optimización comercial del Swarm.
 
+### 7. Integración del Repositorio de Personal de Hermes Commercial (hermes-commercial)
+Se clonó e integró el repositorio del orquestador comercial del Swarm:
+- **Arquitectura de Venta:** Mapeados los 10 estados del flujo de venta (`E1` a `E10`) y los 4 sub-agentes comerciales (`vendedor`, `cotizador`, `qa-followup` y `finanzas`).
+- **Canal y Pasarela:** Orquesta las solicitudes de WhatsApp (vía Meta API) integrándolas con Supabase, n8n y Chatwoot (para escalamientos humanos de incidencias comerciales).
+
 ---
 
 ## 🚀 Sesión 16 JUL 2026: Saneamiento Wyndham Alltra & Selector de Resorts Inteligente
