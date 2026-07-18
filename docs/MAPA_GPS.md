@@ -275,5 +275,53 @@ cp -rp "$STAGING/assets"     "$TARGET/assets"
 
 ---
 
+## 📋 9. Documentación de Arquitectura y Roadmap
+
+### aliun-rrhh-v2/doctrines/ — Documentos sellados
+
+| Documento | Contenido | Estado |
+|-----------|-----------|--------|
+| `MANUAL-OPERACIONES-v1.md` | Rutina diaria, WFs por horario, flujo de clientes, mesa de tareas, mejora continua | ✅ Sellado 17 Jul 2026 |
+| `ROADMAP-TECNICO-v1.md` | Arquitectura 2026, 4 fases de evolución, checklist con owners, SQL generadores de tareas Mission Control | ✅ v1.0 18 Jul 2026 |
+| `RRHH_IA_v3.0.md` | Doctrina del swarm — roles, frentes, protocolo de delegación | ✅ Sellado 06 Jul 2026 |
+
+### ROADMAP-TECNICO-v1.md — Referencia rápida
+
+**Repo:** `aliuntravelsrl-hash/aliun-rrhh-v2`
+**Ruta:** `doctrines/ROADMAP-TECNICO-v1.md`
+**Commit inicial:** `4407806295bbbd48567b20f98bc0189f26431216`
+
+#### Las 4 fases
+
+| Fase | Plazo | Qué resuelve | Owner principal |
+|------|-------|-------------|-----------------|
+| F1 — Desbloquear canales reactivos | Inmediato | MKT-1 Instagram, Chatwoot sdk.js 403, Gemini nodo B5 | `director` + `claude` |
+| F2 — Completar capa programada | 2 semanas | Botón Reservar (B-2), staging de prompts, backlog limpio | `antigravity` + `claude` |
+| F3 — Reactividad nativa (LISTEN/NOTIFY) | 30 días | Leads responden en <30s, Mission Control SSE | `claude` |
+| F4 — GitOps para agentes | 90 días | Despliegue desde Git sin intervención manual | `claude` |
+
+#### SQL para generar tareas de Fase 1 (ejecutar en Supabase)
+
+```sql
+-- F1-A: Token Instagram
+SELECT rpc_crear_tarea('MKT-1: Reconectar token Instagram/Meta',
+  'Director regenera token larga duración en Meta Business Suite y actualiza credencial en n8n.',
+  'operacional','antigravity','director','critica','F3-ATRACCION');
+
+-- F1-B: Chatwoot sdk.js 403
+SELECT rpc_crear_tarea('OPS-Chatwoot: sdk.js 403 — EasyPanel Basic Auth',
+  'ATLAS-TECH desactiva Basic Auth para la ruta del sdk.js en EasyPanel.',
+  'operacional','swarm','claude','alta','F2-BACKEND-CORE');
+
+-- F1-C: Credencial Gemini nodo B5
+SELECT rpc_crear_tarea('MKT-9: Credencial Gemini en n8n nodo B5',
+  'Director actualiza API key Gemini en n8n → Settings → Credentials.',
+  'operacional','antigravity','director','alta','F3-ATRACCION');
+```
+
+> Para el SQL completo de todas las fases, ver `ROADMAP-TECNICO-v1.md` sección 3.
+
+---
+
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
-*Última sesión documentada por: Computer (Perplexity) — 17 JUL 2026 — Patrones CI/CD documentados (white screen v2, 403, env vars)*
+*Última sesión documentada por: Computer (Perplexity) — 18 JUL 2026 — ROADMAP-TECNICO-v1.md creado, referenciado en MAPA_GPS*
