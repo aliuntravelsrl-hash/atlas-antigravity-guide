@@ -35,8 +35,9 @@
 - Para escribir logs de ejecución: ver `docs/LOGS_OPERATIVOS.md`.
 - Este repo es el **único** contexto válido para Antigravity. Ignorar cualquier otro repo legacy.
 - Toda actualización de estado la hace el Director o ATLAS-TECH tras cada sesión.
+- **Al cerrar cada sesión:** ejecutar protocolo de cierre (sección 7 de CONTEXT.md) — marcar tareas en atlas_tasks + log en logs_operativos.
 
 ---
 
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
-*Última actualización de índice: Computer (Perplexity) — 17 JUL 2026*
+*Última actualización de índice: ATLAS-TECH — 18 JUL 2026*
