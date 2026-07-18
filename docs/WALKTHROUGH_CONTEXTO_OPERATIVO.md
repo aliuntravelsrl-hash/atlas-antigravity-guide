@@ -1,7 +1,21 @@
 # Walkthrough — Actualización de Contexto Operativo
-**Fecha:** 16 de Julio de 2026 | **Estado:** Completado y Sincronizado en Producción
+**Fecha:** 18 de Julio de 2026 | **Estado:** Completado y Sincronizado en Producción
 
 Este documento registra las acciones realizadas durante las sesiones de rehidratación, sincronización de contexto canónico, saneamiento multimedia e innovación funcional en el ecosistema ATLAS.
+
+---
+
+## 🚀 Sesión 18 JUL 2026: Saneamiento Definitivo Wyndham Alltra & Prevención de CORS
+
+### 1. Rescate Visual Real de Habitaciones y Restaurantes
+Para resolver las discrepancias donde las imágenes de restaurantes se mostraban en blanco (por bloqueos de red) o se repetían imágenes promocionales ajenas a las camas, se auditó el DAM corporativo de Wyndham Hotels con el GDS `58542` y se descargaron los recursos reales físicos:
+- **Habitaciones:** Extraídas fotos auténticas de los interiores mostrando camas y mobiliario real (`room_standard.jpg`, `room_premium.jpg`, `room_suite.jpg`), sustituyendo el placeholder de la familia comiendo sandía en el balcón.
+- **Restaurantes y Bares:** Descargadas imágenes específicas y reales de los locales (`restaurant_umi.jpg`, `restaurant_costa_azul.jpg`, `restaurant_ventanas.jpg`, `restaurant_bella.jpg`, `restaurant_agave.jpg`, `restaurant_sidelines.jpg`, `bar_kaa.jpg`).
+
+### 2. Arquitectura de Distribución Anti-CORS y Anti-Referer
+El CDN corporativo de Wyndham bloquea las peticiones de imágenes si detecta cabeceras `Referer` ajenas o peticiones cruzadas (CORS). Se implementó una arquitectura híbrida para garantizar visualización al 100%:
+- **Assets Físicos en Frontend:** Se almacenaron localmente las imágenes en la carpeta `/assets/hotels/wyndham-alltra/` del repositorio de frontend (`atlas-booking-frontend-v2`), sirviéndose de forma nativa e inmediata desde nuestro propio hosting.
+- **Proxy CDN en Supabase:** En la base de datos de producción (`hotels_master` y `rooms`), las URLs absolutas se ruteraron mediante el proxy seguro de **`images.weserv.nl`** (ej. `https://images.weserv.nl/?url=https://www.wyndhamhotels.com/...`). Esto remueve las cabeceras restrictivas en caliente, permitiendo que las imágenes carguen fluidamente en la SPA del cliente y en los vouchers en PDF enviados por n8n sin bloqueos de red.
 
 ---
 
