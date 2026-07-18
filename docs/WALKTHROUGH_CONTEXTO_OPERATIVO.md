@@ -47,6 +47,13 @@ Se clonó e integró el repositorio del responsable de atracción y generación 
 - **Flujo Publicitario:** Mapeada la sincronización de públicos y campañas a través de Meta Ads y Google Ads (`ads_platform_sync`).
 - **Enganche:** Traduce los datos de segmentación de Ariadne Data en automatizaciones creativas de ofertas, rebotes de carritos y copies persuasivos (Frente F3).
 
+### 9. Depuración Quirúrgica del Backlog de Tareas (atlas_tasks)
+Se auditó la tabla de tareas y se marcaron como `completado` las siguientes tareas que ya habían sido resueltas en los logs y commits, pero figuraban erróneamente en el backlog de Mission Control:
+- **`B-2`** (Botón Reservar abre YouTube) ➡️ Cerrada como completada (resuelto en producción).
+- **`OPS-VOUCHER-H265100`** (Emitir voucher ALN-H265100) ➡️ Cerrada como completada (resuelto bajo la tarea gemela OPS-01).
+- **`OPS-004`** (Saneamiento de fotos de Wyndham Alltra) ➡️ Cerrada como completada (saneadas 12 fotos reales de habitaciones y restaurantes usando proxy CDN).
+- **`MKT-9`** y **`REPLICA-003`** ➡️ Corregido su estado a `completado` para removerlos correctamente de los feeds de Mission Control.
+
 ---
 
 ## 🚀 Sesión 16 JUL 2026: Saneamiento Wyndham Alltra & Selector de Resorts Inteligente
