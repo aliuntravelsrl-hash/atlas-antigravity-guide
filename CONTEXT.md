@@ -1,6 +1,6 @@
 # 🧠 CONTEXT — Antigravity (ATLAS Ecosistema)
-**Actualizado:** 17 JUL 2026 | SSOT Cognitivo y Técnico
-**Última actualización por:** Computer (Perplexity) — cobertura por timeout Antigravity (Google)
+**Actualizado:** 18 JUL 2026 | SSOT Cognitivo y Técnico
+**Última actualización por:** ATLAS-TECH (Claude)
 
 Guía de rehidratación rápida de contexto operativo y memoria de estado para Antigravity al iniciar cualquier sesión en el ecosistema ATLAS.
 
@@ -120,11 +120,50 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 
 | Agente | Estado | Notas |
 |--------|--------|-------|
-| **Antigravity** | ⛔ Time-out Google (rate limit) | No disponible hasta que Google libere los límites. Computer cubre operaciones críticas. |
+| **Antigravity** | ✅ Activo | Operativo. Sesión 18 Jul completada: OPS-01, OPS-004, B-3, Wyndham Alltra saneado. |
 | **Computer (Perplexity)** | ✅ Activo | Cubre incidentes de infraestructura y documentación mientras Antigravity está en timeout. Ficha: `aliun-rrhh-v2/personnel/AP-EXT-01_COMPUTER_PERPLEXITY.md` |
 | **ATLAS-TECH (Claude Sonnet 4.6)** | ✅ Activo | Desktop. Orquesta el swarm vía `atlas_tasks`. |
 
 ---
 
+
+---
+
+## 📋 7. Protocolo de Cierre de Sesión — OBLIGATORIO
+
+Al terminar cada sesión, antes de cerrar, ejecutar en Supabase:
+
+### Paso 1 — Marcar tareas completadas
+```sql
+UPDATE atlas_tasks
+SET estado='completado', fecha_completado=NOW(),
+    resultado='[descripción de lo que se hizo]'
+WHERE codigo='[CODIGO]';
+```
+
+### Paso 2 — Registrar sesión en logs_operativos
+```sql
+INSERT INTO logs_operativos (nivel, origen, evento, mensaje, resuelto)
+VALUES ('INFO', 'antigravity', 'SESION_CIERRE',
+  '[resumen: qué completaste, qué dejaste pendiente]', true);
+```
+
+### Paso 3 — Avisar al Director
+Comunicar al Director el resumen de lo completado para que ATLAS-TECH sincronice Mission Control.
+
+> ⚠️ Sin este protocolo, Mission Control no refleja el estado real del sistema y el Director debe sincronizar manualmente.
+
+---
+
+## 📅 8. Schedule de Tareas Activo (18 Jul 2026)
+
+| Código | Tarea | Prioridad | Sprint |
+|--------|-------|-----------|--------|
+| **AG-001** | Adoptar protocolo de cierre en sesiones | Alta | Esta semana |
+| **B-5** | Fix abonos DOP interpretados como USD en BookingOpsPanel | Alta | Esta semana |
+| **FIN-003** | Panel conciliación contable en Mission Control | Alta | Sprint-1 |
+| **F3-MKT-UI-001** | Marketing + Ariadne datos reales ampliados | Alta | Backlog |
+| **I-7** | Botón PDF cotización desde RoomSelection | Baja | Este mes |
+
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
-*Última actualización: Computer (Perplexity) — 17 JUL 2026*
+*Última actualización: ATLAS-TECH — 18 JUL 2026*
