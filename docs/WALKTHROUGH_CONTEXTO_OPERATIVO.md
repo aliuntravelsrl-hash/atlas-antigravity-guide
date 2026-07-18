@@ -42,6 +42,11 @@ Se clonó e integró el repositorio del orquestador comercial del Swarm:
 - **Arquitectura de Venta:** Mapeados los 10 estados del flujo de venta (`E1` a `E10`) y los 4 sub-agentes comerciales (`vendedor`, `cotizador`, `qa-followup` y `finanzas`).
 - **Canal y Pasarela:** Orquesta las solicitudes de WhatsApp (vía Meta API) integrándolas con Supabase, n8n y Chatwoot (para escalamientos humanos de incidencias comerciales).
 
+### 8. Integración del Repositorio de Personal de Hermes Marketing (hermes-marketing)
+Se clonó e integró el repositorio del responsable de atracción y generación de demanda del Swarm:
+- **Flujo Publicitario:** Mapeada la sincronización de públicos y campañas a través de Meta Ads y Google Ads (`ads_platform_sync`).
+- **Enganche:** Traduce los datos de segmentación de Ariadne Data en automatizaciones creativas de ofertas, rebotes de carritos y copies persuasivos (Frente F3).
+
 ---
 
 ## 🚀 Sesión 16 JUL 2026: Saneamiento Wyndham Alltra & Selector de Resorts Inteligente
