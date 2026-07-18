@@ -22,6 +22,11 @@ Se auditó Mission Control en la tabla de tareas globales de Supabase (`atlas_ta
 - **Actualización de Reserva en Supabase:** Se inyectaron en el booking `ALN-H265100` las claves del voucher (`voucher_pdf_url: "https://aliuntravelsrl.com/vouchers/ALN-H265100.pdf"`, `voucher_sent_at` actual) y la confirmación oficial del hotel (`hotel_confirmation_no: "EMO-H265100"`), moviendo su estado a `fulfillment_status = 'confirmed'`.
 - **Cierre de Tarea:** Se actualizó en `atlas_tasks` el estado de la tarea `OPS-01` a `'completado'` con su `fecha_completado` correspondiente, eliminándola del dashboard en vivo de Mission Control.
 
+### 4. Auditoría y Mapa de Componentes del Motor Financiero y de Pagos
+Para asegurar la consistencia funcional y versiones del motor de reservas y cobros del ecosistema, se confeccionó una auditoría exhaustiva guardada en el archivo local de la guía:
+- **Reserva Pública (`atlas-booking-frontend-v2`):** Se mapeó el flujo de captura de Leads, validación estricta de nacionalidad en el checkout (`GuestDetailsForm`), el summary de la cotización y la llamada a la RPC de pagos (`atlas_register_payment_v2`).
+- **Control Administrativo (`-atlas-admin-v2`):** Se mapeó la lógica del panel operativo de reservas manuales (`BookingOpsPanel`), la emisión segmentada de facturas por nacionalidad dominicana vs extranjera (`FacturadorPanel`, Fix B-4) y el dashboard de monitoreo financiero (`MissionControlLive`).
+
 ---
 
 ## 🚀 Sesión 16 JUL 2026: Saneamiento Wyndham Alltra & Selector de Resorts Inteligente
