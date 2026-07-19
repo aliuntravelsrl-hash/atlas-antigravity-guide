@@ -134,12 +134,27 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 Al terminar cada sesión, antes de cerrar, ejecutar en Supabase:
 
 ### Paso 1 — Marcar tareas completadas
+Los 3 campos son OBLIGATORIOS — sin ellos la tarea no cuenta como hecha:
+
 ```sql
 UPDATE atlas_tasks
-SET estado='completado', fecha_completado=NOW(),
-    resultado='[descripción de lo que se hizo]'
-WHERE codigo='[CODIGO]';
+SET 
+  estado        = 'completado',
+  fecha_completado = NOW(),
+  resultado     = '[qué se hizo exactamente]',
+  cerrado_por   = 'antigravity',
+  evidencia_url = '[commit SHA / URL / WF ID que prueba la ejecución]'
+WHERE codigo = '[CODIGO]';
 ```
+
+**Ejemplos de evidencia_url válida:**
+- Commit: `https://github.com/aliuntravelsrl-hash/atlas-admin-v2/commit/42d44ccf`
+- WF n8n: `https://n8n-n8n.xaruuo.easypanel.host/workflow/X5BnnlKKqgssQUNI`
+- CI run: `https://github.com/aliuntravelsrl-hash/atlas-admin-v2/actions`
+- Notion walkthrough: URL de la página donde documentaste el trabajo
+
+> ⚠️ Una tarea marcada sin `cerrado_por` y `evidencia_url` se considera
+> no verificada. Mission Control no la contará como realmente completada.
 
 ### Paso 2 — Registrar sesión en logs_operativos
 ```sql
