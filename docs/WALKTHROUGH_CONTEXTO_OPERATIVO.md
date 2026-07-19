@@ -63,6 +63,12 @@ Se auditó la propuesta técnica con Computer (Cerebro 2) y se definieron las es
   - **`ATL-011`** (Fase 3): Desplegar daemon reactivo `LISTEN/NOTIFY` con heartbeat cada 60s.
   - **`ATL-012`** (Fase 2): Montar contenedores shadow de Staging en la red de EasyPanel del VPS2.
 
+### 11. Sincronización del CRM y Pipeline (Tarea B-5)
+Tras la auditoría de Vocero CRM y su comparación con el motor de reservas y QA de Aliun, se determinó:
+- **Calidad y Simulación:** Nuestro agente `Hermes-QA` (`agents/qa.md` en `hermes-commercial`) es superior para auditar en caliente conversaciones reales post-interacción. El sandbox de simulación determinista de Vocero se incorporará a futuro como una skill de testing de pre-despliegue.
+- **Detección de Brecha del CRM:** Se identificó que las reservas creadas de forma manual en `BookingOpsPanel.jsx` no registran la clave foránea `lead_id` ni actualizan el `stage` del lead en `crm_leads`.
+- **Tarea Creada:** Registrada la tarea **`B-5`** (`ATL-013` en Supabase) para programar la sincronización del formulario de reservas manuales y excursiones con el pipeline de leads y contactos.
+
 ---
 
 ## 🚀 Sesión 16 JUL 2026: Saneamiento Wyndham Alltra & Selector de Resorts Inteligente
