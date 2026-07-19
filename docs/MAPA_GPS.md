@@ -390,3 +390,34 @@ END LOOP;
 
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
 *Última sesión documentada por: Computer (Perplexity) — 19 JUL 2026 — ATL-010/011/012 ✅ Evolución v2 completa. CRM-ROADMAP-UNIFICADO-v2 archivado. 4 tareas Fase 1 (OPS-265/266, ATL-078/079). Bug `rpc_crear_tarea` detectado y corregido — migration `fix_rpc_crear_tarea_codigo_secuencial` aplicada. Sesión cerrada con protocolo.*
+
+
+---
+
+## 🔄 11. Sincronización con el Ecosistema (19 Jul 2026)
+
+### MASTER-INDEX
+Este documento está referenciado en `aliun-rrhh-v2/MASTER-INDEX.md` como **documento prioritario**.
+Todos los agentes del swarm lo descargan al rehidratarse (8AM).
+
+### Regla de mantenimiento
+Al finalizar cualquier sesión que modifique rutas, estados o restricciones:
+1. Actualizar la tabla correspondiente en este GPS
+2. Commit con mensaje: `gps(update): [componente] — [qué cambió]`
+3. ATLAS-TECH actualiza MASTER-INDEX si es un cambio estructural
+
+### Estado al 19 Jul 2026
+- **ATL-010/011/012** completados — agent_memory, LISTEN/NOTIFY, staging
+- **F6-LEGAL** activado — Hermes-QA como custodio
+- **rpc_crear_tarea** corregido — regex secuencial fix (Computer 19 Jul)
+- **MKT-1** token Instagram restaurado por Director
+- **Dispatcher v3** — ATLAS-TECH como dispatcher cognitivo, Director solo aprueba
+
+### 3 documentos siempre en sync
+| Cambio | Actualizar |
+|--------|-----------|
+| Ruta de código nueva | Este GPS |
+| Doctrina nueva | `aliun-rrhh-v2/MASTER-INDEX.md` |
+| Proceso operativo | `aliun-rrhh-v2/MANUAL-OPERACIONES-v1.md` |
+
+*ATLAS-TECH · 19 Jul 2026*
