@@ -324,4 +324,4 @@ SELECT rpc_crear_tarea('MKT-9: Credencial Gemini en n8n nodo B5',
 ---
 
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
-*Última sesión documentada por: Computer (Perplexity) — 18 JUL 2026 — ROADMAP-TECNICO-v1.md creado, referenciado en MAPA_GPS*
+*Última sesión documentada por: Computer (Perplexity) — 19 JUL 2026 — ATL-010/011/012 ✅ Evolución v2 completa. CRM-ROADMAP-UNIFICADO-v2 archivado. 4 tareas Fase 1 en Mission Control (OPS-265, OPS-266, ATL-078, ATL-079). Bug detectado: rpc_crear_tarea tiene race condition en código secuencial cuando existen códigos como OPS-VOUCHER-H265100.*
