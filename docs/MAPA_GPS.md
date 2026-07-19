@@ -323,5 +323,70 @@ SELECT rpc_crear_tarea('MKT-9: Credencial Gemini en n8n nodo B5',
 
 ---
 
+
+---
+
+## Sección 10 — Bug Fix: `rpc_crear_tarea` · Código secuencial roto · 19 JUL 2026
+
+**Detectado por:** Computer (Perplexity) al generar tareas CRM Fase 1
+**Corregido por:** Computer (Perplexity) · Migration aplicada en Supabase · 19 JUL 2026
+
+### El bug
+
+El RPC usaba `REGEXP_REPLACE(codigo, '[^0-9]', '', 'g')` para extraer el número
+secuencial. Al existir el código `OPS-VOUCHER-H265100`, la expresión extraía `265100`
+y el MAX de la secuencia quedaba contaminado — el siguiente código generado era
+`OPS-265101` (incorrecto) o en caso de sesiones concurrentes colisionaba con un
+código ya existente lanzando `duplicate key violation`.
+
+```sql
+-- ANTES (roto)
+WHERE codigo LIKE 'OPS-%'                      -- captura OPS-VOUCHER-H265100
+REGEXP_REPLACE(codigo, '[^0-9]', '', 'g')      -- extrae '265100' → MAX = 265100
+-- siguiente = OPS-265101 (incorrecto) ó colisión con OPS-265 existente
+```
+
+### El fix (migration `fix_rpc_crear_tarea_codigo_secuencial`)
+
+Dos cambios quirúrgicos en el body de la función:
+
+**1. Regex estricto en el WHERE** — solo pasan códigos del patrón `OPS-NNN`:
+```sql
+-- DESPUÉS
+WHERE codigo ~ '^OPS-[0-9]+$'                 -- excluye OPS-VOUCHER-H265100
+SUBSTRING(codigo FROM '^OPS-([0-9]+)$')       -- captura solo dígitos finales
+```
+
+**2. Loop con manejo de `unique_violation`** — elimina race condition en llamadas
+concurrentes (hasta 10 reintentos automáticos antes de lanzar excepción):
+```sql
+LOOP
+  -- calcular v_seq y v_codigo
+  BEGIN
+    INSERT ... RETURNING to_json(...) INTO v_result;
+    RETURN v_result; -- éxito: salir del loop
+  EXCEPTION WHEN unique_violation THEN
+    CONTINUE; -- reintento automático
+  END;
+END LOOP;
+```
+
+### Resultado validado
+
+| Verificación | Resultado |
+|---|---|
+| Próximo OPS (ignorando `OPS-VOUCHER-H265100`) | `OPS-267` ✅ |
+| Próximo ATL | `ATL-080` ✅ |
+| `OPS-VOUCHER-H265100` contamina el contador | No — ignorado ✅ |
+| Race condition bajo carga concurrente | Reintento automático ✅ |
+
+### Regla operativa permanente
+
+> **Todos los códigos de `atlas_tasks` con prefijo estándar (`OPS-`, `ATL-`) deben
+> terminar exclusivamente en dígitos.** Códigos mixtos como `OPS-VOUCHER-X` o
+> `ATL-MCP-001` deben evitarse — rompen el contador secuencial del RPC.
+> Si el código no es numérico, insertar directamente con `INSERT INTO atlas_tasks`
+> y código explícito, nunca via `rpc_crear_tarea`.
+
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
-*Última sesión documentada por: Computer (Perplexity) — 19 JUL 2026 — ATL-010/011/012 ✅ Evolución v2 completa. CRM-ROADMAP-UNIFICADO-v2 archivado. 4 tareas Fase 1 en Mission Control (OPS-265, OPS-266, ATL-078, ATL-079). Bug detectado: rpc_crear_tarea tiene race condition en código secuencial cuando existen códigos como OPS-VOUCHER-H265100.*
+*Última sesión documentada por: Computer (Perplexity) — 19 JUL 2026 — ATL-010/011/012 ✅ Evolución v2 completa. CRM-ROADMAP-UNIFICADO-v2 archivado. 4 tareas Fase 1 (OPS-265/266, ATL-078/079). Bug `rpc_crear_tarea` detectado y corregido — migration `fix_rpc_crear_tarea_codigo_secuencial` aplicada. Sesión cerrada con protocolo.*
