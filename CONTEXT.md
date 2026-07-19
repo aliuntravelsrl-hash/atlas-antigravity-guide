@@ -182,3 +182,27 @@ Comunicar al Director el resumen de lo completado para que ATLAS-TECH sincronice
 
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
 *Última actualización: ATLAS-TECH — 18 JUL 2026*
+
+---
+
+## 📚 Índice Maestro del Ecosistema
+
+Antes de empezar cualquier sesión, consultar:
+
+**MASTER-INDEX:** `https://github.com/aliuntravelsrl-hash/aliun-rrhh-v2/blob/main/MASTER-INDEX.md`
+
+Contiene todos los documentos vivos del ecosistema:
+- Doctrinas y protocolos operativos
+- Roadmap técnico (4 fases — estado actual)
+- WFs activos en n8n con sus IDs
+- Fichas de personal del swarm
+- Documentos legales vigentes
+
+**Roadmap técnico actual:**
+`aliun-rrhh-v2/doctrines/ROADMAP-TECNICO-v1.md`
+- F1: Canales reactivos (Instagram ✅, Chatwoot ❌)
+- F2: Capa operativa (staging ✅, limpieza ✅)
+- F3: LISTEN/NOTIFY ✅ completado
+- F4: GitOps — 90 días
+
+> Si vas a crear algo nuevo, verifica primero si ya existe en MASTER-INDEX.
