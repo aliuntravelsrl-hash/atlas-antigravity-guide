@@ -473,6 +473,69 @@ Dependency Intelligence (futuro)
 ```
 Detectar automáticamente cadenas `A bloquea B bloquea C` y mostrar el cuello de botella de mayor impacto. El campo `depende_de[]` ya está en el select — la base está lista.
 
+
+---
+
+## Sección 12 — DependencyIntelligence · Grafo de dependencias · 20 JUL 2026
+
+**Construido por:** Computer (Perplexity)
+**Commits:** `acef8bf9` (componente) · `3d92ba0f` (integración) — repo `-atlas-admin-v2`
+
+### Ubicación en el árbol
+
+```
+MissionControlLive.jsx
+  ├── KPIs reservas
+  ├── Tasa del Dólar
+  ├── AtlasExecutionPulse
+  ├── DependencyIntelligence   ← NUEVO
+  └── Grid 3 columnas
+```
+
+### Algoritmo
+
+1. **buildGraph** — recorre `atlasTasks` y construye:
+   - `byCode`: mapa `codigo → task`
+   - `blocking`: mapa inverso `codigo → [codigos que dependen de él]`
+
+2. **getChain** — BFS desde una raíz, retorna todos los descendientes en cadena (evita ciclos con `visited`)
+
+3. **Clasificación:**
+   - **Cuello de botella** — raíz con `estado = bloqueada` OR `en_progreso` sin mov ≥24h, que bloquea ≥1 descendiente
+   - **Unlock key** — raíz sin dependencias propias (`depende_de[]` vacío) que libera la cadena más larga
+   - **Cadenas por impacto** — ordenadas por `depth` descendente (mayor cascada primero)
+
+### Paneles
+
+| Panel | Contenido |
+|-------|-----------|
+| Cadenas por impacto | Hasta 6 cadenas, ordenadas por tamaño. Cada fila muestra raíz → chips de dependientes con estado y ejecutor |
+| Cuellos de botella | Badge rojo animado en el header si hay raíces bloqueadas/estancadas. Resaltado visual en la cadena |
+| Tareas de desbloqueo | Top 3 raíces sin dependencias propias — completarlas libera la mayor cascada |
+| Header stats | Total con deps · total afectadas · profundidad máxima de cadena |
+
+### Caso real detectado en datos (20 JUL 2026)
+
+```
+OPS-265 (CRM-SYNC) — bloqueando:
+  ↓ OPS-266 (trg_lead_stage_changed)
+  ↓ VOICE-001 (Session Layer)
+      ↓ VOICE-002 (Context Runtime)
+          ↓ VOICE-003 (Voice Adapter)
+              ↓ VOICE-004 (MVP Comercial Voz)
+                  ↓ VOICE-005 (CRM Conversacional)
+  ↓ WF-SEGUIMIENTO-001 (WF Seguimiento Cotizaciones)
+      ↓ WF-SALDO-001 (WF Saldo Final)
+```
+**OPS-265 es el unlock key de mayor impacto** — 8 tareas liberadas al completarlo.
+
+### Archivos afectados
+
+| Archivo | Cambio |
+|---------|--------|
+| `src/components/marketing/DependencyIntelligence.jsx` | Creado |
+| `src/components/marketing/MissionControlLive.jsx` | Import + inserción JSX (sin cambios en query — ya tenía `depende_de`) |
+
 ### Estado al 20 Jul 2026
 - **ATL-010/011/012** completados — agent_memory, LISTEN/NOTIFY, staging
 - **F6-LEGAL** activado — Hermes-QA como custodio
@@ -480,6 +543,7 @@ Detectar automáticamente cadenas `A bloquea B bloquea C` y mostrar el cuello de
 - **MKT-1** token Instagram restaurado por Director
 - **Dispatcher v3** — ATLAS-TECH como dispatcher cognitivo, Director solo aprueba
 - **AtlasExecutionPulse** — nuevo widget Mission Control entre Tasa del Dólar y grid (Computer 20 Jul)
+- **DependencyIntelligence** — grafo BFS, cuellos de botella, unlock keys — OPS-265 detectado como mayor unlock key (Computer 20 Jul)
 
 ### 3 documentos siempre en sync
 | Cambio | Actualizar |
@@ -488,4 +552,4 @@ Detectar automáticamente cadenas `A bloquea B bloquea C` y mostrar el cuello de
 | Doctrina nueva | `aliun-rrhh-v2/MASTER-INDEX.md` |
 | Proceso operativo | `aliun-rrhh-v2/MANUAL-OPERACIONES-v1.md` |
 
-*ATLAS-TECH · 19 Jul 2026 · Computer (Perplexity) · 20 Jul 2026*
+*ATLAS-TECH · 19 Jul 2026 · Computer (Perplexity) · 20 Jul 2026 (x2)*
