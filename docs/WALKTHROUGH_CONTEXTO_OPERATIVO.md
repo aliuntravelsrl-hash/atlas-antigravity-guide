@@ -137,10 +137,26 @@ Siguiendo las pautas de integridad del Molde de Hierro, se saneó la base de dat
 - **Ajuste de RAG de Imagen (Evitación de Bloqueo por Hotlink):**
   - Se detectó que el hotel `Lifestyle Tropical Beach` (`lifestyle-tropical-beach`) apuntaba en la columna `about_image` de Supabase a una URL del dominio oficial del hotel (`lifestyletropicalbeach.com`). Este servidor bloqueaba las descargas de agentes externos (como PDFMonkey y Telegram) mediante políticas de Hotlink Protection, haciendo que el voucher llegara sin imagen. Se actualizó el campo en Supabase con una imagen de resort de playa tropical de alta definición optimizada y libre de restricciones del CDN de Unsplash.
 
+- **Sincronización Git:** Se subieron los cambios de producción de `atlas-booking-frontend-v2` a GitHub en el commit `feat: implementar carrusel de destinos en 3D Coverflow con Swiper en el Home`.
+
+---
+
+## 🚀 Sesión 20 JUL 2026: Sincronización CRM-SYNC (`OPS-265`) & Fix `🛎️ Special Requests`
+
+### 1. Enlace de Reservas Manuales al CRM (`OPS-265` / `ATL-013`)
+*   Se cargó la lista de leads de `crm_leads` en `BookingOpsPanel.jsx`.
+*   Se inyectó un buscador de leads en los formularios de hotel y excursión, auto-completando datos de contacto y asociando `lead_id` a la reserva.
+*   Al insertar, la etapa del lead cambia automáticamente a `'confirmada'`.
+*   Se añadió un Checkbox de usabilidad (`Crear automáticamente un nuevo Lead manual en el pipeline`) con una nota para que el operador decida si desea crear el lead de cero o dejar la reserva huérfana en Supabase.
+*   **Estado:** Desplegado con éxito a `atlas.aliuntravelsrl.com` mediante pipeline de GitHub Actions (commit `219b45f`). La tarea `OPS-265` fue marcada como `completado` con éxito en Supabase de producción.
+
+### 2. Fix de Peticiones Especiales (`🛎️ Special Requests`) en Checkout
+*   Se detectó que en el Checkout del cliente final (`CheckoutPage.jsx`), las peticiones especiales seleccionadas por el cliente no se enviaban a Supabase al actualizar la reserva tras la confirmación de pago.
+*   Se inyectó el campo `special_requests: specialRequests` en la llamada `.update()` a la tabla `bookings`.
+*   **Estado:** Desplegado con éxito a `aliuntravelsrl.com` mediante pipeline de GitHub Actions (commit `300df10`).
+
 ---
 
 ## 🔬 Verificación de Cambios
-
-- **Frontend Build:** Se corrió `npx vite build` y se comprobó que la aplicación compila al 100% de forma limpia y sin errores de imports.
-- **Vite HMR:** El servidor de desarrollo Vite (`task-218`) refrescó la aplicación correctamente, aplicando las modificaciones de inmediato y sin errores en consola.
-- **Sincronización Git:** Se subieron los cambios de producción de `atlas-booking-frontend-v2` a GitHub en el commit `feat: implementar carrusel de destinos en 3D Coverflow con Swiper en el Home`.
+- **Frontend Build:** Se corrió `npm run build` en ambos repositorios comprobando que las aplicaciones compilan al 100% de forma limpia y sin errores de imports.
+- **Sincronización Git:** Cambios subidos a GitHub Actions de ambos repositorios, completando e indexando las tareas de producción.
