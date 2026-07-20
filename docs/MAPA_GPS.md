@@ -406,12 +406,80 @@ Al finalizar cualquier sesión que modifique rutas, estados o restricciones:
 2. Commit con mensaje: `gps(update): [componente] — [qué cambió]`
 3. ATLAS-TECH actualiza MASTER-INDEX si es un cambio estructural
 
-### Estado al 19 Jul 2026
+
+---
+
+## Sección 11 — AtlasExecutionPulse · Nuevo componente Mission Control · 20 JUL 2026
+
+**Construido por:** Computer (Perplexity)
+**Spec aprobada:** [Notion — Atlas Execution Pulse](https://app.notion.com/p/360293f46b248176814ed3101723f759)
+**Commits:** `dd3b5f79` (componente) · `4ee6fcad` (integración) — repo `-atlas-admin-v2`
+
+### Ubicación en el árbol de componentes
+
+```
+MissionControlLive.jsx
+  ├── KPIs reservas
+  ├── Tasa del Dólar
+  ├── AtlasExecutionPulse   ← NUEVO (entre Tasa del Dólar y el grid)
+  └── Grid 3 columnas
+        ├── n8n / Agentes
+        ├── Mesa de Tareas
+        └── Actividad Reciente / Heartbeat
+```
+
+### Archivos afectados
+
+| Archivo | Cambio | Commit |
+|---------|--------|--------|
+| `src/components/marketing/AtlasExecutionPulse.jsx` | Creado — componente completo | `dd3b5f79` |
+| `src/components/marketing/MissionControlLive.jsx` | Import + inserción JSX + select expandido | `4ee6fcad` |
+
+### Query `atlas_tasks` ampliada
+
+La query del backlog activo en `MissionControlLive` pasó de:
+```
+codigo, titulo, descripcion, asignado_a, asignado_tipo, prioridad,
+estado, tipo, frente, sprint, bloqueado, bloqueo_razon
+```
+A incluir adicionalmente:
+```
+updated_at, ejecutor, responsable_arquitectura, depende_de
+```
+Ambas instancias actualizadas: polling principal (POLLING 5) y refresh post-creación de tarea.
+
+### Paneles del componente
+
+| Panel | Lógica | Campo clave |
+|-------|--------|------------|
+| Estado del backlog | Conteo + barras por estado activo (`pendiente`, `en_progreso`, `bloqueada`, `en_revision`, `requiere_correccion`) | `estado` |
+| Execution Health | 🟢 Activos: `en_progreso` + `updated_at < 24h` · 🟡 Estancados: `en_progreso` + `updated_at ≥ 24h` · 🔴 Bloqueados: `estado = bloqueada` | `updated_at` |
+| Distribución por ejecutor | Barras proporcionales — usa `ejecutor` (quién ejecuta), no `asignado_a` | `ejecutor` |
+| Cuellos de botella | Auto-detecta tareas bloqueadas que aparecen en `depende_de[]` de otras — muestra cadena de impacto | `depende_de` |
+| Críticas activas | Top 3 tareas con `prioridad = critica` del backlog | `prioridad` |
+
+### Decisiones de diseño (per spec)
+
+1. **Sin porcentaje global** — la query excluye `completado` y `archivado`, por lo que `X% completado` sería engañoso. Para iniciativas delimitadas (ej. VOICE-000→005) sí se puede calcular con universo conocido.
+2. **`ejecutor` vs `asignado_a`** — el componente usa `ejecutor` para mostrar quién realiza el trabajo. `responsable_arquitectura` queda separado para trazabilidad de decisión, no contaminando la distribución de carga.
+3. **Componente independiente** — no modifica estado compartido, solo consume `atlasTasks`. No rompe: n8n, Agentes, Mesa de Tareas, Actividad Reciente, Heartbeat Manual.
+
+### Siguiente paso estratégico sugerido (per spec)
+
+```
+AtlasExecutionPulse
+        ↓
+Dependency Intelligence (futuro)
+```
+Detectar automáticamente cadenas `A bloquea B bloquea C` y mostrar el cuello de botella de mayor impacto. El campo `depende_de[]` ya está en el select — la base está lista.
+
+### Estado al 20 Jul 2026
 - **ATL-010/011/012** completados — agent_memory, LISTEN/NOTIFY, staging
 - **F6-LEGAL** activado — Hermes-QA como custodio
 - **rpc_crear_tarea** corregido — regex secuencial fix (Computer 19 Jul)
 - **MKT-1** token Instagram restaurado por Director
 - **Dispatcher v3** — ATLAS-TECH como dispatcher cognitivo, Director solo aprueba
+- **AtlasExecutionPulse** — nuevo widget Mission Control entre Tasa del Dólar y grid (Computer 20 Jul)
 
 ### 3 documentos siempre en sync
 | Cambio | Actualizar |
@@ -420,4 +488,4 @@ Al finalizar cualquier sesión que modifique rutas, estados o restricciones:
 | Doctrina nueva | `aliun-rrhh-v2/MASTER-INDEX.md` |
 | Proceso operativo | `aliun-rrhh-v2/MANUAL-OPERACIONES-v1.md` |
 
-*ATLAS-TECH · 19 Jul 2026*
+*ATLAS-TECH · 19 Jul 2026 · Computer (Perplexity) · 20 Jul 2026*
