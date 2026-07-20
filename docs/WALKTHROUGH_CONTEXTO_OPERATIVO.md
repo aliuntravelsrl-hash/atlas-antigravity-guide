@@ -155,8 +155,18 @@ Siguiendo las pautas de integridad del Molde de Hierro, se saneó la base de dat
 *   Se inyectó el campo `special_requests: specialRequests` en la llamada `.update()` a la tabla `bookings`.
 *   **Estado:** Desplegado con éxito a `aliuntravelsrl.com` mediante pipeline de GitHub Actions (commit `300df10`).
 
+### 3. Corrección de Botones y Multilenguaje (`ReviewBooking.jsx` & `BookingSummary.jsx`)
+*   **Causa Raíz de Botones Muertos:** Al presionar los botones en el checkout, el payload enviaba `children_ages` y `special_requests` serializados como string. Esto violaba la restricción de tipo de la columna Postgres `integer[]` y `jsonb` de Supabase, abortando la transacción silenciosamente. Al mismo tiempo, el Toaster de Sonner (incompatible con la raíz de Shadcn de la app) ocultaba el mensaje de error.
+*   **Solución:**
+    *   Pasamos `children_ages` y `special_requests` como array y objeto nativos directamente.
+    *   Reemplazamos `sonner` por `useToast` nativo de Shadcn para mostrar notificaciones visibles.
+    *   Cambiamos el checkbox de Radix UI por un input checkbox HTML nativo para garantizar robustez.
+    *   Implementamos el hook `useTranslation` de `react-i18next` en la vista de confirmación y en la barra lateral de ventas (`BookingSummary.jsx`), mapeando los textos a los diccionarios `es.json` y `en.json`.
+*   **Estado:** Desplegado con éxito a `aliuntravelsrl.com` mediante pipeline de GitHub Actions (commit `6da5f53`).
+
 ---
 
 ## 🔬 Verificación de Cambios
 - **Frontend Build:** Se corrió `npm run build` en ambos repositorios comprobando que las aplicaciones compilan al 100% de forma limpia y sin errores de imports.
 - **Sincronización Git:** Cambios subidos a GitHub Actions de ambos repositorios, completando e indexando las tareas de producción.
+
