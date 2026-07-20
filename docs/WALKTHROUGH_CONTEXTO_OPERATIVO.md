@@ -162,11 +162,18 @@ Siguiendo las pautas de integridad del Molde de Hierro, se saneó la base de dat
     *   Reemplazamos `sonner` por `useToast` nativo de Shadcn para mostrar notificaciones visibles.
     *   Cambiamos el checkbox de Radix UI por un input checkbox HTML nativo para garantizar robustez.
     *   Implementamos el hook `useTranslation` de `react-i18next` en la vista de confirmación y en la barra lateral de ventas (`BookingSummary.jsx`), mapeando los textos a los diccionarios `es.json` y `en.json`.
-*   **Estado:** Desplegado con éxito a `aliuntravelsrl.com` mediante pipeline de GitHub Actions (commit `6da5f53`).
+*   **Ajuste de Políticas de Cancelación (24 Horas):** Cambiamos la política por defecto en `CancellationPolicyTable.jsx` para que calcule un intervalo de **24 horas (1 día antes)** en lugar de 7 días, y sincronizamos esta política aplicada en el objeto `special_requests` de `bookings`.
+*   **Estado:** Desplegado con éxito a `aliuntravelsrl.com` mediante pipeline de GitHub Actions (commit `a194426`).
+
+### 4. Peticiones Especiales en Reservas Manuales (CRM y Panel Admin)
+*   **UI del Panel Admin:** Agregamos el input `🛎️ Peticiones especiales (Huésped/Cliente)` en los formularios de Hotel y Excursión en `BookingOpsPanel.jsx`.
+*   **Sincronización Supabase & CRM:** Se guarda como un array/objeto JSON nativo en el campo `special_requests` de `bookings` y se concatena automáticamente al final de la columna `message` en `crm_leads` (ej. `\n🛎️ Peticiones especiales: Cama king`), permitiendo su visualización inmediata en el pipeline de Kommo CRM.
+*   **Estado:** Desplegado con éxito a `atlas.aliuntravelsrl.com` mediante pipeline de GitHub Actions (commit `5d70e27`).
 
 ---
 
 ## 🔬 Verificación de Cambios
 - **Frontend Build:** Se corrió `npm run build` en ambos repositorios comprobando que las aplicaciones compilan al 100% de forma limpia y sin errores de imports.
 - **Sincronización Git:** Cambios subidos a GitHub Actions de ambos repositorios, completando e indexando las tareas de producción.
+
 
