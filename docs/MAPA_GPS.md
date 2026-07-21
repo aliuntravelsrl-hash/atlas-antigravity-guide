@@ -57,11 +57,11 @@ Este documento consolida el mapa de archivos físicos, repositorios, ubicaciones
 | **Integrity Monitor** | Ruta `/integrity` | **✅ Operativo** | — |
 | **Hoteles Admin** | `src/pages/admin/AdminHotelsPage.jsx` (ruta `/admin/hotels`) | **✅ Operativo** | — |
 | **Excursiones Admin** | `src/pages/admin/AdminExcursionsPage.jsx` (ruta `/admin/excursions`) | **✅ Operativo** | — |
-| **Pagos por Booking** | `src/components/admin/PaymentGatewayPage.jsx` (ruta `/admin/payments/:bookingRef`) | **⚠️ En espera (RNC)** | — |
+| **Pagos por Booking** | `src/components/admin/PaymentGatewayPage.jsx` (ruta `/admin/payments/:bookingRef`) | **✅ Operativo (Multimoneda)** | — |
 | **CRM Pipeline** | Ruta `/crm/pipeline` | **✅ Operativo** | — |
 | **CRM Dashboard** | Ruta `/crm/dashboard` | **✅ Operativo** | — |
 | **API Toolbox** | Ruta `/api-toolbox` | **✅ Operativo** | — |
-| **Booking Ops Panel** | `src/pages/admin/BookingOpsPanel.jsx` (ruta `/dashboard26`) | **✅ Operativo** | — |
+| **Booking Ops Panel** | `src/pages/admin/BookingOpsPanel.jsx` (ruta `/dashboard26`) | **✅ Operativo (Multimoneda)** | — |
 
 ### 🔐 Configuración de Deploy (CI/CD)
 - **Workflow:** `.github/workflows/deploy.yml` → GitHub Actions → SCP → Hostinger
@@ -544,6 +544,7 @@ OPS-265 (CRM-SYNC) — bloqueando:
 - **Dispatcher v3** — ATLAS-TECH como dispatcher cognitivo, Director solo aprueba
 - **AtlasExecutionPulse** — nuevo widget Mission Control entre Tasa del Dólar y grid (Computer 20 Jul)
 - **DependencyIntelligence** — grafo BFS, cuellos de botella, unlock keys — OPS-265 detectado como mayor unlock key (Computer 20 Jul)
+- **Soporte Multimoneda por Nacionalidad (F1-NAC-001 & B-5-REG)** — Implementado soporte dinámico DOP/USD. Normalizado el cálculo de saldos y abonos manuales en pesos y dólares en la base de datos de Supabase y el panel de administración, resolviendo descuadres en abonos (Antigravity 21 Jul)
 
 ### 3 documentos siempre en sync
 | Cambio | Actualizar |
@@ -552,4 +553,4 @@ OPS-265 (CRM-SYNC) — bloqueando:
 | Doctrina nueva | `aliun-rrhh-v2/MASTER-INDEX.md` |
 | Proceso operativo | `aliun-rrhh-v2/MANUAL-OPERACIONES-v1.md` |
 
-*ATLAS-TECH · 19 Jul 2026 · Computer (Perplexity) · 20 Jul 2026 (x2)*
+*ATLAS-TECH · 19 Jul 2026 · Computer (Perplexity) · 20 Jul 2026 (x2) · Antigravity · 21 Jul 2026*
