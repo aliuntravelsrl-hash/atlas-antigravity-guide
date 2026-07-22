@@ -661,3 +661,36 @@ Gap registrado automáticamente si no encuentra → QA procesa en briefing diari
 ```
 
 *Antigravity · ATLAS-TECH · 22 Jul 2026*
+
+
+---
+
+## Sección 14 — F1-GRP-001 + HK-002B Completados (22 Jul 2026 18:24 UTC)
+
+**Construido por:** Antigravity
+**Commit:** `9a37353` (-atlas-admin-v2)
+
+### F1-GRP-001 — Facturador Grupal unificado
+
+| Cambio | Detalle |
+|--------|---------|
+| `FacturadorPanel.jsx` | Llama `/webhook/aliun-factura` para grupal e individual |
+| Modo grupal | Purga booking_passengers → inserta lista → webhook con booking_id |
+| Modo individual | Busca/inicializa pasajero líder → obtiene passenger_id → webhook |
+| Error handling | Valida `{ pdf_url }` en respuesta antes de window.open |
+| Supabase | booking_passengers sincronizada en tiempo real antes del PDF |
+
+### HK-002B — Embeddings OpenAI credencial
+
+Nodo `06_OPENAI_EMBEDDING` reconfigurado:
+- ID hardcodeado removido → credencial estándar `OpenAI API` (resolución automática)
+- Cuando se publique conocimiento → WF genera embedding → set_knowledge_embedding() → pgvector activo
+
+### Estado Antigravity — tareas completadas esta sesión
+```
+F1-PDF-001 ✅ jsPDF → Gotenberg (admin + frontend)
+F1-GRP-001 ✅ Facturador grupal unificado + booking_passengers
+HK-002B    ✅ Embeddings OpenAI credencial configurada
+```
+
+*Antigravity · 22 Jul 2026*
