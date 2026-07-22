@@ -556,3 +556,79 @@ OPS-265 (CRM-SYNC) — bloqueando:
 | Proceso operativo | `aliun-rrhh-v2/MANUAL-OPERACIONES-v1.md` |
 
 *ATLAS-TECH · 19 Jul 2026 · Computer (Perplexity) · 20 Jul 2026 (x2) · Antigravity · 21 Jul 2026 (x3)*
+
+
+---
+
+## Sección 12 — Hotel Knowledge Loop + Commercial Runtime (22 Jul 2026)
+
+**Construido por:** ATLAS-TECH
+**Tareas:** HK-000 → HK-006 (todas completadas)
+
+### Nuevas tablas en Supabase
+
+| Tabla | Función | RLS |
+|-------|---------|-----|
+| `hotel_knowledge` | Conocimiento canónico verificado por hotel (20 col, vector(1536) HNSW) | ✅ |
+| `hotel_qa_log` | Log de preguntas + gaps pendientes QA (16 col) | ✅ |
+| `booking_passengers` | Pasajeros por reserva grupal (FK bookings) | ✅ |
+
+### Nuevas vistas en Supabase
+
+| Vista | Función |
+|-------|---------|
+| `hotel_knowledge_dashboard` | Resumen knowledge por hotel — publicado/propuesto/gaps |
+| `hotel_knowledge_gaps` | Gaps pendientes QA con estado: pendiente_qa/gap_confirmado/resuelto |
+| `conversation_messages_unified` | Unifica schema VOICE-001 + hermes-commercial |
+
+### Nuevas RPCs en Supabase
+
+| RPC | Owner | Función |
+|-----|-------|---------|
+| `consultar_y_registrar(hotel_id, pregunta, ...)` | Commercial Runtime | Consulta knowledge + registra gap automático |
+| `registrar_knowledge_gap(...)` | Hermes Commercial | Registra gap desde conversación |
+| `publicar_knowledge(...)` | Director/QA | Publica conocimiento canónico |
+| `aprobar_knowledge(knowledge_id)` | Director (1 clic) | Aprueba propuesta de Intel |
+| `rechazar_knowledge(knowledge_id)` | Director | Marca obsoleto |
+| `get_hotel_knowledge(hotel_id, pregunta, embedding?)` | Retrieval | Búsqueda semántica pgvector + fallback pg_trgm |
+| `set_knowledge_embedding(knowledge_id, embedding)` | WF Antigravity | Guarda embedding OpenAI ada-002 |
+| `search_hotels_for_voice(...)` | VOICE-MVP | Top 3 hoteles por destino/fechas |
+| `get_customer_context(lead_id)` | Context Runtime | Contexto cliente para sesión |
+| `get_session_context(session_id)` | Context Runtime | Sesión activa + mensajes |
+| `create_conversation_session(lead_id, channel)` | Voice Adapter | Crea/retoma sesión |
+
+### WFs actualizados
+
+| WF | ID | Cambio |
+|----|-----|--------|
+| WF-VOICE-MVP-v1 | `L7KkXngQUY7bW6RW` | Añadido nodo 03B_KNOWLEDGE_CHECK (HK-004) |
+| WF-QA-BRIEFING | `vFSdP9tFvGwIg1ZQ` | Fix fan-in + Merge node |
+| WF-ATLAS-BRIDGE | `k4ufSjrvsmy7HRDS` | Fix fan-in + Merge node |
+| WF-HERMES-GUARDIAN | `wT4AD9VhFZc0DfGH` | Fix fan-in + Merge node |
+| WF-SALDO-FINAL-v1 | `e5gIesmEw7giIjnR` | Activado (estaba inactivo) |
+
+### Componentes frontend pendientes (tareas Antigravity)
+
+| Tarea | Componente | Estado |
+|-------|-----------|--------|
+| HK-006 | `HotelKnowledgePanel.jsx` | ⏳ Pendiente |
+| F1-PDF-001 | Migrar jsPDF → Gotenberg (8 archivos) | ⏳ Pendiente |
+| F1-GRP-001 | Conectar UI factura grupal con booking_passengers | ⏳ Pendiente |
+| HK-002B | WF embeddings OpenAI credencial | ⏳ Pendiente |
+| B-5-REG | WF-DEPOSITO fix DOP hardcoded | ⏳ Pendiente |
+
+### Estándar ATLAS Product Knowledge
+
+Documento canónico: `aliun-rrhh-v2/doctrines/ATLAS-PRODUCT-KNOWLEDGE-STANDARD-v1.md`
+Commit: `542a72be`
+
+**Regla:** Antes de crear cualquier `*_knowledge` table → leer el estándar primero.
+**Extensión:** hotel → excursion → transfer → real_estate (mismo modelo, distinto product_type)
+
+### Protocolo Knowledge-First para Hermes Commercial
+
+Ver: `hermes-commercial/ROUTING.md` commit `48d55ec1`
+Antes de responder pregunta específica sobre hotel → `consultar_y_registrar()`
+Gap registrado automáticamente si no encuentra → QA procesa en briefing diario
+
+*ATLAS-TECH · 22 Jul 2026*
