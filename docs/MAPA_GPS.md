@@ -632,3 +632,32 @@ Antes de responder pregunta específica sobre hotel → `consultar_y_registrar()
 Gap registrado automáticamente si no encuentra → QA procesa en briefing diario
 
 *ATLAS-TECH · 22 Jul 2026*
+
+
+---
+
+## Sección 13 — F1-PDF-001 Completado (22 Jul 2026 18:15 UTC)
+
+**Construido por:** Antigravity
+**Commits:** `1bee198` (-atlas-admin-v2) · `e2234e9` (atlas-booking-frontend-v2)
+
+### jsPDF eliminado — Gotenberg activo en ambos repos
+
+| Archivo | Repo | Estado |
+|---------|------|--------|
+| `src/lib/QuotationPDFGenerator.js` | admin + frontend | ✅ Gotenberg |
+| `src/lib/QuotePDFGenerator.js` | admin + frontend | ✅ Gotenberg |
+| `src/lib/VoucherPDFGenerator.js` | admin | ✅ Gotenberg |
+| `src/services/voucherService.js` | frontend | ✅ Gotenberg |
+| `src/services/documentService.js` | frontend | ✅ Gotenberg |
+| `html2canvas.esm-*.js` | admin dist | ❌ Removido |
+| `purify.es-*.js` | admin dist | ❌ Removido |
+
+### Webhooks activos (todos via Gotenberg)
+```
+/webhook/aliun-cotizacion-individual → DOC-1 + DOC-2
+/webhook/aliun-recibo-abono          → DOC-3
+/webhook/aliun-voucher               → DOC-4
+```
+
+*Antigravity · ATLAS-TECH · 22 Jul 2026*
