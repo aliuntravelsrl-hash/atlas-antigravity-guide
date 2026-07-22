@@ -546,6 +546,7 @@ OPS-265 (CRM-SYNC) — bloqueando:
 - **DependencyIntelligence** — grafo BFS, cuellos de botella, unlock keys — OPS-265 detectado como mayor unlock key (Computer 20 Jul)
 - **Soporte Multimoneda por Nacionalidad (F1-NAC-001 & B-5-REG)** — Implementado soporte dinámico DOP/USD. Normalizado el cálculo de saldos y abonos manuales en pesos y dólares en la base de datos de Supabase y el panel de administración, resolviendo descuadres en abonos (Antigravity 21 Jul)
 - **Normalización de Pasarela de Pagos (PaymentGatewayPage)** — Corregido el cálculo del total (total_amount_dop) y cobrado acumulado para evitar sumas erróneas e interpretaciones incorrectas de monedas DOP/USD en abonos (Antigravity 21 Jul)
+- **Corrección de Mapeo de Webhook (PaymentGatewayPage)** — Solucionada la multiplicación redundante por tasa de cambio de abonos ya registrados en DOP al ser transferidos al webhook del Estado de Cuenta (Antigravity 21 Jul)
 
 ### 3 documentos siempre en sync
 | Cambio | Actualizar |
@@ -554,4 +555,4 @@ OPS-265 (CRM-SYNC) — bloqueando:
 | Doctrina nueva | `aliun-rrhh-v2/MASTER-INDEX.md` |
 | Proceso operativo | `aliun-rrhh-v2/MANUAL-OPERACIONES-v1.md` |
 
-*ATLAS-TECH · 19 Jul 2026 · Computer (Perplexity) · 20 Jul 2026 (x2) · Antigravity · 21 Jul 2026 (x2)*
+*ATLAS-TECH · 19 Jul 2026 · Computer (Perplexity) · 20 Jul 2026 (x2) · Antigravity · 21 Jul 2026 (x3)*
