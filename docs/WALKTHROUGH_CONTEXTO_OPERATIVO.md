@@ -31,6 +31,8 @@ Este documento registra las acciones realizadas durante las sesiones de rehidrat
     *   **Cotizar (`HotelBookingForm.jsx`):** Genera el `event_id`, dispara el evento `Lead` del navegador, realiza el `dataLayer.push` comercial a GTM e inserta la reserva asociando de forma síncrona el `meta_event_id` y `meta_fbclid` al lead correspondiente en **`crm_leads`** de Supabase.
     *   **Checkout & Compra (`CheckoutPage.jsx`):** Dispara `InitiateCheckout` (`begin_checkout`) al entrar a la sección de pago y `Purchase` (`purchase`) al concretar el depósito con éxito, arrastrando el mismo `event_id`.
 *   **Configuración del Pixel ID Real:** Se configuró el Pixel del navegador **`1197179654562182`** como `VITE_META_PIXEL_ID` en el archivo `.env` del frontend público para la correcta detección y diagnóstico por parte de Meta.
+*   **Validación en Vivo de Meta CAPI:** Ejecutada prueba de inyección directa sobre el webhook `/webhook/meta-capi-event` en el workflow `oMycQdTpSKsTHBRc` de n8n, con respuesta exitosa **200 OK** y confirmando la correcta integración del token de acceso para el dataset `4167218546884724`.
+
 
 ---
 
