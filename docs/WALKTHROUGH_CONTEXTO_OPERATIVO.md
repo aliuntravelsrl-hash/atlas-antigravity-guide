@@ -230,4 +230,22 @@ Siguiendo las pautas de integridad del Molde de Hierro, se saneó la base de dat
 - **Frontend Build:** Se corrió `npm run build` en ambos repositorios comprobando que las aplicaciones compilan al 100% de forma limpia y sin errores de imports.
 - **Sincronización Git:** Cambios subidos a GitHub Actions de ambos repositorios, completando e indexando las tareas de producción.
 
+---
+
+## 🚀 Sesión 24 JUL 2026: Sincronización CRM & Inbound de Proveedores (B-5 / OPS-269)
+
+### 1. Matching Inteligente de Leads (`B-5` / `ATL-013`)
+*   Se implementó una búsqueda en caliente de leads por `email` o `phone` (removiendo caracteres no numéricos de forma flexible) antes de insertar reservas manuales en `BookingOpsPanel.jsx`.
+*   Esto auto-asocia la reserva al lead existente en Supabase si coincide el teléfono o el email, previniendo leads huérfanos y duplicados.
+*   Se corrigió la etapa de destino a `'deposito_recibido'` (en lugar de `'confirmada'`) para respetar la restricción check `crm_leads_stage_check` en Supabase de producción, validándolo mediante tests de integración local exitosos.
+*   **Estado:** Modificaciones comiteadas y subidas a `-atlas-admin-v2` en el commit `ba7c24d`.
+
+### 2. Transición a Correo Corporativo y Trazabilidad (`OPS-269`)
+*   Se actualizó el JSON de n8n en [WF-OPS-BOOKING-FULFILLMENT-v1-FIXED3.json](file:///C:/Users/Admin/Downloads/WF-OPS-BOOKING-FULFILLMENT-v1-FIXED3.json) para inyectar las cabeceras personalizadas de respuesta corporativa y trazabilidad:
+    *   `Reply-To`: `reservas@aliuntravelsrl.com` (apuntando al dominio corporativo oficial).
+    *   `From`: `Aliun Travel <aliuntravelsrl@gmail.com>` (para garantizar la entregabilidad máxima mediante SPF/DKIM de Google).
+    *   `X-Entity-Ref-ID`: `={{ $('05_PREP_EMAIL_PAYLOAD').item.json.booking_reference }}` (para trazabilidad inequívoca en las respuestas).
+*   **Estado:** Archivo JSON modificado y validado sintácticamente en local, listo para importar en la consola gráfica de n8n.
+
+
 

@@ -120,7 +120,7 @@ Guía de rehidratación rápida de contexto operativo y memoria de estado para A
 
 | Agente | Estado | Notas |
 |--------|--------|-------|
-| **Antigravity** | ✅ Activo | Operativo. Sesión 24 Jul completada: Pre-rendering (SEO-001) y Sitemap (SEO-002) generados y validados. |
+| **Antigravity** | ✅ Activo | Operativo. Sesión 24 Jul completada: CRM-sync (B-5) robustecido con matching de leads y cabeceras de trazabilidad de correo (OPS-269) en n8n integradas. |
 | **Computer (Perplexity)** | ✅ Activo | Cubre incidentes de infraestructura y documentación mientras Antigravity está en timeout. Ficha: `aliun-rrhh-v2/personnel/AP-EXT-01_COMPUTER_PERPLEXITY.md` |
 | **ATLAS-TECH (Claude Sonnet 4.6)** | ✅ Activo | Desktop. Orquesta el swarm vía `atlas_tasks`. |
 
