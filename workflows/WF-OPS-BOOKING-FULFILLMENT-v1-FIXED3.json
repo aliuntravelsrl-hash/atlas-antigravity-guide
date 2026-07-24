@@ -1,0 +1,1081 @@
+{
+  "name": "WF-OPS-BOOKING-FULFILLMENT-v1",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 🚀 WF-OPS-BOOKING-FULFILLMENT-v1\n**Motor B2B de Fulfillment — ATLAS OPS**\n\n### FASE OUTBOUND (Solicitud al mayorista)\n```\nTRIGGER (cada 5 min) → Query bookings\n→ JOIN leads + marketing_offers\n→ Mapear email proveedor\n→ Gemini redacta correo B2B\n→ Gmail Send\n→ UPDATE bookings (email_sent)\n```\n\n### FASE INBOUND (Confirmación del mayorista)\n```\nTRIGGER (cada 10 min) → Gmail poll\n→ Filtrar respuestas pendientes\n→ Gemini extrae localizador\n→ UPDATE bookings (provider_locator)\n→ POST → Antigravity Squad (WhatsApp)\n```\n\n### MATRIZ DE PROVEEDORES:\n- `soltravel` → soltravel06@gmail.com\n- `deseo` → deseoreservas@gniall.com.do ⚠️ verificar\n- `opera` → ventas8@operahotel.com.do\n- `sunparadise` → sunreservas@sunparadise.com.do\n- `tierraverde` → reservas@mitierraverde.com\n\n### COLUMNAS NUEVAS en bookings:\n`fulfillment_status`, `provider_name`, `provider_email`,\n`pax_details`, `children_ages`, `provider_locator`,\n`gmail_thread_id`, `outbound_sent_at`\n\n⚠️ **POST-IMPORT**: Configurar credencial Gmail en\nnodos 03_GMAIL_SEND y 09_GMAIL_POLL",
+        "height": 620,
+        "width": 500,
+        "color": 3
+      },
+      "id": "7f06f076-e3e1-4789-a230-9553ebf8ac96",
+      "name": "📋 ARQUITECTURA",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        8864,
+        5360
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 📤 FASE OUTBOUND\nSolicitud al mayorista",
+        "height": 80,
+        "width": 180,
+        "color": 5
+      },
+      "id": "ef96f6ac-fc95-40ce-b9a3-9609bbff2909",
+      "name": "📤 FASE OUTBOUND",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        9456,
+        5360
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 📥 FASE INBOUND\nConfirmación del mayorista",
+        "height": 80,
+        "width": 180,
+        "color": 6
+      },
+      "id": "97d21e63-3bbf-4cc1-bd51-9091052fbbde",
+      "name": "📥 FASE INBOUND",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        9456,
+        6160
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "4c7661c1-4e44-4a11-9f34-eddf426b559e",
+      "name": "01_SCHEDULE_OUTBOUND",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        9456,
+        5520
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://oyihiyivdhfxpyiwnmqk.supabase.co/rest/v1/bookings",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "fulfillment_status",
+              "value": "=eq.pending_provider"
+            },
+            {
+              "name": "select",
+              "value": "id,lead_id,hotel_id,offer_id,atlas_offer_id,check_in,check_out,total_amount,pax_details,children_ages,occupancy_desc,provider_name,booking_reference,leads(first_name,last_name,email,phone)"
+            },
+            {
+              "name": "limit",
+              "value": "10"
+            },
+            {
+              "name": "order",
+              "value": "created_at.asc"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "d0208fb9-5b9a-4286-ad07-aab17be549e6",
+      "name": "02A_QUERY_BOOKINGS_PENDIENTES",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        9696,
+        5520
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-has-bookings",
+              "leftValue": "={{ Array.isArray($json) ? $json.length : 0 }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ea0c2cec-49d9-4b60-92a4-4b5654cf59f9",
+      "name": "02B_IF_HAY_PENDIENTES",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        9936,
+        5520
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supabase HTTP devuelve el array directamente como $json\n// Este nodo convierte [{booking1},{booking2}] en items individuales\nconst data = $input.first().json;\nconst arr = Array.isArray(data) ? data : [];\nif (arr.length === 0) return [];\nreturn arr.map(item => ({ json: item }));"
+      },
+      "id": "c52285e8-f495-45dd-a607-0ff6437fd02f",
+      "name": "02C_SPLIT_BOOKINGS",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        10176,
+        5440
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══ MATRIZ TEMPORAL DE PROVEEDORES ═══\n// Actualizar cuando se confirme el dominio de Deseo\nconst PROVIDER_EMAIL_MAP = {\n  'soltravel':   'soltravel06@gmail.com',\n  'deseo':       'deseoreservas@gniall.com.do',   // ⚠️ Verificar dominio con Director\n  'opera':       'ventas8@operahotel.com.do',\n  'sunparadise': 'sunreservas@sunparadise.com.do',\n  'tierraverde': 'reservas@mitierraverde.com',\n};\n\nconst booking = $input.first().json;\nconst lead    = booking.leads || {};\nconst offer   = booking.marketing_offers || {};\n\n// Normalizar provider_name: viene de bookings.provider_name o de la oferta\nconst rawProvider = (booking.provider_name || offer.source_channel || '').toLowerCase().trim();\n\n// Match flexible: busca si alguna clave de la matriz aparece en el provider_name\nlet matchedKey = null;\nfor (const key of Object.keys(PROVIDER_EMAIL_MAP)) {\n  if (rawProvider.includes(key)) { matchedKey = key; break; }\n}\n\nconst providerEmail = matchedKey ? PROVIDER_EMAIL_MAP[matchedKey] : null;\n\nif (!providerEmail) {\n  // Sin match → marcar como fallido para revisión manual\n  return [{json: {\n    _skip: true,\n    _reason: `Sin email mapeado para proveedor: \"${rawProvider}\"`,\n    booking_id: booking.id,\n    provider_raw: rawProvider\n  }}];\n}\n\n// Construir listado de viajeros para el email\nlet paxDetails = [];\ntry { paxDetails = typeof booking.pax_details === 'string' ? JSON.parse(booking.pax_details) : (booking.pax_details || []); } catch(e) {}\nlet childrenAges = [];\ntry { childrenAges = typeof booking.children_ages === 'string' ? JSON.parse(booking.children_ages) : (booking.children_ages || []); } catch(e) {}\n\nconst adultNames = paxDetails.filter(p => p.type === 'adult').map(p => p.name).join(', ')\n  || `${lead.first_name || ''} ${lead.last_name || ''}`.trim()\n  || 'Viajero principal';\n\nconst childInfo = childrenAges.length > 0\n  ? `Niños: ${childrenAges.map((age, i) => `Niño ${i+1} (${age} años)`).join(', ')}`\n  : '';\n\nconst occupancy = booking.occupancy_desc || offer.occupancy_desc || '';\n\nreturn [{json: {\n  booking_id:     booking.id,\n  lead_id:        booking.lead_id,\n  hotel_name:     offer.title || 'Hotel',\n  hotel_slug:     offer.hotel_slug || '',\n  offer_type:     offer.offer_type || 'last_minute',\n  check_in:       booking.check_in,\n  check_out:      booking.check_out,\n  total_amount:   booking.total_amount,\n  booking_ref:    booking.booking_reference || booking.id.substring(0,8).toUpperCase(),\n  // Cliente\n  client_name:    `${lead.first_name || ''} ${lead.last_name || ''}`.trim(),\n  client_email:   lead.email || '',\n  client_phone:   lead.phone || '',\n  // Viajeros\n  adult_names:    adultNames,\n  children_info:  childInfo,\n  occupancy_desc: occupancy,\n  pax_count:      paxDetails.length || 1,\n  // Proveedor\n  provider_key:   matchedKey,\n  provider_email: providerEmail,\n  // Para el copywriter\n  _skip: false\n}}];\n"
+      },
+      "id": "0d7f8e19-3e11-47e0-aa75-c4d12e7b9208",
+      "name": "03_MAPEAR_EMAIL_PROVEEDOR",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        10416,
+        5440
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-no-skip",
+              "leftValue": "={{ $json._skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEqual"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "916f85f0-49cc-4d39-8ee0-9c5eec9773bd",
+      "name": "03B_IF_TIENE_PROVIDER_EMAIL",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        10656,
+        5440
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://oyihiyivdhfxpyiwnmqk.supabase.co/rest/v1/bookings",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "=eq.{{ $json.booking_id }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"fulfillment_status\":\"failed\",\"updated_at\":\"{{ new Date().toISOString() }}\"}",
+        "options": {}
+      },
+      "id": "1a892e47-c1a2-4ab5-bfd3-657fdfc32e92",
+      "name": "03C_UPDATE_BOOKING_NO_PROVIDER",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        10896,
+        5680
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={{ $vars.GEMINI_API_KEY }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"contents\": [{\"parts\": [{\"text\": \"Eres el asistente de reservas de Aliun Travel SRL, agencia de viajes dominicana. Redacta un correo FORMAL en español para solicitar el bloqueo de habitaciones a un mayorista hotelero.\\n\\nDATOS DE LA RESERVA:\\n- Hotel: {{ $json.hotel_name }}\\n- Tipo de Oferta: {{ $json.offer_type }}\\n- Check-in: {{ $json.check_in }}\\n- Check-out: {{ $json.check_out }}\\n- Referencia interna: {{ $json.booking_ref }}\\n- Huéspedes adultos: {{ $json.adult_names }}\\n- {{ $json.children_info }}\\n- Condición de ocupación: {{ $json.occupancy_desc || 'Estándar' }}\\n- Monto total: USD ${{ $json.total_amount }}\\n\\nINSTRUCCIONES:\\n1. Saludo formal de negocios\\n2. Solicitar confirmación de disponibilidad y bloqueo de habitación\\n3. Listar datos de viajeros con claridad\\n4. Indicar fechas exactas de entrada y salida\\n5. Mencionar la condición de ocupación si aplica (niños gratis, etc.)\\n6. Solicitar código de confirmación/localizador para nuestros registros\\n7. Cierre profesional con nombre Aliun Travel SRL\\n8. Tono: profesional, conciso, cordial\\n\\nResponde SOLO con el texto del email (sin asunto, sin markdown, sin explicaciones).\"}]}],\n  \"generationConfig\": {\"temperature\": 0.3, \"maxOutputTokens\": 1024}\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "a98ee549-9900-4126-8831-2f780f60d245",
+      "name": "04_GEMINI_COPYWRITER_B2B",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        10896,
+        5440
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const geminiRaw = $input.first().json;\nconst booking   = $('03_MAPEAR_EMAIL_PROVEEDOR').item.json;\n\nconst emailBody = geminiRaw.candidates?.[0]?.content?.parts?.[0]?.text || \n  `Estimados,\\n\\nSolicitamos confirmación de reserva para ${booking.client_name} en ${booking.hotel_name}.\\nCheck-in: ${booking.check_in} | Check-out: ${booking.check_out}\\nRef: ${booking.booking_ref}\\n\\nQuedamos atentos.\\nAliun Travel SRL`;\n\nconst subject = `Solicitud de Bloqueo — ${booking.hotel_name} | Ref: ${booking.booking_ref} | ${booking.check_in}`;\n\nreturn [{json: {\n  ...booking,\n  email_subject: subject,\n  email_body: emailBody,\n  to_email: booking.provider_email\n}}];"
+      },
+      "id": "45f7bd8c-4fba-4455-9ab9-3fd000949cfb",
+      "name": "05_PREP_EMAIL_PAYLOAD",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        11136,
+        5440
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.to_email }}",
+        "subject": "={{ $json.email_subject }}",
+        "emailType": "text",
+        "message": "={{ $json.email_body }}",
+        "options": {
+          "appendAttribution": false,
+          "replyTo": "reservas@aliuntravelsrl.com",
+          "senderName": "Aliun Travel",
+          "additionalHeaders": {
+            "headers": [
+              {
+                "key": "X-Entity-Ref-ID",
+                "value": "={{ $('05_PREP_EMAIL_PAYLOAD').item.json.booking_reference }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "043c78aa-8ac0-4fc3-8a92-0364f6f1e68a",
+      "name": "06_GMAIL_SEND_PROVEEDOR",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        11376,
+        5440
+      ],
+      "webhookId": "7baa9a4b-ab5d-406f-a02b-ef75336726ff",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bmoOIstLWEB97Q6w",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://oyihiyivdhfxpyiwnmqk.supabase.co/rest/v1/bookings",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "=eq.{{ $('05_PREP_EMAIL_PAYLOAD').item.json.booking_id }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"fulfillment_status\": \"email_sent\",\n  \"provider_email\": \"{{ $('05_PREP_EMAIL_PAYLOAD').item.json.provider_email }}\",\n  \"provider_name\": \"{{ $('05_PREP_EMAIL_PAYLOAD').item.json.provider_key }}\",\n  \"gmail_thread_id\": \"{{ $json.threadId || '' }}\",\n  \"gmail_message_id\": \"{{ $json.id || '' }}\",\n  \"outbound_sent_at\": \"{{ new Date().toISOString() }}\",\n  \"updated_at\": \"{{ new Date().toISOString() }}\"\n}",
+        "options": {}
+      },
+      "id": "9c8bce91-5d3e-4ab4-877d-68743dd608e3",
+      "name": "07_UPDATE_BOOKING_EMAIL_SENT",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        11616,
+        5440
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 10
+            }
+          ]
+        }
+      },
+      "id": "fc54b7d6-45b7-41bb-8bf5-5d1e66644007",
+      "name": "09_SCHEDULE_INBOUND",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        9456,
+        6288
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://oyihiyivdhfxpyiwnmqk.supabase.co/rest/v1/bookings",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "fulfillment_status",
+              "value": "=eq.email_sent"
+            },
+            {
+              "name": "select",
+              "value": "id,gmail_thread_id,booking_reference,lead_id,hotel_id,check_in,check_out,provider_name,provider_email,leads(first_name,last_name,email,phone)"
+            },
+            {
+              "name": "order",
+              "value": "outbound_sent_at.asc"
+            },
+            {
+              "name": "limit",
+              "value": "10"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "e97c6609-98c0-415d-ac2b-e9a90f045d0a",
+      "name": "10_QUERY_BOOKINGS_EMAIL_SENT",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        9696,
+        6288
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-has-waiting",
+              "leftValue": "={{ Array.isArray($json) ? $json.length : 0 }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4785df71-272a-4ab6-999b-c5a34514c0c1",
+      "name": "10B_IF_HAY_ESPERANDO",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        9936,
+        6288
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supabase HTTP devuelve el array directamente como $json\n// Este nodo convierte [{booking1},{booking2}] en items individuales\nconst data = $input.first().json;\nconst arr = Array.isArray(data) ? data : [];\nif (arr.length === 0) return [];\nreturn arr.map(item => ({ json: item }));"
+      },
+      "id": "c2b2be0d-29e7-4e61-8c61-9f9be329e994",
+      "name": "10C_SPLIT_WAITING",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        10176,
+        6208
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 1,
+        "filters": {
+          "q": "=in:inbox from:{{ $json.provider_email }} subject:{{ $json.booking_reference || $json.id.substring(0,8).toUpperCase() }}"
+        }
+      },
+      "id": "33545653-af17-4ed7-b4e5-30b6261a5ed7",
+      "name": "11_GMAIL_READ_REPLY",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        10416,
+        6208
+      ],
+      "webhookId": "77e13ed2-e48b-48fa-aa99-62b4b5987db9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bmoOIstLWEB97Q6w",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-has-reply",
+              "leftValue": "={{ ($json.id || '').length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3df04d4d-4e63-4a4a-b6ea-62552437ccfa",
+      "name": "11B_IF_HAY_REPLY",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        10656,
+        6208
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={{ $vars.GEMINI_API_KEY }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"contents\": [{\"parts\": [{\"text\": \"Analiza el siguiente correo de confirmación de un mayorista hotelero y extrae el código de confirmación o localizador de reserva.\\n\\nCORREO DEL PROVEEDOR:\\n{{ $json.text || $json.snippet || '' }}\\n\\nResponde SOLO con JSON válido, sin markdown:\\n{\\n  \\\"locator_found\\\": true/false,\\n  \\\"provider_locator\\\": \\\"CODIGO123\\\" o null,\\n  \\\"confidence\\\": \\\"alta/media/baja\\\",\\n  \\\"raw_snippet\\\": \\\"fragmento del texto donde encontraste el código\\\"\\n}\\n\\nBusca patrones como: \\\"Número de reserva:\\\", \\\"Localizador:\\\", \\\"Ref:\\\", \\\"Confirmation:\\\", \\\"Booking code:\\\", \\\"Código:\\\", combinaciones de letras y números de 4-12 caracteres típicos de sistemas hoteleros.\"}]}],\n  \"generationConfig\": {\"response_mime_type\": \"application/json\", \"temperature\": 0.1, \"maxOutputTokens\": 256}\n}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "64bfafe1-0bc4-45df-9a38-6ef90cbe2098",
+      "name": "12_GEMINI_EXTRAER_LOCALIZADOR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        10896,
+        6208
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const geminiRaw = $input.first().json;\nconst booking   = $('10C_SPLIT_WAITING').item.json;\nconst lead      = booking.leads || {};\nconst offer     = booking.marketing_offers || {};\n\nlet extracted = {};\ntry {\n  const txt = geminiRaw.candidates?.[0]?.content?.parts?.[0]?.text || '{}';\n  extracted = JSON.parse(txt.replace(/```json|```/g, '').trim());\n} catch(e) {\n  extracted = { locator_found: false, provider_locator: null };\n}\n\nif (!extracted.locator_found || !extracted.provider_locator) {\n  return [{ json: { _skip: true, booking_id: booking.id, _reason: 'Sin localizador detectado' } }];\n}\n\nreturn [{json: {\n  booking_id:       booking.id,\n  provider_locator: extracted.provider_locator,\n  confidence:       extracted.confidence,\n  // Cliente para WhatsApp\n  client_name:      `${lead.first_name || ''} ${lead.last_name || ''}`.trim(),\n  client_phone:     lead.phone || '',\n  client_email:     lead.email || '',\n  hotel_name:       offer.title || 'el hotel',\n  hotel_slug:       offer.hotel_slug || '',\n  check_in:         booking.check_in,\n  check_out:        booking.check_out,\n  provider_name:    booking.provider_name,\n  _skip: false\n}}];"
+      },
+      "id": "630f35a1-0aab-40ff-a770-fccf87b07703",
+      "name": "13_PARSEAR_LOCALIZADOR",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        11136,
+        6208
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-locator",
+              "leftValue": "={{ $json._skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEqual"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5b47e1e9-b4a0-4583-b165-9e07f0b25e1d",
+      "name": "13B_IF_LOCALIZADOR_ENCONTRADO",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        11376,
+        6208
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://oyihiyivdhfxpyiwnmqk.supabase.co/rest/v1/bookings",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "=eq.{{ $json.booking_id }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"fulfillment_status\": \"locator_received\",\n  \"provider_locator\": \"{{ $json.provider_locator }}\",\n  \"locator_received_at\": \"{{ new Date().toISOString() }}\",\n  \"updated_at\": \"{{ new Date().toISOString() }}\"\n}",
+        "options": {}
+      },
+      "id": "dad15c73-2642-4b00-af22-7fa26343e1f4",
+      "name": "14_UPDATE_BOOKING_LOCATOR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        11616,
+        6128
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $vars.ANTIGRAVITY_WEBHOOK_URL }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "a706ade2-0171-4d5d-a51a-399083cde486",
+      "name": "15_POST_ANTIGRAVITY_SQUAD",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        11856,
+        6128
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://oyihiyivdhfxpyiwnmqk.supabase.co/rest/v1/bookings",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "=eq.{{ $('13_PARSEAR_LOCALIZADOR').item.json.booking_id }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95aWhpeWl2ZGhmeHB5aXdubXFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjQzOTk3NSwiZXhwIjoyMDc4MDE1OTc1fQ.6XRTNHLwhPlGWObFGqfvY-YlB9prcxWlWBCa8oyiOT0"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"fulfillment_status\": \"confirmed\",\n  \"status\": \"confirmed\",\n  \"whatsapp_notified_at\": \"{{ new Date().toISOString() }}\",\n  \"updated_at\": \"{{ new Date().toISOString() }}\"\n}",
+        "options": {}
+      },
+      "id": "a28ee8d7-cc1e-4591-9f8d-ec8476dbdc4b",
+      "name": "16_UPDATE_BOOKING_CONFIRMED",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        12096,
+        6128
+      ]
+    },
+    {
+      "parameters": {
+        "path": "5e25d7d6-cea0-409b-96ec-b48ed57f9ecd",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        9552,
+        5056
+      ],
+      "id": "ef9743d2-f61b-40c4-9df0-5100cc233929",
+      "name": "Webhook",
+      "webhookId": "5e25d7d6-cea0-409b-96ec-b48ed57f9ecd"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "01_SCHEDULE_OUTBOUND": {
+      "main": [
+        [
+          {
+            "node": "02A_QUERY_BOOKINGS_PENDIENTES",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "02A_QUERY_BOOKINGS_PENDIENTES": {
+      "main": [
+        [
+          {
+            "node": "02B_IF_HAY_PENDIENTES",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "02B_IF_HAY_PENDIENTES": {
+      "main": [
+        [
+          {
+            "node": "02C_SPLIT_BOOKINGS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "02C_SPLIT_BOOKINGS": {
+      "main": [
+        [
+          {
+            "node": "03_MAPEAR_EMAIL_PROVEEDOR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "03_MAPEAR_EMAIL_PROVEEDOR": {
+      "main": [
+        [
+          {
+            "node": "03B_IF_TIENE_PROVIDER_EMAIL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "03B_IF_TIENE_PROVIDER_EMAIL": {
+      "main": [
+        [
+          {
+            "node": "04_GEMINI_COPYWRITER_B2B",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "03C_UPDATE_BOOKING_NO_PROVIDER",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "04_GEMINI_COPYWRITER_B2B": {
+      "main": [
+        [
+          {
+            "node": "05_PREP_EMAIL_PAYLOAD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "05_PREP_EMAIL_PAYLOAD": {
+      "main": [
+        [
+          {
+            "node": "06_GMAIL_SEND_PROVEEDOR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "06_GMAIL_SEND_PROVEEDOR": {
+      "main": [
+        [
+          {
+            "node": "07_UPDATE_BOOKING_EMAIL_SENT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "09_SCHEDULE_INBOUND": {
+      "main": [
+        [
+          {
+            "node": "10_QUERY_BOOKINGS_EMAIL_SENT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10_QUERY_BOOKINGS_EMAIL_SENT": {
+      "main": [
+        [
+          {
+            "node": "10B_IF_HAY_ESPERANDO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10B_IF_HAY_ESPERANDO": {
+      "main": [
+        [
+          {
+            "node": "10C_SPLIT_WAITING",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10C_SPLIT_WAITING": {
+      "main": [
+        [
+          {
+            "node": "11_GMAIL_READ_REPLY",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11_GMAIL_READ_REPLY": {
+      "main": [
+        [
+          {
+            "node": "11B_IF_HAY_REPLY",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11B_IF_HAY_REPLY": {
+      "main": [
+        [
+          {
+            "node": "12_GEMINI_EXTRAER_LOCALIZADOR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12_GEMINI_EXTRAER_LOCALIZADOR": {
+      "main": [
+        [
+          {
+            "node": "13_PARSEAR_LOCALIZADOR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "13_PARSEAR_LOCALIZADOR": {
+      "main": [
+        [
+          {
+            "node": "13B_IF_LOCALIZADOR_ENCONTRADO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "13B_IF_LOCALIZADOR_ENCONTRADO": {
+      "main": [
+        [
+          {
+            "node": "14_UPDATE_BOOKING_LOCATOR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "14_UPDATE_BOOKING_LOCATOR": {
+      "main": [
+        [
+          {
+            "node": "15_POST_ANTIGRAVITY_SQUAD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15_POST_ANTIGRAVITY_SQUAD": {
+      "main": [
+        [
+          {
+            "node": "16_UPDATE_BOOKING_CONFIRMED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "5d3ec989-964d-4542-86c4-dcfcd2726e63",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c0c1497c11921ba1b06e8e24648281658c3cfb4681048debf09ecccecea23aac"
+  },
+  "id": "HVJHikQu5WH8rWHW",
+  "tags": [
+    {
+      "updatedAt": "2026-03-03T20:03:01.023Z",
+      "createdAt": "2026-03-03T20:03:01.023Z",
+      "id": "18xO6kpBbSUEcvKn",
+      "name": "atlas"
+    },
+    {
+      "updatedAt": "2026-03-31T21:16:33.390Z",
+      "createdAt": "2026-03-31T21:16:33.390Z",
+      "id": "6jUaLYhaCd7VAEB8",
+      "name": "FULFILLMENT"
+    },
+    {
+      "updatedAt": "2026-03-27T18:24:00.084Z",
+      "createdAt": "2026-03-27T18:24:00.084Z",
+      "id": "QPl0KbkaqafxDyHI",
+      "name": "PRODUCCION"
+    },
+    {
+      "updatedAt": "2026-03-03T20:03:01.020Z",
+      "createdAt": "2026-03-03T20:03:01.020Z",
+      "id": "U3e86wsX137qUt6j",
+      "name": "marketing"
+    },
+    {
+      "updatedAt": "2026-03-31T21:16:33.380Z",
+      "createdAt": "2026-03-31T21:16:33.380Z",
+      "id": "XmVblpi7xNSMpJbd",
+      "name": "B2B"
+    },
+    {
+      "updatedAt": "2026-01-24T13:38:04.495Z",
+      "createdAt": "2026-01-24T13:38:04.495Z",
+      "id": "bBsvGQn28cS9vFXN",
+      "name": "OPERACIÓN ATLAS"
+    },
+    {
+      "updatedAt": "2026-03-03T20:03:01.025Z",
+      "createdAt": "2026-03-03T20:03:01.025Z",
+      "id": "fiS2KcNCp1Tq7k3P",
+      "name": "offers"
+    },
+    {
+      "updatedAt": "2026-03-31T21:16:33.386Z",
+      "createdAt": "2026-03-31T21:16:33.386Z",
+      "id": "lmoaMlWgSGMHrdC5",
+      "name": "ATLAS-OPS"
+    },
+    {
+      "updatedAt": "2026-03-03T17:09:17.697Z",
+      "createdAt": "2026-03-03T17:09:17.697Z",
+      "id": "nROBN6jzW4iN0nAp",
+      "name": "MCP-ENABLED"
+    }
+  ]
+}
