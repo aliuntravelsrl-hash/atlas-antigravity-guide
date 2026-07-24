@@ -536,7 +536,66 @@ OPS-265 (CRM-SYNC) — bloqueando:
 | `src/components/marketing/DependencyIntelligence.jsx` | Creado |
 | `src/components/marketing/MissionControlLive.jsx` | Import + inserción JSX (sin cambios en query — ya tenía `depende_de`) |
 
-### Estado al 20 Jul 2026
+
+---
+
+## Sección 13 — ATLAS Control System v1 · Sistema de control cognitivo integrado · 24 JUL 2026
+
+**Formalizado por:** Computer (Perplexity) + Director Aldo Hilario
+**Commit doctrina:** `b4143644` — `aliun-rrhh-v2/doctrines/ATLAS-CONTROL-SYSTEM-v1.md`
+**Commit index:** `000f7639` — `aliun-rrhh-v2/MASTER-INDEX.md`
+
+### El salto arquitectónico
+
+Los tres sistemas que existían como componentes paralelos ahora son un flujo unificado:
+
+```
+Antes:  [ATLAS-SDD] + [Dependency Intelligence] + [Knowledge Loop] → paralelos
+Ahora:  ATLAS-SDD → Dependency Check → Knowledge Check → QA Gate → Ejecución
+```
+
+### Flujo oficial
+
+```
+PROBLEMA
+   ↓
+SPEC (ATLAS-SDD-v1)
+   ↓
+DEPENDENCY CHECK (depende_de[])
+   ↓
+KNOWLEDGE CHECK (hotel_knowledge)
+   ↓
+HERMES-QA GATE
+   ↓              ↓
+APROBADA       BLOQUEADA
+   ↓              ↓
+EJECUCIÓN     GAP / FIX
+   ↓
+VALIDACIÓN → EVIDENCIA → MEMORIA → MEJORA
+```
+
+### Hermes-QA como arnés cognitivo
+
+| Momento | Función |
+|---------|---------|
+| PRE-FLIGHT | SDD válido? + Deps OK? + Knowledge OK? |
+| EJECUCIÓN | despacho aprobado |
+| POST-FLIGHT | Criterios OK? + Evidencia URL? + Memoria actualizada? |
+
+### Tareas de implementación creadas
+
+| Código | Tarea | Fase |
+|--------|-------|------|
+| ATL-081 | KB-001 Knowledge Loop extremo a extremo — 150 entradas | Fase 1 |
+| ATL-082 | SDD-002 Quality Gate obligatorio — 0 tareas sin ejecutor | Fase 2 |
+| ATL-083 | DEP-001 Dependency Enforcement en SOUL.md + WF-SUPERVISOR | Fase 3 |
+
+### Formulación oficial sellada
+> *"Ninguna capacidad nueva entra en ATLAS directamente a producción.*
+> *Primero debe tener una especificación, sus dependencias deben estar resueltas*
+> *y el conocimiento necesario debe existir o quedar explícitamente identificado como un gap."*
+
+### Estado al 24 Jul 2026
 - **ATL-010/011/012** completados — agent_memory, LISTEN/NOTIFY, staging
 - **F6-LEGAL** activado — Hermes-QA como custodio
 - **rpc_crear_tarea** corregido — regex secuencial fix (Computer 19 Jul)
@@ -754,3 +813,5 @@ Google Search Console → Sitemaps
 ```
 
 *Antigravity · ATLAS-TECH · 24 Jul 2026*
+
+- **ATLAS-CONTROL-SYSTEM-v1** — 3 pilares integrados bajo Hermes-QA como arnés cognitivo (Computer 24 Jul)
