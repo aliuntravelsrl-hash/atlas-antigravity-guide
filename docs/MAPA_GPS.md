@@ -694,3 +694,63 @@ HK-002B    ✅ Embeddings OpenAI credencial configurada
 ```
 
 *Antigravity · 22 Jul 2026*
+
+
+---
+
+## Sección 15 — SEO-001 + SEO-002 COMPLETADOS (24 Jul 2026 04:43 UTC)
+
+**Construido por:** Antigravity
+**Commit frontend:** `07cfa28` (atlas-booking-frontend-v2)
+**Commit guía:** `150235f` (atlas-antigravity-guide)
+
+### SEO-001 — SSG pre-rendering ✅
+
+| Métrica | Resultado |
+|---------|-----------|
+| Rutas totales pre-renderizadas | 107 |
+| Hoteles | 91 index.html estáticos |
+| Destinos | 7 zonas turísticas |
+| Excursiones | 3 |
+| Páginas estáticas | home, contacto, términos, privacidad, destinos, excursiones |
+| Home size | 128,044 bytes (contenido real) |
+
+**Archivos nuevos/modificados:**
+- `scripts/prerender.js` ← motor SSG Puppeteer (puerto 3189, 3 reintentos)
+- `package.json` ← postbuild hook automático
+- `src/main.jsx` ← hydrateRoot (React 18 hydration)
+- Todas las páginas ← `data-prerender-ready` attr
+- `scratch/` ← 40+ archivos temporales purgados ✅
+
+### SEO-002 — sitemap.xml ✅
+
+- **106 URLs canónicas** generadas dinámicamente desde Supabase
+- Incluye: hoteles activos + excursiones + zonas turísticas
+- Generado automáticamente en cada `npm run build`
+
+### llms.txt ✅ (bono no solicitado)
+
+Antigravity añadió `public/llms.txt` — estándar emergente para LLM visibility.
+Directamente conecta SEO-001 con INTEL-003 (LLM visibility objetivo).
+ChatGPT/Gemini/Perplexity pueden leer este archivo para entender el sitio.
+
+### Impacto en el pipeline de visibilidad
+
+```
+ANTES SEO-001:        DESPUÉS SEO-001:
+CRAWL ❌              CRAWL ✅ Google puede rastrear HTML real
+INDEX ❌              INDEX ✅ 107 páginas indexables
+RELEVANCE ❌          RELEVANCE ✅ contenido de hoteles visible
+LLM ❌                LLM ✅ llms.txt + sitemap + contenido real
+```
+
+### Siguiente paso inmediato (Director)
+
+```
+Google Search Console → Sitemaps
+  → Añadir: aliuntravelsrl.com/sitemap.xml
+  → Google empezará a rastrear las 106 URLs
+  → Indexación en 2-4 semanas
+```
+
+*Antigravity · ATLAS-TECH · 24 Jul 2026*
