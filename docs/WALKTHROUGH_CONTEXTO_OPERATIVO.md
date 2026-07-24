@@ -1,7 +1,30 @@
 # Walkthrough — Actualización de Contexto Operativo
-**Fecha:** 18 de Julio de 2026 | **Estado:** Completado y Sincronizado en Producción
+**Fecha:** 24 de Julio de 2026 | **Estado:** Completado y Sincronizado en Producción
 
 Este documento registra las acciones realizadas durante las sesiones de rehidratación, sincronización de contexto canónico, saneamiento multimedia e innovación funcional en el ecosistema ATLAS.
+
+---
+
+## 🚀 Sesión 24 JUL 2026: Pre-rendering / SSG (SEO-001) y Sitemap Dinámico (SEO-002)
+
+### 1. Implementación de Pre-rendering (SSG) mediante Puppeteer (SEO-001)
+*   **Diagnóstico:** Para solucionar la falta de indexación de la SPA en Hostinger (servidor Apache sin Node.js dinámico persistente), se diseñó e implementó un pipeline de **Generación de Sitios Estáticos (SSG)** post-compilación.
+*   **Inyección del Atributo data-prerender-ready:**
+    *   Se inyectó el atributo dinámico `data-prerender-ready` en las páginas dinámicas de la app: [HotelPage.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/HotelPage.jsx), [ExcursionDetailPage.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/ExcursionDetailPage.jsx) y [DestinationPage.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/DestinationPage.jsx). El atributo pasa a `"true"` únicamente cuando la API de Supabase completa el fetch de datos y el pricing en el DOM.
+    *   Se inyectó de forma estática en las páginas estáticas y catálogos globales: [HomePage.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/HomePage.jsx), [ContactPage.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/ContactPage.jsx), [TermsPage.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/TermsPage.jsx), [DestinationsPage.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/DestinationsPage.jsx) y [ExcursionsPage.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/ExcursionsPage.jsx).
+*   **Configuración del Punto de Entrada (`main.jsx`):**
+    *   Se reescribió [main.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/main.jsx) utilizando la API de hidratación de React 18 (`hydrateRoot`). El script detecta si el contenedor raíz `#root` ya tiene nodos estáticos renderizados en tiempo de compilación para aplicar `hydrateRoot` (evitando flashing en el cliente), y en caso contrario aplica `createRoot().render()`.
+
+### 2. Script de Automatización `prerender.js` y Sitemap Autónomo (SEO-002)
+*   **Script de SSG creado:** Desarrollado [scripts/prerender.js](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/scripts/prerender.js) en ESM, que realiza los siguientes pasos:
+    1.  Consulta Supabase en caliente para obtener la lista de hoteles, excursiones y destinos activos en producción.
+    2.  Levanta un servidor temporal local utilizando la librería `sirv` sobre el puerto `3189` sirviendo la SPA original compilada en `/dist`.
+    3.  Lanza una instancia Headless de **Puppeteer** que navega de forma secuencial por cada una de las 107 rutas identificadas.
+    4.  Espera con tolerancia a fallos mediante un selector `[data-prerender-ready]` y un bucle de reintento automático (3 intentos por ruta) para capturar el HTML completamente renderizado, evitando timeouts accidentales por saturación de CPU o red.
+    5.  Resguarda la SPA del servidor temporal manteniendo el `dist/index.html` original y escribiendo la Home pre-renderizada en disco únicamente al final del proceso.
+    6.  Escribe el archivo HTML estructurado en subcarpetas físicas (ej. `dist/hoteles/dreams-macao-beach/index.html`), permitiendo que Apache lo sirva directamente de forma estática en Hostinger.
+*   **Sitemap XML Automatizado (SEO-002):** El script escribe al final en la raíz del `/dist` un archivo `sitemap.xml` indexable por Google, mapeando todas las rutas pre-renderizadas exitosamente (~106 URLs) asociadas al dominio canónico de producción de Aliun Travel.
+*   **Integración en `package.json`:** Añadido el script `"postbuild": "node scripts/prerender.js"` en el frontend público para automatizar el ciclo completo de SSG al correr `npm run build` en entornos locales o GitHub Actions.
 
 ---
 
