@@ -5,6 +5,35 @@ Este documento registra las acciones realizadas durante las sesiones de rehidrat
 
 ---
 
+## 🚀 Sesión 23 JUL 2026: Gotenberg PDF Migration, Páginas Legales (LEG-004) e Integración CABLE (Tracking, Píxeles & Deduplicación)
+
+### 1. Migración Global de jsPDF a Gotenberg (F1-PDF-001 & F1-GRP-001)
+*   **Gotenberg Migration:** Se deprecó la renderización imperativa local de jsPDF en el frontend de reservas (`atlas-booking-frontend-v2`) y en el panel administrativo (`-atlas-admin-v2`). La conversión HTML-to-PDF ahora se delega al servidor de Gotenberg mediante webhooks dedicados de n8n.
+*   **Facturación Grupal e Individual:** Modificada la interfaz de facturación del administrador (`FacturadorPanel.jsx`) para sincronizar la lista de habitaciones/huéspedes ingresados con la tabla relacional `booking_passengers` en Supabase antes de disparar el webhook unificado de n8n `/webhook/aliun-factura` pasando el payload `{ booking_id, tipo: 'grupal'|'individual', passenger_id }`.
+*   **Manejo de Errores Consistente:** Ambos flujos validan que la respuesta de n8n contenga la propiedad `{ pdf_url }` y, en caso contrario, lanzan un mensaje de error detallado en lugar de intentar abrir una URL nula.
+
+### 2. Páginas Legales y Rutas en SPA (LEG-004)
+*   **Páginas Creadas:**
+    *   `/politica-de-privacidad` ➡️ [PrivacyPolicyPage.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/PrivacyPolicyPage.jsx) con los textos y estilos responsivos dorados/oscuros de `aliun-legal-v1`.
+    *   `/terminos` ➡️ [TermsPage.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/pages/TermsPage.jsx) con el esqueleto provisional de términos comerciales (`LEGAL-003`) y banner destacado de advertencia preliminar.
+*   **Integración:** Ambas páginas configuradas vía `lazy` load en [App.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/App.jsx).
+
+### 3. Configuración de Credenciales OpenAI (HK-002B)
+*   Se saneó el workflow vectorial de embeddings de n8n [BATCH - Embeddings v5 FINAL.json](file:///C:/Users/Admin/Downloads/BATCH%20-%20Embeddings%20v5%20FINAL.json) removiendo la credencial local hardcodeada y reconfigurándola con el nombre oficial del ecosistema: `OpenAI API` (con ID vacío). Esto permite que n8n resuelva la credencial de forma automática en producción al importar el JSON.
+
+### 4. Integración CABLE (Tracking, Píxeles & Deduplicación)
+*   **Inyección HTML:** Incorporados los contenedores oficiales de **GTM** y **Meta Pixel** en [index.html](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/index.html) mapeados con las variables de entorno de Vite (`%VITE_GTM_CONTAINER_ID%` y `%VITE_META_PIXEL_ID%`).
+*   **Captura de Atribución fbclid:** Creado hook de detección en [App.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/App.jsx) que almacena el `fbclid` de la URL como cookie de primer party `_fbc` de Meta (expiración 7 días) y en `localStorage` (backup).
+*   **Deduplicación por event_id:**
+    *   Rediseñada la firma de eventos en [meta-pixel.js](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/lib/meta-pixel.js) para aceptar y pasar el `event_id` en las llamadas del Pixel.
+    *   Formato canónico unificado: `ALIUN-{lead_id || Date.now()}-{random5}`.
+*   **Integración del Embudo Comercial:**
+    *   **Cotizar (`HotelBookingForm.jsx`):** Genera el `event_id`, dispara el evento `Lead` del navegador, realiza el `dataLayer.push` comercial a GTM e inserta la reserva asociando de forma síncrona el `meta_event_id` y `meta_fbclid` al lead correspondiente en **`crm_leads`** de Supabase.
+    *   **Checkout & Compra (`CheckoutPage.jsx`):** Dispara `InitiateCheckout` (`begin_checkout`) al entrar a la sección de pago y `Purchase` (`purchase`) al concretar el depósito con éxito, arrastrando el mismo `event_id`.
+*   **Configuración del Pixel ID Real:** Se configuró el Pixel del navegador **`1197179654562182`** como `VITE_META_PIXEL_ID` en el archivo `.env` del frontend público para la correcta detección y diagnóstico por parte de Meta.
+
+---
+
 ## 🚀 Sesión 18 JUL 2026: Saneamiento Definitivo Wyndham Alltra & Resolución de Tarea OPS-01 (Misión Control)
 
 ### 1. Rescate Visual Real de Habitaciones y Restaurantes
