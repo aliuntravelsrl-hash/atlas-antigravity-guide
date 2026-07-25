@@ -44,30 +44,24 @@ El sistema financiero opera en tres capas aisladas para garantizar la inmutabili
 
 ---
 
-## 📋 2. Desglose de Tareas Pendientes para el Seguimiento
+## 📋 2. Desglose de Tareas de Ejecución (ATLAS-SDD SPEC-002 v1.0.2)
 
-Para el correcto seguimiento de la implementación del Transaction Ledger, se detallan las siguientes subtareas secuenciales asignadas al plan de desarrollo:
+Para la implementación física del modelo financiero y la alineación comercial, se detallan las siguientes tareas y dependencias oficiales del Quality Gate de Hermes-QA:
 
-*   **[ ] FIN-001-A: Schema + Migraciones SQL**
-    *   *Descripción:* Ejecución de tipos ENUM contables y DDLs de base de datos para `bookings`, `atlas_payments` y la creación de `payment_ledger`.
+*   **[x] AUDIT-001: Corrección de Métricas Contables Temporales**
+    *   *Descripción:* Solucionar el bug visual que igualaba facturación a caja en React, implementando el cálculo y consolidación monetaria en caliente local (tasa 60.5) en `AdminAccountingPage.jsx`.
+    *   *Estado:* COMPLETADO.
+*   **[ ] FIN-DB-001: Implementación de Base de Datos Canónica**
+    *   *Descripción:* Ejecución de los scripts SQL DDL y RPCs de la SPEC contable base en Supabase (tipos enums, alteración de `bookings`, creación de `atlas_payments` y `payment_ledger`).
     *   *Estado:* PENDIENTE.
-*   **[ ] FIN-001-B: RPCs Transaccionales PostgreSQL**
-    *   *Descripción:* Creación de las funciones seguras de base de datos `atlas_register_payment` (con fingerprint), `atlas_approve_payment`, `atlas_reject_payment` y `atlas_apply_payment_to_booking` (con `FOR UPDATE`).
+*   **[ ] CRM-FIN-001: Contrato de Sincronización Backend**
+    *   *Descripción:* Crear el trigger de base de datos en Supabase para sincronizar automáticamente el lead comercial a `'deposito_recibido'` tras una inserción exitosa en `payment_ledger`.
     *   *Estado:* PENDIENTE.
-*   **[ ] FIN-001-C: Triggers de Inmutabilidad e Invariantes**
-    *   *Descripción:* Implementación de políticas RLS y triggers de Postgres para bloquear ediciones directas a campos monetarios y forzar las invariantes `FIN-I-001` a `FIN-I-009`.
+*   **[ ] FIN-UI-001: Dashboard de Caja y Conciliación**
+    *   *Descripción:* Diseñar las vistas A (Caja Recibida en `atlas_payments`) y B (Ledger de Aplicación en `payment_ledger`) en React, mostrando saldos y conversiones en base a la tasa histórica inmutable de base de datos.
     *   *Estado:* PENDIENTE.
-*   **[ ] FIN-001-D: Refactorización del Dashboard Contable (get_accounting_dashboard)**
-    *   *Descripción:* Reescribir la RPC del dashboard para consolidar saldos y proyecciones desde el ledger inmutable con tipo de cambio histórico congelado.
-    *   *Estado:* PENDIENTE.
-*   **[ ] FIN-001-E: Integración n8n y Flujos Idempotentes**
-    *   *Descripción:* Ajustar prompt del `WF-ACCOUNTING-AI-v1` y crear tabla `fulfillment_events` para gatillar vouchers del Flujo F una sola vez de forma idempotente.
-    *   *Estado:* PENDIENTE.
-*   **[ ] FIN-001-F: Verificación de Criterios QA (Hermes-QA)**
-    *   *Descripción:* Ejecución del suite de pruebas automatizadas validando las invariantes `QA-C-01` a `QA-C-12`.
-    *   *Estado:* PENDIENTE.
-*   **[ ] FIN-001-G: Evidencia, Puesta en Marcha y Cierre**
-    *   *Descripción:* Pruebas reales con abonos de clientes en producción y certificación final.
+*   **[ ] CRM-UI-001: Kanban Canónico del CRM**
+    *   *Descripción:* Alinear las 7 columnas del Kanban en React a los estados de Supabase y bloquear la transición manual a `'deposito_recibido'`, dejándola en modo de sólo lectura automática de base de datos.
     *   *Estado:* PENDIENTE.
 
 ---
