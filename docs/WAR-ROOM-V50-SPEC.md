@@ -547,3 +547,300 @@ const loadAll = async () => {
 | Geniall | — | — | ⚪ hasta HC real |
 
 *ATLAS-TECH · WAR-ROOM-V50-SPEC v1.1 · Correcciones Computer aplicadas · 25 Jul 2026*
+
+
+---
+
+## ADDENDUM 2 — SEGUNDA REVISIÓN COMPUTER
+**Fecha:** 25 Jul 2026 | **Estado:** SPEC-003-WARROOM-V5 — APPROVED WITH REQUIRED CORRECTIONS
+**Orden de implementación validado por Computer (seguir este orden exacto)**
+
+---
+
+### ORDEN DE IMPLEMENTACIÓN (Computer — obligatorio)
+
+```
+1. Backend contract verification   ← RPC v3 ✅ ya actualizada
+2. RPC get_warroom_task_summary()  ← ✅ v3 en Supabase
+3. Real logs_operativos            ← Antigravity conecta
+4. Cable health abstraction        ← resolveCableStatus()
+5. Atomic refresh engine           ← useRef lock + swap atómico
+6. Owner cards                     ← expandibles inline (lazy)
+7. Live logs + filters             ← nivel + origen
+8. SSOT health                     ← mantener v4.1
+9. Hermes Reporter                 ← "Eventos registrados hoy"
+10. QA acceptance tests            ← criterios de aceptación
+```
+
+---
+
+### CORRECCIÓN A — Owner Cards: lazy-load, NO drawer
+
+**Computer aprobó expansión inline (no drawer lateral):**
+
+```
+CERRADO:
+┌──────────────────────────┐
+│ ATLAS-TECH           (B) │
+│ 20 tareas activas        │
+│ 🔴 1 crítica             │
+│ ⚠️ 15 altas              │
+│ [Click para expandir ▼]  │
+└──────────────────────────┘
+
+EXPANDIDO (lazy-load al click):
+┌──────────────────────────────────────────┐
+│ ATLAS-TECH                           ▲  │
+│ 20 tareas activas                        │
+├──────────────────────────────────────────┤
+│ 🔴 ATL-XXX  Migración ledger  CRÍTICA   │
+│ ⚠️  ATL-YYY  Validar RPC       ALTA     │
+│ ⚠️  ATL-ZZZ  Auditoría         ALTA     │
+│                                          │
+│ [Ver todas las tareas →]                 │
+└──────────────────────────────────────────┘
+```
+
+**La RPC ya devuelve `top_tasks` (5 más importantes por owner).**
+Para "Ver todas" → consulta lazy directa a Supabase:
+```javascript
+// Solo al hacer click "Ver todas"
+const { data } = await supabase
+  .from('atlas_tasks')
+  .select('id, titulo, prioridad, estado, codigo')
+  .eq('owner_type', ownerType)
+  .in('estado', ['pendiente', 'en_progreso'])
+  .order('prioridad')  // critica primero
+  .limit(50);
+```
+
+---
+
+### CORRECCIÓN B — Semáforos: health funcional ≠ freshness temporal
+
+**Regla definitiva de Computer:**
+
+```
+HEALTH = estado funcional (¿el sistema falla?)
+FRESHNESS = antigüedad del último dato (¿cuándo fue?)
+
+Semáforo final = peor de ambos
+```
+
+**Tabla de comportamiento:**
+
+| Último dato | Status | Resultado |
+|-------------|--------|-----------|
+| Hace 5 min  | success | 🟢 |
+| Hace 5 min  | failed  | 🔴 |
+| Hace 30h    | success | 🟡 |
+| Hace 60h    | success | 🔴 |
+| Nunca       | —       | 🔴 |
+
+**Función resolveCableStatus() FINAL:**
+```javascript
+function resolveCableStatus({
+  lastTimestamp,        // timestamp del último dato
+  lastSuccessAt,        // timestamp del último ÉXITO
+  expectedIntervalHours,
+  warningAfterHours,
+  criticalAfterHours,
+  hasError = false,
+  isConfigured = true,
+  isHealthy = true,
+  count = null,
+  min = null
+}) {
+  if (!isConfigured) return 'gray';
+  if (hasError || !isHealthy) return 'red';  // health primero
+  
+  // count-based (hotel_knowledge)
+  if (count !== null && min !== null) {
+    return count >= min ? 'green' : 'yellow';
+  }
+  
+  const ts = lastSuccessAt || lastTimestamp;
+  if (!ts) return 'red';
+  
+  const hours = (Date.now() - new Date(ts)) / 3600000;
+  if (hours <= (warningAfterHours || expectedIntervalHours)) return 'green';
+  if (hours <= (criticalAfterHours || expectedIntervalHours * 2)) return 'yellow';
+  return 'red';
+}
+```
+
+**Umbrales aprobados por Director:**
+
+```javascript
+const CABLE_CONFIG = {
+  meta_capi: {
+    warningAfterHours: 24,
+    criticalAfterHours: 48,
+    // usa lastSuccessAt (no sent_at genérico)
+    // hasError = errors_24h > 0
+  },
+  firecrawl: {
+    warningAfterHours: 168,   // 7 días (ciclo semanal)
+    criticalAfterHours: 336,  // 14 días
+  },
+  payment_ledger: {
+    // NO usar solo created_at
+    // is_healthy viene de get_payment_ledger_breakdown()
+    // integrity = 'OK' → green si freshness OK
+  },
+  hotel_knowledge: {
+    count: activeEntries,
+    min: 150
+  },
+  geniall: {
+    isConfigured: false  // ⚪ hasta supplier_api_logs
+  },
+  tbo_holidays: {
+    isConfigured: false  // ⚪ hasta onboarding
+  }
+}
+```
+
+---
+
+### CORRECCIÓN C — Atomic refresh (sin parpadeo)
+
+**NO hacer esto (causa parpadeo):**
+```javascript
+// ❌ MAL
+const loadAll = async () => {
+  setLogs([]);           // ← parpadeo
+  setCables([]);         // ← parpadeo
+  setTaskSummary(null);  // ← parpadeo
+  // fetch...
+};
+```
+
+**Hacer esto (swap atómico):**
+```javascript
+// ✅ CORRECTO
+const refreshInFlight = useRef(false);
+
+const loadAll = async () => {
+  if (refreshInFlight.current) return;  // lock
+  refreshInFlight.current = true;
+  setIsRefreshing(true);  // solo el dot pulsante
+
+  try {
+    // Fetch en paralelo
+    const [taskData, logsData, cablesData, agentsData, ssotData] = 
+      await Promise.all([
+        loadTaskSummary(),
+        loadLogs(),
+        loadCables(),
+        loadAgentReports(),
+        loadSsotHealth()
+      ]);
+
+    // Swap atómico — todo junto
+    setTaskSummary(taskData);
+    setLogs(logsData);
+    setCables(cablesData);
+    setAgentReports(agentsData);
+    setSsotHealth(ssotData);
+    setLastRefresh(new Date());
+
+  } catch (err) {
+    // En error: mantener estado anterior, solo mostrar badge
+    console.error('War Room refresh failed:', err);
+  } finally {
+    refreshInFlight.current = false;
+    setIsRefreshing(false);
+  }
+};
+```
+
+---
+
+### CORRECCIÓN D — Hermes Reporter: "Eventos" no "Reportes"
+
+```
+❌ ANTES:          ✅ AHORA:
+Reportes hoy: 42  Eventos registrados hoy: 42
+```
+
+**Un reporte puede generar múltiples eventos en logs_operativos.**
+No mezclar conceptos. La tabla muestra `logs_operativos` → son eventos.
+
+**Mini-card por agente:**
+```
+┌──────────────────────────────────────┐
+│ 🤖 hermes-ops                       │
+│ Último evento: hace 2h              │
+│ Eventos hoy: 42                     │  ← NO "reportes"
+│ Errores: 0 🟢                       │
+│ [Ver historial →]                   │
+└──────────────────────────────────────┘
+```
+
+**[Ver historial →] → drawer lateral (NO nueva ruta):**
+```javascript
+// Drawer: logs filtrados por agente
+const { data } = await supabase
+  .from('logs_operativos')
+  .select('nivel, evento, mensaje, created_at')
+  .eq('origen', agentName)
+  .order('created_at', { ascending: false })
+  .limit(50);
+// Filtros en drawer: 24h / 7d / 30d
+```
+
+---
+
+### CORRECCIÓN E — payment_ledger: usar get_payment_ledger_breakdown()
+
+```javascript
+// ❌ INCORRECTO:
+const { data } = await supabase
+  .from('payment_ledger')
+  .select('created_at')
+  .order('created_at', { ascending: false })
+  .limit(1);
+
+// ✅ CORRECTO:
+const { data } = await supabase
+  .rpc('get_payment_ledger_breakdown');
+
+// Lógica:
+const ledgerHealthy = data !== null &&
+  data.length > 0 &&
+  !data.some(p => p.application_status === 'error');
+```
+
+**Semáforo payment_ledger:**
+```
+🟢 = RPC responde + sin anomalías
+🟡 = RPC responde + hay aplicaciones en estado anómalo
+🔴 = RPC falla o errores críticos de integridad
+```
+
+---
+
+### CRITERIOS DE ACEPTACIÓN v1.2 (finales)
+
+- [ ] Owner cards muestran `top_tasks` del RPC — NO calculan en frontend
+- [ ] Click owner card → expande inline (lazy-load, no drawer)
+- [ ] "Ver todas las tareas" → consulta directa a `atlas_tasks`
+- [ ] Semáforos usan `resolveCableStatus()` con health > freshness
+- [ ] Meta CAPI evalúa `last_success_at` + `has_error` (no solo timestamp)
+- [ ] payment_ledger usa `get_payment_ledger_breakdown()` no `created_at`
+- [ ] Geniall muestra ⚪ gris + "Telemetría no disponible"
+- [ ] TBO Holidays muestra ⚪ gris + "Pendiente onboarding"
+- [ ] loadAll() usa useRef lock + swap atómico (sin nullear estado previo)
+- [ ] Indicador "Actualizando" muestra dot pulsante — NO blank state
+- [ ] Hermes Reporter dice "Eventos registrados hoy" (no "Reportes")
+- [ ] Ver historial → drawer lateral en la misma página (no nueva ruta)
+- [ ] Logs son reales de `logs_operativos` ORDER BY created_at DESC
+- [ ] Filtros de log: nivel + origen (sin recargar página)
+- [ ] Auto-refresh cada 60s sin parpadeo de contenido
+- [ ] SSOT Health mantiene v4.1 (no regresión)
+
+---
+
+*ATLAS-TECH · WAR-ROOM-V50-SPEC v1.2 · Segunda revisión Computer aplicada · 25 Jul 2026*
+*Veredicto final: APPROVED — ejecutable con correcciones aplicadas*
