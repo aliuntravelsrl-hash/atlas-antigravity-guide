@@ -1320,3 +1320,59 @@ const successRate = geniallBookings ?
 *ATLAS-TECH · WAR-ROOM-V50-SPEC v1.5 FINAL EJECUTABLE · 5 revisiones Computer · 25 Jul 2026*
 *STATUS: APPROVED FOR EXECUTION — EXECUTOR: ANTIGRAVITY*
 *"Antigravity, ejecutar War Room v5.0" — Computer, Rev5*
+
+
+---
+
+## ✅ APROBACIÓN FINAL — COMPUTER
+**Fecha:** 25 Jul 2026 | **STATUS: GO — EJECUTAR WAR ROOM v5.0**
+
+> "Antigravity puede ejecutar la SPEC v1.5 FINAL sin nuevas revisiones de arquitectura."
+> — Computer, aprobación final
+
+### CRITERIO DE ACEPTACIÓN OBLIGATORIO (Computer — último añadido)
+
+```
+Si una fuente individual falla, el War Room debe:
+  ✅ Mostrar esa sección como UNKNOWN / DATA UNAVAILABLE
+  ✅ Conservar la última información válida del resto del ecosistema
+  ❌ NUNCA declarar todo el sistema como rojo por un fallo parcial
+```
+
+```javascript
+// Implementación con Promise.allSettled() (ya en spec):
+snapshot.forEach((result, index) => {
+  if (result.status === 'rejected') {
+    // mostrar sección individual como "DATA UNAVAILABLE"
+    // NO propagar el error al estado global
+    setSectionError(index, 'DATA UNAVAILABLE');
+  } else {
+    setSectionData(index, result.value);
+  }
+});
+```
+
+### 4 INVARIANTES QA (Computer — obligatorias en QA antes de merge)
+
+```
+1. Promise.allSettled()
+   → una consulta fallida no puede tumbar todo el War Room
+
+2. Swap atómico
+   → nunca datos parcialmente nuevos mezclados con datos antiguos
+
+3. loadAll() con lock/ref
+   → nunca dos refresh simultáneos
+
+4. calculateEcosystemHealth() — jamás cuenta:
+   → cables planned ⚪
+   → cables external ⚪
+   → cables grises ⚪
+   → logs resueltos
+   Solo cuenta: CRITICAL activo + cable operational rojo + blocked > 0
+```
+
+---
+
+*ATLAS-SDD SPEC-WARROOM-005 v1.5 — ✅ APPROVED FOR EXECUTION*
+*5 revisiones de Quality Gate completadas — Antigravity ejecutar*
