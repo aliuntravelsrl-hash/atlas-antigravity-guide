@@ -815,3 +815,49 @@ Google Search Console → Sitemaps
 *Antigravity · ATLAS-TECH · 24 Jul 2026*
 
 - **ATLAS-CONTROL-SYSTEM-v1** — 3 pilares integrados bajo Hermes-QA como arnés cognitivo (Computer 24 Jul)
+
+
+---
+
+## Sección 14 — Commercial Operating System v1 · Motor agnóstico al producto · 26 JUL 2026
+
+**Sellado por:** Director Aldo Hilario + Computer (Perplexity)
+**Commit doctrina:** `6d4f1497` — `aliun-rrhh-v2/doctrines/COS-v1.md`
+**Tarea:** ATL-087 (COS-001)
+
+### El principio
+
+> *"El producto cambia. El cerebro no cambia."*
+
+Aliun Travel no construye motores separados por producto. Construye un único
+Commercial Operating System donde CRM, Event Bus, Commercial Runtime y Swarm
+son invariantes. Solo cambia el dominio en Product Knowledge Intelligence.
+
+### Los 4 dominios sellados
+
+| # | Dominio | Pregunta | Estado |
+|---|---------|----------|--------|
+| 1 | CRM / Customer Intelligence | ¿QUIÉN? | ✅ operativo |
+| 2 | Product Knowledge Intelligence | ¿QUÉ? | 🔄 Hotel Domain activo, otros: futuro |
+| 3 | Event Bus / State Intelligence | ¿QUÉ CAMBIÓ? | ✅ operativo |
+| 4 | Commercial Runtime | ¿QUÉ DEBE OCURRIR AHORA? | ✅ operativo |
+
+### Regla de gobierno para nuevos productos
+
+1. NO crear nuevo CRM, motor comercial ni nuevos agentes.
+2. SÍ crear nuevo dominio en Product Knowledge Intelligence.
+3. SÍ definir reglas de fulfillment específicas.
+4. SÍ agregar tipos de evento al Event Bus.
+5. El Swarm existente atiende el nuevo producto — con nuevo conocimiento, no nuevas instancias.
+
+### Evolución
+
+```
+hotel_knowledge (hoy) → Hotel Domain → Product Knowledge Intelligence → COS completo
+```
+
+### Relación con ATLAS Control System v1 (Sección 13)
+
+ATLAS Control System es la capa de governance del COS:
+SDD + Dependency Intelligence + Knowledge Loop controlan cómo se construye y opera cada dominio.
+
