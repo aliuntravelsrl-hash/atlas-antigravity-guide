@@ -1029,3 +1029,135 @@ Todos los puntos críticos están resueltos. Resumen ejecutivo:
 *ATLAS-TECH · WAR-ROOM-V50-SPEC v1.3 FINAL · 3 revisiones Computer aplicadas · 25 Jul 2026*
 *Veredicto: APPROVED FOR EXECUTION — entregar a Antigravity*
 *Componente: WarRoomV41.jsx → WarRoomV50.jsx | Ruta: /warroom*
+
+
+---
+
+## ADDENDUM 4 — CUARTA REVISIÓN COMPUTER (PUNTOS NUEVOS)
+**Estado:** ATLAS-SDD SPEC-WARROOM-005 — APPROVED WITH REQUIRED CORRECTIONS
+**Nota:** Las 6 correcciones críticas ya están en v1.3. Solo 3 puntos nuevos.
+
+---
+
+### NUEVO 1 — Promise.allSettled() en lugar de Promise.all()
+
+```javascript
+// ❌ Promise.all() — si un request falla, TODA la pantalla falla
+const results = await Promise.all([...]);
+
+// ✅ Promise.allSettled() — cada sección maneja su propio error
+const snapshot = await Promise.allSettled([
+  loadTaskSummary(),
+  loadLogs(),
+  loadCables(),
+  loadAgentReports(),
+  loadSsotHealth()
+]);
+
+// Aplicar lo que llegó exitosamente
+snapshot.forEach((result, index) => {
+  if (result.status === 'fulfilled') {
+    // actualizar la sección correspondiente
+  } else {
+    // mantener el estado anterior de esa sección
+    console.warn('Sección falló:', index, result.reason);
+  }
+});
+```
+
+**Regla:** Una consulta caída no debe romper el War Room completo.
+
+---
+
+### NUEVO 2 — Filtros de logs: locales (no refetch)
+
+```javascript
+// ❌ MAL — refetch cada vez que el usuario filtra
+const handleFilterChange = async (nivel) => {
+  const { data } = await supabase
+    .from('logs_operativos')
+    .select('*')
+    .eq('nivel', nivel)
+    .limit(50);
+  setLogs(data);
+};
+
+// ✅ CORRECTO — traer 50 registros, filtrar localmente
+const [allLogs, setAllLogs] = useState([]);
+const [logFilter, setLogFilter] = useState({ nivel: 'all', origen: 'all' });
+
+const filteredLogs = useMemo(() => {
+  return allLogs.filter(log => {
+    if (logFilter.nivel !== 'all' && log.nivel !== logFilter.nivel) return false;
+    if (logFilter.origen !== 'all' && log.origen !== logFilter.origen) return false;
+    return true;
+  });
+}, [allLogs, logFilter]);
+```
+
+---
+
+### NUEVO 3 — Cables ⚪ NO afectan el estado global
+
+```javascript
+// Regla: ⚪ pendiente de configurar ≠ ❌ fallo operacional
+
+function calculateEcosystemHealth({ cables, criticalLogs, failedRpc }) {
+  // ⚪ cables NUNCA cuentan como red
+  const redCables = Object.values(cables).filter(c =>
+    c.status === 'red' && c.is_configured === true  // solo los configurados
+  );
+
+  if (failedRpc) return 'critical';
+  if (criticalLogs.filter(l => !l.resuelto).length > 0) return 'critical';
+  if (redCables.length > 0) return 'degraded';
+  return 'healthy';
+}
+
+// Ejemplo correcto:
+// Geniall ⚪ → NO cuenta para el estado global
+// TBO ⚪ → NO cuenta para el estado global
+// Meta CAPI 🔴 → SÍ cuenta (is_configured: true)
+```
+
+---
+
+### SOBRE EL TRIGGER payment_ledger (CORRECCIÓN YA APLICADA)
+
+Computer señala que `AFTER INSERT` no puede modificar `NEW.payment_id`.
+
+**Esto ya está correcto en producción:**
+```
+trg_prepare_ledger_insert  → BEFORE INSERT  ✅
+  → hereda payment_id de la aplicación original
+  → valida reversal_of_ledger_id
+  → prohibe reversión de reversión
+
+trg_sync_ledger_to_crm     → AFTER INSERT   ✅
+  → solo llama atlas_sync_lead_finance_state()
+  → NO modifica ningún campo
+```
+
+SPEC-003 v1.0.6 ya implementó esta separación correcta. El cable `payment_ledger` en el War Room puede conectarse con confianza.
+
+---
+
+### CLASIFICACIÓN FINAL — P0 / P1
+
+**P0 — Antes de merge (obligatorio):**
+- [x] No usar `bookings.created_at` como health de Geniall
+- [x] Estado global con lógica explícita (`calculateEcosystemHealth`)
+- [x] ⚪ cables no generan alerta global
+- [x] `Promise.allSettled()` para refresh resiliente
+- [x] Snapshot atómico — sin blank state durante refresh
+- [x] Filtros de logs: locales (no refetch)
+
+**P1 — Dentro de v5.0:**
+- Owner Cards expandibles inline
+- Drawer historial reporters
+- Badge "🔴 CUELLO ACTIVO"
+
+---
+
+*ATLAS-TECH · WAR-ROOM-V50-SPEC v1.4 FINAL · 4 revisiones Computer · 25 Jul 2026*
+*STATUS: APPROVED WITH REQUIRED CORRECTIONS — EXECUTOR: ANTIGRAVITY*
