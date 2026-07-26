@@ -1161,3 +1161,162 @@ SPEC-003 v1.0.6 ya implementó esta separación correcta. El cable `payment_ledg
 
 *ATLAS-TECH · WAR-ROOM-V50-SPEC v1.4 FINAL · 4 revisiones Computer · 25 Jul 2026*
 *STATUS: APPROVED WITH REQUIRED CORRECTIONS — EXECUTOR: ANTIGRAVITY*
+
+
+---
+
+## ADDENDUM 5 — QUINTA REVISIÓN COMPUTER (PUNTOS FINALES)
+**5 revisiones convergentes — SPEC EJECUTABLE**
+
+---
+
+### FINAL 1 — Cadencia por agente (hermes reporter)
+
+```javascript
+// Cada agente tiene su propio umbral de salud
+const AGENT_CADENCE = {
+  'hermes-ops':        { expectedIntervalHours: 4,  label: 'Centro Nervioso' },
+  'hermes-qa':         { expectedIntervalHours: 24, label: 'Briefing diario 8AM' },
+  'hermes-commercial': { expectedIntervalHours: 12, label: 'Orquestador Comercial' },
+  'hermes-marketing':  { expectedIntervalHours: 24, label: 'Marketing' },
+  'ariadne-data':      { expectedIntervalHours: 48, label: 'Analytics' },
+  'intel':             { expectedIntervalHours: 168,label: 'Intel semanal' }
+};
+
+// Ejemplo: hermes-qa sin reporte en 8h NO es amarillo — su ciclo es 24h
+```
+
+**Mini-card por agente:**
+```
+🔍 HERMES QA
+Último evento: hace 8h (briefing 8AM)
+Eventos 24h: 3
+Errores activos: 0
+Estado: 🟢 ACTIVO    ← verde porque su cadencia es 24h
+```
+
+---
+
+### FINAL 2 — Cable impact type: solo 'operational' afecta estado global
+
+```javascript
+const CABLE_DEFINITIONS = [
+  // operational — afecta salud global si está rojo
+  { id: 'meta_capi',     impact: 'operational', is_configured: true  },
+  { id: 'firecrawl',     impact: 'operational', is_configured: true  },
+  { id: 'payment_ledger',impact: 'operational', is_configured: true  },
+  { id: 'hotel_knowledge',impact:'operational', is_configured: true  },
+  { id: 'n8n',           impact: 'operational', is_configured: true  },
+
+  // planned — NO afecta salud global (pendiente de activar)
+  { id: 'google_capi',   impact: 'planned',     is_configured: false },
+
+  // external — NO afecta salud global (onboarding pendiente)
+  { id: 'tbo_holidays',  impact: 'external',    is_configured: false },
+  { id: 'geniall',       impact: 'external',    is_configured: false },
+];
+
+// calculateEcosystemHealth solo cuenta cables operational
+const criticalFailures = cables.filter(c =>
+  c.status === 'red' && c.impact === 'operational'
+).length;
+```
+
+---
+
+### FINAL 3 — Logs: resuelto=true NO afecta estado actual
+
+```javascript
+// Solo logs activos (no resueltos) cuentan para el estado global
+const activeErrors = logs.filter(l =>
+  l.nivel === 'CRITICAL' && !l.resuelto
+);
+
+// En la UI — mostrar badge según estado de resolución:
+// [CRÍTICO] [ACTIVO]    → fondo rojo intenso
+// [CRÍTICO] [RESUELTO]  → fondo gris/apagado
+// [ERROR]   [ACTIVO]    → fondo amber
+// [ERROR]   [RESUELTO]  → fondo gris
+```
+
+---
+
+### FINAL 4 — last_checked en cable cards
+
+```
+🟢 Meta CAPI
+Último evento exitoso: hace 5 min
+Verificado: hace 12s    ← timestamp del último refresh del War Room
+```
+
+```javascript
+// Añadir al estado de cables
+const [cablesCheckedAt, setCablesCheckedAt] = useState(null);
+
+// Actualizar al cargar cables
+setCablesCheckedAt(new Date());
+
+// Render
+<span>Verificado: {formatRelative(cablesCheckedAt)}</span>
+```
+
+---
+
+### FINAL 5 — Geniall: success rate basado en transacciones
+
+```javascript
+// ❌ NO: timestamp mensual
+// ✅ SÍ: éxito de las últimas N reservas
+
+// Cuando existan bookings con provider_name = 'geniall':
+const { data: geniallBookings } = await supabase
+  .from('bookings')
+  .select('status, created_at')
+  .eq('provider_name', 'geniall')
+  .order('created_at', { ascending: false })
+  .limit(10);
+
+const successRate = geniallBookings ?
+  geniallBookings.filter(b => b.status === 'confirmed').length / geniallBookings.length : null;
+
+// Semáforo:
+// successRate === null → ⚪ sin actividad reciente
+// successRate >= 0.9   → 🟢 OK
+// successRate >= 0.7   → 🟡 alertas
+// successRate < 0.7    → 🔴 fallos
+
+// HOY: ⚪ hasta tener bookings con provider_name='geniall' (ya hay campo en BD)
+```
+
+---
+
+### RESUMEN EJECUTIVO — 5 REVISIONES (para Antigravity)
+
+**Todo lo aprobado en una sola tabla:**
+
+| Decisión | Versión | Estado |
+|----------|---------|--------|
+| health ≠ freshness en semáforos | Rev1 | ✅ |
+| Geniall ⚪ sin bookings.created_at | Rev1 | ✅ |
+| payment_ledger → RPC integridad | Rev1 | ✅ |
+| loadAll() useRef lock | Rev1 | ✅ |
+| Owner cards expandibles inline | Rev2 | ✅ |
+| Swap atómico sin parpadeo | Rev2 | ✅ |
+| "Eventos" no "Reportes" | Rev2 | ✅ |
+| Estado global calculateEcosystemHealth() | Rev3 | ✅ |
+| Orden visual Header→Alertas→... | Rev3 | ✅ |
+| Badge "CUELLO ACTIVO" si blocked>0 | Rev3 | ✅ |
+| Promise.allSettled() resiliente | Rev4 | ✅ |
+| Filtros logs locales sin refetch | Rev4 | ✅ |
+| ⚪ grises no afectan estado global | Rev4 | ✅ |
+| Cadencia por agente (hermes-ops:4h etc) | Rev5 | ✅ |
+| Cable impact: operational/planned/external | Rev5 | ✅ |
+| resuelto=true no contamina estado | Rev5 | ✅ |
+| last_checked en cable cards | Rev5 | ✅ |
+| Geniall: success rate transaccional | Rev5 | ✅ |
+
+---
+
+*ATLAS-TECH · WAR-ROOM-V50-SPEC v1.5 FINAL EJECUTABLE · 5 revisiones Computer · 25 Jul 2026*
+*STATUS: APPROVED FOR EXECUTION — EXECUTOR: ANTIGRAVITY*
+*"Antigravity, ejecutar War Room v5.0" — Computer, Rev5*
