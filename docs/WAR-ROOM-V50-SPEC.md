@@ -300,3 +300,250 @@ Las rutas del menú sidebar no se modifican en este sprint
 
 *ATLAS-TECH · War Room v5.0 Spec · 25 Jul 2026*
 *Conecta con: WarRoomV41.jsx · logs_operativos · atlas_tasks · crm_capi_logs*
+
+
+---
+
+## ADDENDUM — CORRECCIONES DE COMPUTER
+**Fecha:** 25 Jul 2026 | **Estado:** APPROVED WITH CONDITIONS
+**Veredicto:** La dirección es correcta. El War Room v5.0 debe evolucionar de dashboard visual a Operational Control Plane. Las correcciones siguientes son obligatorias antes de ejecutar.
+
+---
+
+### CORRECCIÓN 1 🔴 — Cables: Freshness + Integrity (no solo tiempo)
+
+El cable `payment_ledger` y otros NO deben evaluarse solo por `created_at`.
+Un cable puede estar fresco pero operacionalmente roto.
+
+**Regla:** `INTEGRIDAD > FRESHNESS`
+
+```javascript
+// INCORRECTO (versión original):
+getCableStatus(lastTimestamp, expectedIntervalHours)
+
+// CORRECTO (versión aprobada):
+function resolveCableStatus({
+  lastTimestamp, expectedIntervalHours,
+  hasError = false, isConfigured = true, isHealthy = true,
+  count = null, min = null
+}) {
+  if (!isConfigured) return 'gray';
+  if (hasError || !isHealthy) return 'red';       // integridad primero
+  if (count !== null && min !== null) {
+    if (count < min) return 'yellow';
+    return 'green';
+  }
+  if (!lastTimestamp) return 'red';
+  const hours = (Date.now() - new Date(lastTimestamp)) / 3600000;
+  if (hours <= expectedIntervalHours) return 'green';
+  if (hours <= expectedIntervalHours * 2) return 'yellow';
+  return 'red';
+}
+```
+
+**Para payment_ledger:** usar `get_payment_ledger_breakdown()` no solo `MAX(created_at)`.
+
+---
+
+### CORRECCIÓN 2 🔴 — Sistema de semáforos basado en máquina de estados
+
+La función de semáforo original era demasiado simple.
+La RPC `get_warroom_task_summary()` ya devuelve `is_healthy`, `hasError`, etc.
+El frontend **solo presenta** — el backend **decide**.
+
+```
+atlas_tasks / logs_operativos / crm_capi_logs
+         ↓
+get_warroom_task_summary() ← AUTORIDAD
+         ↓
+frontend presentation only
+```
+
+---
+
+### CORRECCIÓN 3 🟡 — Meta CAPI: umbrales más estrictos
+
+**Aprobado por Director:**
+```javascript
+// Meta CAPI — medir último envío EXITOSO, no solo cualquier evento
+{
+  name: 'Meta CAPI',
+  expectedIntervalHours: 6,    // 🟢 0–6h
+  warningAfterHours: 24,       // 🟡 6–24h
+  criticalAfterHours: 48       // 🔴 >24h
+}
+
+// Firecrawl Intel — ciclo semanal
+{
+  name: 'Firecrawl',
+  expectedIntervalHours: 168,  // 🟢 dentro del ciclo
+  warningAfterHours: 336,      // 🟡 retraso moderado
+  criticalAfterHours: 504      // 🔴 ciclo perdido
+}
+
+// payment_ledger — freshness + integrity
+// Ver corrección #1
+```
+
+**Visualmente para Meta CAPI:**
+```
+🟢 Meta CAPI
+Último envío exitoso: hace 12 min
+Errores 24h: 0
+```
+
+---
+
+### CORRECCIÓN 4 🟡 — Geniall: estado ⚪ hasta health check real
+
+**ELIMINAR** `bookings.created_at` como proxy de Geniall.
+Una reserva puede crearse aunque Geniall esté desconectado.
+
+```javascript
+// INCORRECTO:
+{ name: 'Geniall', table: 'bookings', field: 'created_at', interval: 720 }
+
+// CORRECTO:
+{ name: 'Geniall', status: 'gray', reason: 'Sin health check implementado' }
+```
+
+**Estado correcto hasta implementar `geniall_sync_events` en logs_operativos:**
+```
+⚪ Geniall
+Sin health check implementado
+```
+
+---
+
+### CORRECCIÓN 5 🔴 — Owner Cards: output contractual estable
+
+La RPC `get_warroom_task_summary()` ya está actualizada con este contrato:
+
+```typescript
+interface OwnerSummary {
+  total_active: number;
+  pending: number;
+  in_progress: number;
+  blocked: number;
+  critical: number;
+  high: number;
+  medium: number;
+  health: 'red' | 'yellow' | 'green';
+}
+```
+
+**Tarjeta UI:**
+```
+DIRECTOR — 14 tareas activas
+🔴 1 crítica
+⚠️ 10 altas
+⏳ 3 normales
+──────────────
+9 pendientes · 3 en progreso · 2 bloqueadas
+[Ver detalle →] → drawer lateral
+```
+
+**Click → drawer** (no expandir inline):
+Filtros en drawer: [Todas] [Críticas] [Altas] [Bloqueadas] [En progreso]
+
+---
+
+### CORRECCIÓN 6 🟡 — loadAll() sin solapamiento de requests
+
+```javascript
+// INCORRECTO (puede crear requests superpuestos):
+useEffect(() => {
+  loadAll();
+  const interval = setInterval(loadAll, 60000);
+  return () => clearInterval(interval);
+}, []);
+
+// CORRECTO (con lock):
+const loadingRef = useRef(false);
+
+const loadAll = async () => {
+  if (loadingRef.current) return;
+  loadingRef.current = true;
+  try {
+    await Promise.all([
+      loadTaskSummary(),
+      loadLogs(),
+      loadCables(),
+      loadAgentReports(),
+      loadSsotHealth()
+    ]);
+    setLastRefresh(new Date());
+  } finally {
+    loadingRef.current = false;
+  }
+};
+```
+
+---
+
+### DISEÑO FINAL APROBADO (Computer)
+
+```
+┌────────────────────────────────────────────────────────────┐
+│ WAR ROOM v5.0                              🟢 HEALTHY      │
+│ Última actualización: hace 12 segundos                     │
+└────────────────────────────────────────────────────────────┘
+
+┌──────────────┬──────────────┬──────────────┬──────────────┐
+│ DIRECTOR (A) │ ATLAS-TECH(B)│   SWARM  (C) │ ANTIGRAV.(D) │
+│ 14 activas   │ 20 activas   │ 23 activas   │ 7 activas    │
+│ 🔴 1 crítica │ 🔴 1 crítica │ 🟢 0         │ 🟢 0         │
+│ [Ver →]      │ [Ver →]      │ [Ver →]      │ [Ver →]      │
+└──────────────┴──────────────┴──────────────┴──────────────┘
+
+┌─────────────────────────┬────────────────────────────────┐
+│ CABLES / INTEGRACIONES  │ HERMES REPORTER                │
+│ 🟢 Meta CAPI (12 min)   │ 🤖 hermes-ops  · hace 2h      │
+│ 🟢 Firecrawl (viernes)  │ 🔍 hermes-qa   · hace 8h      │
+│ 🟢 payment_ledger       │ 💼 commercial  · hace 1h      │
+│ 🟡 hotel_knowledge      │                                │
+│ ⚪ Geniall (sin HC)     │ [Ver historial →]              │
+│ ⚪ TBO Holidays         │                                │
+└─────────────────────────┴────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────┐
+│ LIVE OPERATIONAL LOG                                       │
+│ [Todos] [INFO] [WARN] [ERROR] [CRITICAL]  [origen ▼]     │
+│ 15:42 🟢 hermes-ops   Evento completado                   │
+│ 15:40 ⚠️  atlas-tech  Migración pendiente                 │
+│ 15:38 🔴 hermes-qa    Test failed                         │
+└────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────┐
+│ SSOT HEALTH  (mantener igual que v4.1)                     │
+└────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### CRITERIOS DE ACEPTACIÓN ACTUALIZADOS
+
+- [ ] Owner cards leen de `get_warroom_task_summary()` — NO calculan en frontend
+- [ ] Click owner card → drawer lateral con lista filtrable de tareas
+- [ ] Semáforos usan `resolveCableStatus()` con integridad > freshness
+- [ ] Meta CAPI mide último envío EXITOSO (no cualquier registro)
+- [ ] Geniall muestra ⚪ gris (sin health check real)
+- [ ] `loadAll()` usa `useRef` lock — sin solapamiento de requests
+- [ ] Logs son reales de `logs_operativos` (no hardcodeados)
+- [ ] Auto-refresh cada 60s sin parpadeo
+- [ ] SSOT Health mantiene funcionamiento de v4.1 (no regresión)
+- [ ] Hermes Reporter muestra actividad de últimas 24h por agente
+- [ ] Botón "Ver historial →" en Hermes Reporter (vista filtrada de logs)
+
+---
+
+### DECISIONES DEL DIRECTOR (confirmadas)
+
+| Cable | 🟢 | 🟡 | 🔴 |
+|-------|-----|-----|-----|
+| Meta CAPI | 0–6h exitoso | 6–24h | >24h |
+| Firecrawl | dentro del ciclo semanal | retraso moderado | ciclo perdido |
+| payment_ledger | freshness + integrity OK | warning | error |
+| Geniall | — | — | ⚪ hasta HC real |
+
+*ATLAS-TECH · WAR-ROOM-V50-SPEC v1.1 · Correcciones Computer aplicadas · 25 Jul 2026*
