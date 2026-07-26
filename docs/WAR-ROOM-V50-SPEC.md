@@ -844,3 +844,188 @@ const ledgerHealthy = data !== null &&
 
 *ATLAS-TECH · WAR-ROOM-V50-SPEC v1.2 · Segunda revisión Computer aplicada · 25 Jul 2026*
 *Veredicto final: APPROVED — ejecutable con correcciones aplicadas*
+
+
+---
+
+## ADDENDUM 3 — TERCERA REVISIÓN COMPUTER (FINAL)
+**Estado:** ATLAS-SDD SPEC-WR-005 v1.3 — APPROVED FOR EXECUTION
+**Convergencia de 3 revisiones: todos los puntos críticos resueltos**
+
+---
+
+### CORRECCIÓN F — Estado global: lógica explícita RED/YELLOW/GREEN
+
+**NO hacer esto:**
+```javascript
+// ❌ MAL — un log INFO no es una alerta
+const globalStatus = logs.length > 0 ? 'red' : 'green';
+```
+
+**Hacer esto:**
+```javascript
+// ✅ CORRECTO — lógica explícita
+function resolveGlobalStatus({ owners, cables, logs }) {
+  // RED si:
+  const hasCritical =
+    logs.some(l => l.nivel === 'CRITICAL' && !l.resuelto) ||
+    Object.values(cables).some(c => c.status === 'red' && c.is_configured) ||
+    owners.some(o => o.health === 'red' && o.critical > 0);
+
+  if (hasCritical) return { status: 'red', label: 'REQUIERE ATENCIÓN' };
+
+  // YELLOW si:
+  const hasWarning =
+    logs.some(l => l.nivel === 'ERROR' && !l.resuelto) ||
+    Object.values(cables).some(c => c.status === 'yellow') ||
+    owners.some(o => o.blocked > 0);
+
+  if (hasWarning) return { status: 'yellow', label: 'ADVERTENCIAS ACTIVAS' };
+
+  // GREEN:
+  return { status: 'green', label: 'ECOSISTEMA OPERATIVO' };
+}
+```
+
+**Header resultado:**
+```
+🟢 ECOSISTEMA OPERATIVO
+Última actualización: hace 12s · 0 críticas · 2 warnings · 4 cables sanos
+
+— o —
+
+🔴 REQUIERE ATENCIÓN
+2 alertas críticas · 1 cable caído · [Ver detalles ↓]
+```
+
+---
+
+### CORRECCIÓN G — Orden visual FINAL (aprobado por Computer)
+
+```
+1. HEADER GLOBAL + STATUS
+   ↓
+2. ALERTAS CRÍTICAS (solo si existen — conditional render)
+   🔴 N ALERTAS REQUIEREN ATENCIÓN
+   [lista compacta de qué está mal]
+   ↓
+3. OWNER CARDS (A · B · C · D)
+   ↓
+4. CABLES / INTEGRACIONES
+   ↓
+5. SSOT HEALTH (v4.1 intacto)
+   ↓
+6. LIVE LOG (logs_operativos)
+   ↓
+7. HERMES REPORTER
+```
+
+**Razón:** El Director necesita primero "¿qué requiere mi atención?" antes de ver métricas.
+
+---
+
+### CORRECCIÓN H — Owner Card: badge "CUELLO ACTIVO"
+
+Cuando un owner tiene tareas bloqueadas que frenan a otros:
+
+```
+┌─────────────────────────────┐
+│ DIRECTOR (A)                │
+│ 14 pendientes               │
+│ 🔴 1 crítica                │
+│ ⚠️ 10 altas                 │
+│ ⏳ 3 bloqueadas             │
+│                             │
+│ 🔴 CUELLO ACTIVO            │  ← si blocked > 0
+│ [Ver tareas →]              │
+└─────────────────────────────┘
+```
+
+**La RPC ya devuelve `blocked` por owner.**
+Mostrar el badge si `blocked > 0`:
+```javascript
+{owner.blocked > 0 && (
+  <span className="badge-red">🔴 CUELLO ACTIVO</span>
+)}
+```
+
+---
+
+### TABLA DE CABLES FINAL (aprobada)
+
+| Cable | Fuente | Tipo de salud |
+|-------|--------|---------------|
+| Meta CAPI | `crm_capi_logs` | Último éxito + tasa de error |
+| Firecrawl Intel | `competitive_intel` | Freshness semanal |
+| WF QA Briefing | `logs_operativos` | Heartbeat diario |
+| Payment Ledger | `get_payment_ledger_breakdown()` | Integridad financiera |
+| Hotel Knowledge | `hotel_knowledge` | Conteo ≥ 150 activas |
+| Geniall | — | ⚪ Telemetría no disponible |
+| TBO Holidays | — | ⚪ Pendiente onboarding (RNC) |
+| n8n | `logs_operativos` origen='wf-*' | Workflows activos |
+
+---
+
+### CONVERGENCIA DE 3 REVISIONES — PUNTOS CLAVE
+
+Todos los puntos críticos están resueltos. Resumen ejecutivo:
+
+| Punto | Rev 1 | Rev 2 | Rev 3 | Estado |
+|-------|-------|-------|-------|--------|
+| health ≠ freshness | 🔴 | 🔴 | 🔴 | ✅ resuelto |
+| Geniall ⚪ | 🔴 | 🔴 | 🔴 | ✅ resuelto |
+| payment_ledger RPC | 🔴 | 🔴 | 🔴 | ✅ resuelto |
+| loadAll() lock | 🟡 | 🟡 | 🟡 | ✅ resuelto |
+| Owner cards clickeables | 🟡 | 🟡 | 🟡 | ✅ resuelto |
+| Hermes Reporter semántica | 🟡 | 🟡 | 🟡 | ✅ resuelto |
+| Global status explícito | — | — | 🔴 | ✅ añadido |
+| Orden visual | — | — | 🟡 | ✅ añadido |
+| Badge cuello activo | — | — | 🟡 | ✅ añadido |
+
+---
+
+### CRITERIOS DE ACEPTACIÓN v1.3 (FINALES)
+
+**Estado global:**
+- [ ] `resolveGlobalStatus()` usa lógica explícita RED/YELLOW/GREEN
+- [ ] RED solo si: CRITICAL no resuelto | cable crítico caído | owner critical > 0
+- [ ] Header muestra: estado + timestamp + resumen compacto
+
+**Orden visual:**
+- [ ] Sección "Alertas críticas" se muestra solo si existen (conditional render)
+- [ ] Orden: Header → Alertas → Owners → Cables → SSOT → Logs → Hermes Reporter
+
+**Owner Cards:**
+- [ ] Badge "🔴 CUELLO ACTIVO" si `blocked > 0`
+- [ ] top_tasks expandibles inline (lazy del RPC)
+- [ ] "Ver todas" → consulta directa atlas_tasks
+
+**Cables:**
+- [ ] `resolveCableStatus()` con health > freshness
+- [ ] Meta CAPI: last_success_at + errors_24h
+- [ ] payment_ledger: `get_payment_ledger_breakdown()` integridad
+- [ ] Geniall: ⚪ gris + "Telemetría no disponible"
+- [ ] TBO Holidays: ⚪ gris + "Pendiente onboarding"
+
+**Refresh:**
+- [ ] `useRef` lock — sin solapamiento
+- [ ] Swap atómico — sin nullear estado previo
+- [ ] Indicador dot pulsante (no blank state)
+
+**Logs:**
+- [ ] Fuente real: `logs_operativos` ORDER BY created_at DESC LIMIT 50
+- [ ] Filtros: nivel + origen (sin reload)
+
+**Hermes Reporter:**
+- [ ] "Eventos registrados hoy" (no "Reportes")
+- [ ] Mini-cards: events_24h + last_event + errors
+- [ ] [Ver historial →] → drawer lateral misma página
+
+**SSOT Health:**
+- [ ] Mantener v4.1 sin regresión
+
+---
+
+*ATLAS-TECH · WAR-ROOM-V50-SPEC v1.3 FINAL · 3 revisiones Computer aplicadas · 25 Jul 2026*
+*Veredicto: APPROVED FOR EXECUTION — entregar a Antigravity*
+*Componente: WarRoomV41.jsx → WarRoomV50.jsx | Ruta: /warroom*
