@@ -861,3 +861,45 @@ hotel_knowledge (hoy) → Hotel Domain → Product Knowledge Intelligence → CO
 ATLAS Control System es la capa de governance del COS:
 SDD + Dependency Intelligence + Knowledge Loop controlan cómo se construye y opera cada dominio.
 
+
+
+---
+
+## Sección 15 — COS-v2: Arquitectura Madre Completa · 26 JUL 2026 (noche)
+
+**Commit doctrina:** `5f58cb2e` — `aliun-rrhh-v2/doctrines/COS-v2.md`
+**Extiende:** Sección 14 (COS-v1)
+
+### El concepto global completo
+
+Con la incorporación de ATLAS-Marketing y el modelo DMC bidireccional de Experiences,
+el COS queda consolidado como la arquitectura madre de Aliun Travel.
+
+### Los tres elementos nuevos de v2
+
+| Elemento | Rol en el COS |
+|----------|---------------|
+| ATLAS Marketing | Motor de Atracción — mismo motor para cualquier Product Domain |
+| Modelo B2C/B2B | Dos canales, mismo COS — cambia la política, no el motor |
+| Ariadne como medición total | Mide el ciclo completo: Impresión → LTV |
+
+### Posicionamiento de experiences-engine
+
+```
+experiences-engine  →  Experience Domain Adapter  →  Product Knowledge Intelligence  →  COS
+```
+No es una arquitectura comercial paralela. Es un adaptador de dominio.
+
+### Estado de dominios
+
+| Dominio | Estado |
+|---------|--------|
+| Hotel Domain | ✅ operativo (hotel_knowledge, objetivo 150 entradas — ATL-081) |
+| Experience Domain | 🔄 experiences-engine como adaptador, formalización pendiente |
+| Flight Domain | 📋 arquitectura definida, implementación futura |
+| Yacht Domain | 📋 arquitectura definida, implementación futura |
+
+### La regla que no cambia nunca
+
+> *"El motor cambia de dominio. La inteligencia comercial permanece."*
+
