@@ -947,3 +947,18 @@ Nunca al revés.
 
 > *"El sistema aprende. No solamente ejecuta."*
 
+
+
+---
+
+### Tareas de cierre creadas — 27 Jul 2026
+
+| Código | Tarea | Frente | Prioridad |
+|--------|-------|--------|-----------|
+| ATL-097 | COS-002A: SOUL.md Hermes-Marketing — Motor de Atracción COS | F4-RRHH-IA | alta |
+| ATL-098 | COS-002B: SOUL.md Hermes-Ops — Fulfillment B2C/B2B sobre COS | F4-RRHH-IA | alta |
+| ATL-099 | COS-OLA1-SQL: Migration SQL Ola 1 — 5 registros Workflow Intelligence | F2-BACKEND-CORE | crítica |
+
+**Próxima prioridad de ejecución:** ATL-099 (migration SQL) desbloquea COS-101→105.
+`origen: computer | evento: SESION_CIERRE | 27 Jul 2026 01:44 UTC`
+
