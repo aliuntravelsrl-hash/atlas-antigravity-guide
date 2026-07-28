@@ -1149,3 +1149,49 @@ Capacidad: detectar desviaciones, proponer mejoras, priorizar con evidencia.
 
 `origen: computer | evento: ACTA_FUNDACIONAL_SELLADA | 27 Jul 2026`
 
+
+
+---
+
+## Sección 19 — COS-v3 · Capability Intelligence · 27 JUL 2026 (cierre de sesión)
+
+**Commit COS-v3:** `8e19b4e3` — `aliun-rrhh-v2/doctrines/COS-v3.md`
+**Tareas:** ATL-102→109 creadas en Mission Control
+
+### El séptimo pilar
+
+```
+Operational Intelligence    ← ¿Cómo se gobierna?      (pilar 6)
+─────────────────────────────────────────────────────────
+Capability Intelligence     ← ¿Qué necesita aprender?  (pilar 7, NUEVO)
+```
+
+### Ya no existen herramientas — existen capacidades
+
+Antes: detecta limitación → instala librería (ad-hoc, sin gobierno)
+Después: detecta gap → capability_requests → QA → ADR → Director → ATLAS-TECH → Knowledge update → Rehidratación
+
+### El ciclo cognitivo completo
+
+```
+Knowledge → Gap → Capability Intelligence → QA → Director
+→ ATLAS-TECH → Operational Intelligence → Deployment
+→ Knowledge Update → Rehidratación → [cierra el ciclo]
+```
+
+### Los tres pilares que forman el ciclo de aprendizaje
+
+| Pilar | Sabe |
+|-------|------|
+| Operational Intelligence | qué existe |
+| Capability Intelligence | qué falta |
+| Knowledge Intelligence | por qué existe |
+
+### Doctrinas activas al cierre de sesión: 8
+
+`ATLAS-SDD-v1` · `ATLAS-CONTROL-SYSTEM-v1` · `COS-v1` · `COS-v2` · `COS-v2.5` · `MANIFIESTO-COS-v1` · `ACTA-FUNDACIONAL-v1` · **`COS-v3`**
+
+> *"Ya no existen herramientas. Existen capacidades."*
+
+`origen: computer | evento: COS_V3_SELLADO | 27 Jul 2026`
+
