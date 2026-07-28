@@ -962,3 +962,51 @@ Nunca al revés.
 **Próxima prioridad de ejecución:** ATL-099 (migration SQL) desbloquea COS-101→105.
 `origen: computer | evento: SESION_CIERRE | 27 Jul 2026 01:44 UTC`
 
+
+
+---
+
+### Refinamiento final — 27 Jul 2026 (noche)
+
+**Commit COS-v2.5 refinado:** `b92b1f5b` — Operational Intelligence (reemplaza Workflow Intelligence)
+
+#### El cambio conceptual
+
+"Workflow Intelligence" era demasiado estrecho — evocaba solo n8n.
+"Operational Intelligence" gobierna toda la operación: workflows, webhooks, eventos, APIs, runtimes.
+
+#### Los 6 pilares definitivos del COS
+
+| Pilar | Pregunta que responde |
+|-------|----------------------|
+| Customer Intelligence | ¿Quién? |
+| Product Intelligence | ¿Qué? |
+| Attraction Intelligence | ¿Cómo llega? |
+| Event Intelligence | ¿Qué cambió? |
+| Knowledge Intelligence | ¿Qué sabe el sistema de sí mismo? |
+| **Operational Intelligence** | **¿Cómo se gobierna?** |
+
+#### Regla doctrinal permanente sellada
+
+> *Todo activo operativo del ecosistema debe tener una identidad canónica,*
+> *un propietario, un ciclo de vida, una trazabilidad y una fuente única de verdad.*
+> *Si un activo no puede inventariarse, auditarse y gobernarse desde Operational Intelligence,*
+> *no forma parte del Commercial Operating System.*
+
+#### Tarea creada
+
+| Código | Tarea | Prioridad |
+|--------|-------|-----------|
+| ATL-100 | COS-109: Mission Control Intelligence — dashboard OI en tiempo real | crítica |
+
+**Cadena de desbloqueo Ola 1 → Ola 2:**
+```
+ATL-099 (migration SQL)
+    ↓
+COS-101→105 (inventario de los 5 registros)
+    ↓
+ATL-100 / COS-109 (Mission Control Intelligence)
+```
+
+`origen: computer | evento: SESION_CIERRE_FINAL | 27 Jul 2026`
+
