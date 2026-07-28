@@ -1195,3 +1195,47 @@ Knowledge → Gap → Capability Intelligence → QA → Director
 
 `origen: computer | evento: COS_V3_SELLADO | 27 Jul 2026`
 
+
+
+---
+
+## Sección 20 — COS-v3.1 · Capability Lab · 4 Zonas · CIERRE DE SESIÓN · 27 JUL 2026
+
+**Commit COS-v3.1:** `9dab26ef` — `aliun-rrhh-v2/doctrines/COS-v3.1.md`
+
+### Los tres órganos del séptimo pilar
+
+```
+Capability Intelligence   → detecta (nunca instala)
+Capability Lab            → valida en sandbox antes de producción
+Capability Registry       → institucionaliza como activo del COS
+```
+
+### Las cuatro zonas — mapa definitivo
+
+```
+Zona 1  Producción   Hermes · Ariadne · Runtime
+Zona 2  Knowledge    Hotel/CRM/Workflow Knowledge
+Zona 3  Capability   Intelligence · Lab · Registry
+Zona 4  Governance   QA · Director · ATLAS-TECH · Mission Control
+```
+
+### Principio 11 sellado en MANIFIESTO-COS-v1
+
+> El ecosistema no improvisa capacidades; las institucionaliza.
+
+### El salto de naturaleza
+
+```
+Plataforma de automatización  →  Sistema Operativo Comercial Cognitivo
+```
+
+### 9 doctrinas activas al cierre definitivo
+
+`ATLAS-SDD-v1` · `ATLAS-CONTROL-SYSTEM-v1` · `COS-v1` · `COS-v2` · `COS-v2.5`
+`MANIFIESTO-COS-v1` · `ACTA-FUNDACIONAL-v1` · `COS-v3` · **`COS-v3.1`**
+
+> *"Ya no tienes un conjunto de agentes. Tienes un sistema operativo comercial cognitivo."*
+
+`origen: computer | evento: COS_V3_1_SELLADO | 27 Jul 2026`
+
