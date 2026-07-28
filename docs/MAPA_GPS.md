@@ -903,3 +903,47 @@ No es una arquitectura comercial paralela. Es un adaptador de dominio.
 
 > *"El motor cambia de dominio. La inteligencia comercial permanece."*
 
+
+
+---
+
+## Sección 16 — COS-v2.5: La Plataforma de Governance · 27 JUL 2026
+
+**Commit doctrina:** `c12ae426` — `aliun-rrhh-v2/doctrines/COS-v2.5.md`
+**Fuente Notion:** [COS v2.5](https://app.notion.com/p/38c293f46b2481159d85e66373acc4b6)
+
+### Los 5 pilares del COS v2.5
+
+| # | Pilar | Antes | Ahora |
+|---|-------|-------|-------|
+| 1 | Customer Intelligence | CRM | Sin cambio |
+| 2 | Product Intelligence | hotel_knowledge | Hotel Domain + futuros |
+| 3 | Event Intelligence | Event Bus | + registros oficiales |
+| 4 | Attraction Intelligence | Marketing | Sin cambio |
+| 5 | **Knowledge Intelligence** | — | **NUEVO: el cerebro del sistema** |
+
+### El 6° órgano: Workflow Intelligence
+
+5 registros oficiales que eliminan la duplicación y la deriva del sistema circulatorio:
+`wf_registry` · `webhook_registry` · `event_registry` · `api_registry` · `runtime_registry`
+
+**Ciclo de vida:** `EXPERIMENTAL → REVIEW → CANONICAL → DEPRECATED → LEGACY → ARCHIVED`
+
+### Knowledge Base First
+
+```
+Doctrina → Spec → Registry → Implementación → Evento → Métrica → Aprendizaje → KB
+```
+Nunca al revés.
+
+### Roadmap (4 olas)
+
+- **Ola 1** (COS-101→105): crear los 5 registros e inventariar todo
+- **Ola 2** (COS-106→107): consolidar, eliminar duplicados, Lifecycle Policy
+- **Ola 3** (COS-108): Mission Control Intelligence — salud del sistema en tiempo real
+- **Ola 4**: Ariadne cierra el ciclo cognitivo de forma autónoma
+
+### La frase que define el salto
+
+> *"El sistema aprende. No solamente ejecuta."*
+
