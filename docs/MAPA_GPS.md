@@ -1051,3 +1051,50 @@ COS COMPLETO: el sistema se gobierna y se conoce a sí mismo
 
 `origen: computer | evento: SESION_CIERRE_DEFINITIVO | 27 Jul 2026`
 
+
+
+---
+
+## Sección 17 — MANIFIESTO-COS-v1 · Cierre Etapa Fundacional · 27 JUL 2026 (noche)
+
+**Commit:** `e0a7cac9` — `aliun-rrhh-v2/doctrines/MANIFIESTO-COS-v1.md`
+
+### El cierre correcto
+
+No es "definitivo" — el COS es un organismo vivo.
+Lo que cierra aquí es la **etapa fundacional**: los 10 principios y la ecuación
+quedan sellados como base inmutable de toda evolución futura.
+
+### Los 10 principios en una línea cada uno
+
+1. El cliente es el centro, no el producto
+2. El conocimiento es un activo estructural
+3. Todo cambio es un evento
+4. El conocimiento precede a la implementación
+5. Una sola verdad operativa
+6. Reutilización antes que expansión
+7. El COS es un organismo vivo (6 inteligencias)
+8. El sistema debe poder observarse
+9. El sistema debe poder evaluarse
+10. La evolución se mide por inteligencia
+
+### La ecuación extendida del COS
+
+```
+CUSTOMER + PRODUCT + CONTEXT + STATE + POLICY + KNOWLEDGE + EVENTS = ACTION
+```
+
+### Estado arquitectónico al cerrar la etapa fundacional
+
+| Nivel | Componente | Status |
+|-------|-----------|--------|
+| Motor | Commercial Runtime + CRM + Events + PKI + Marketing | ✅ |
+| Governance | ATLAS-SDD + Control Cognitivo + Protocolos | ✅ |
+| Metaarquitectura | COS v1→v2.5 + Manifiesto | ✅ **etapa fundacional cerrada** |
+| Ola 1 | 5 registros OI (ATL-099) | 🔄 próxima ejecución |
+| Ola 4 | Self Assessment Ariadne (ATL-101) | 📋 visión |
+
+> *"No construimos soluciones aisladas. Construimos capacidades reutilizables."*
+
+`origen: computer | evento: ETAPA_FUNDACIONAL_CERRADA | 27 Jul 2026`
+
