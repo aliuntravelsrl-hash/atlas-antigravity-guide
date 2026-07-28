@@ -1098,3 +1098,54 @@ CUSTOMER + PRODUCT + CONTEXT + STATE + POLICY + KNOWLEDGE + EVENTS = ACTION
 
 `origen: computer | evento: ETAPA_FUNDACIONAL_CERRADA | 27 Jul 2026`
 
+
+
+---
+
+## Sección 18 — ACTA-FUNDACIONAL-v1 · Las 5 Edades · 27 JUL 2026 (final de sesión)
+
+**Commit:** `8ce1b4b4` — `aliun-rrhh-v2/doctrines/ACTA-FUNDACIONAL-v1.md`
+
+### Las 5 Edades en una línea
+
+```
+I   Infraestructura  → el sistema aprendió a existir
+II  Automatización   → el sistema aprendió a operar sin intervención
+III Inteligencia     → el sistema aprendió a razonar sobre el negocio
+IV  Gobernanza       → el sistema aprendió a gobernarse a sí mismo
+V   Evolución        → el sistema aprende a mejorar sin perder coherencia ← HOY
+```
+
+### Arquitectura visual final
+
+```
+                         ALIUN TRAVEL
+                               │
+                COMMERCIAL OPERATING SYSTEM
+                               │
+     ┌─────────────────────────────────────────────────────┐
+     │                 INTELLIGENCE LAYER                  │
+     │ Customer │ Product │ Attraction │ Event │ Knowledge │ Operational
+     └─────────────────────────────────────────────────────┘
+                               │
+                    COMMERCIAL RUNTIME
+                               │
+                  Hermes · Ariadne · Swarm
+                               │
+              SUPABASE · N8N · VPS · MISSION CONTROL
+```
+
+### COS v3 — Adaptive
+
+Prerequisitos: Olas 1-3 completas + 3 Self Assessments de Ariadne.
+Capacidad: detectar desviaciones, proponer mejoras, priorizar con evidencia.
+
+### 7 doctrinas activas al cerrar la etapa fundacional
+
+`ATLAS-SDD-v1` · `ATLAS-CONTROL-SYSTEM-v1` · `COS-v1` · `COS-v2` · `COS-v2.5` · `MANIFIESTO-COS-v1` · `ACTA-FUNDACIONAL-v1`
+
+> *"La arquitectura que distingue a una plataforma que evoluciona*
+> *de una aplicación que crece por acumulación."*
+
+`origen: computer | evento: ACTA_FUNDACIONAL_SELLADA | 27 Jul 2026`
+
