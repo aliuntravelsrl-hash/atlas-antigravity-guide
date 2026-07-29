@@ -18,11 +18,12 @@ Este documento consolida el mapa de archivos físicos, repositorios, ubicaciones
 | **Catálogo General & Búsqueda** | `src/pages/HotelCatalogPage.jsx`<br>`src/pages/HotelsPage.jsx` | **✅ Operativo** | Cargar datos desde Supabase filtrando por estado activo. |
 | **Carrusel de Destinos Populares** | `src/components/CategoryCards.jsx` | **✅ Operativo** (Migrado a Swiper 3D Coverflow) | **NO TOCAR** el fondo degradado claro para mantener consistencia visual con el Home y el estilo ShareTrip. |
 | **Carrusel de Ofertas Especiales** | `src/components/OffersSection.jsx` | **✅ Operativo** (Migrado a Swiper lineal con loop infinito) | **NO TOCAR** la lógica de duplicación si las ofertas son < 6 para evitar fallas del loop en producción. |
-| **Ficha del Hotel** | `src/pages/HotelFullPage.jsx`<br>`src/pages/HotelPage.jsx`<br>`src/pages/HotelDetailPage.jsx` | **✅ Operativo** (Fase 1 completada) | **NO TOCAR** el renderizador de galerías de fotos. Debe usar proxy HTTPS `images.weserv.nl`. |
+| **Ficha del Hotel** | `src/pages/HotelFullPage.jsx`<br>`src/pages/HotelPage.jsx`<br>`src/pages/HotelDetailPage.jsx` | **✅ Operativo** (Fase 1 completada + inyección de Hotel Schema dinámico) | **NO TOCAR** el renderizador de galerías de fotos ni duplicar schemas globales de la agencia en el Helmet de la ficha. |
 | **Flujo de Reserva de Hotel** | `src/pages/booking/RoomSelection.jsx`<br>`src/pages/booking/GuestDetails.jsx`<br>`src/pages/booking/ReviewBooking.jsx`<br>`src/pages/booking/Confirm.jsx` | **✅ Operativo** (Flujo nativo conectado a Supabase) | **NO TOCAR** la lógica de cálculo de precios del lado del cliente en `ReviewBooking.jsx`; debe basarse en el RPC `calcular_cotizacion`. |
 | **Catálogo de Excursiones** | `src/pages/ExcursionsPage.jsx`<br>`src/pages/ExcursionStandalonePage.jsx` | **✅ Operativo** (Solo catálogo visual) | **PENDIENTE:** Conectar el checkout final al RPC `funnel_excursiones`. |
 | **Gestión de Ofertas** | `src/pages/oferta/OfertaDetalle.jsx`<br>`src/pages/reserva/ReservaOferta.jsx` | **✅ Operativo** | **NO TOCAR** el flag de origen `source = 'atlas_offer'` en el INSERT del booking. |
 | **Pasarela de Pagos & Checkout** | `src/pages/checkout/CheckoutPage.jsx`<br>`src/pages/checkout/CheckoutRedirectHandler.jsx` | **⚠️ En espera (RNC)** | **REGLA SEV0:** Prohibido utilizar `service_role` key de Supabase. El cobro y verificación se delega a n8n. |
+| **Markup Schema.org** | `src/components/seo/SchemaMarkup.jsx` | **✅ Operativo** (Inyección dinámica de TravelAgency en Home y LocalBusiness en Contacto - SEO-004) | **NO duplicar** esquemas globales en otras subpáginas de producto. |
 
 ---
 
@@ -51,9 +52,10 @@ Este documento consolida el mapa de archivos físicos, repositorios, ubicaciones
 | **Cliente supabaseAdmin** | `src/lib/supabaseAdmin.js` | **✅ Existe** — fallback a anon key hardcodeado | `VITE_SUPABASE_SERVICE_KEY` **NO está** en los GitHub Actions secrets del workflow. Solo están `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`. Agregar el secret para activar service_role real. |
 | **Mission Control** | `src/components/MissionControlLive.jsx` (ruta `/mission`) | **✅ Operativo** (v2.8 — dual-feed Actividad Reciente) | Poll: FAST=30s, MED=60s, SLOW=300s. |
 | **Mesa de Tareas** | Parte de `MissionControlLive.jsx` | **✅ Operativo** — 32 tareas activas en `atlas_tasks` | Filtros, + Nueva Tarea, badges de frente. |
-| **Marketing Mission Control** | `src/pages/admin/MarketingMissionControl.jsx` (ruta `/marketing`) | **✅ Operativo** | — |
-| **Ariadne Data Panel** | `src/pages/admin/AriadnePanel.jsx` (ruta `/ariadne`) | **✅ Operativo** | — |
-| **War Room / Mission Control (CCC)** | `src/components/marketing/WarRoomV50.jsx` (ruta `/warroom`) | **✅ Operativo** (v1.6 — Constitutional Control Center - CCC) | **REGLA DE INMUTABILIDAD:** Vista de solo lectura, no realiza modificaciones directamente, solo observa evidencia. |
+| **Marketing Mission Control** | `src/pages/admin/MarketingMissionControl.jsx` (ruta `/marketing`) | **✅ Operativo** (Conectado a datos reales: DOP/USD, OpenRouter y Swarm) | — |
+| **Ariadne Data Panel** | `src/pages/admin/AriadnePanel.jsx` (ruta `/ariadne`) | **✅ Operativo** (Conectado a datos reales de Supabase: excursiones, VPS, logs) | — |
+| **War Room / Mission Control (CCC)** | `src/components/marketing/WarRoomV50.jsx` (ruta `/warroom`) | **✅ Operativo** (v5.0 modularizado, incluye SwarmMonitor y CRMEventMonitor) | **REGLA DE INMUTABILIDAD:** Vista de solo lectura, no realiza modificaciones directamente, solo observa evidencia. |
+| **Módulo Contable (Facturación)** | `src/pages/admin/AdminAccountingPage.jsx` (ruta `/admin/accounting`) | **✅ Operativo** (Fase 3 - modal de facturación grupal con validaciones en DOP) | NO TOCAR el despachador de payloads a /webhook/factura-grupal. |
 | **Integrity Monitor** | Ruta `/integrity` | **✅ Operativo** | — |
 | **Hoteles Admin** | `src/pages/admin/AdminHotelsPage.jsx` (ruta `/admin/hotels`) | **✅ Operativo** | — |
 | **Excursiones Admin** | `src/pages/admin/AdminExcursionsPage.jsx` (ruta `/admin/excursions`) | **✅ Operativo** | — |
