@@ -1,6 +1,6 @@
 # 🗺️ MAPA GPS — Arquitectura de Código del Ecosistema ATLAS
-**Actualizado:** 17 de Julio de 2026 | **SSOT de Rutas y Estado Operativo**
-**Última actualización por:** Computer (Perplexity) — Sesión 17 JUL 2026 — Antigravity en time-out Google
+**Actualizado:** 28 de Julio de 2026 | **SSOT de Rutas y Estado Operativo**
+**Última actualización por:** Antigravity — Sesión 28 JUL 2026 (Ola 2 - Mission Control CCC)
 
 Este documento consolida el mapa de archivos físicos, repositorios, ubicaciones de red, estados operativos y restricciones de modificación para todos los componentes del ecosistema ATLAS.
 
@@ -53,7 +53,7 @@ Este documento consolida el mapa de archivos físicos, repositorios, ubicaciones
 | **Mesa de Tareas** | Parte de `MissionControlLive.jsx` | **✅ Operativo** — 32 tareas activas en `atlas_tasks` | Filtros, + Nueva Tarea, badges de frente. |
 | **Marketing Mission Control** | `src/pages/admin/MarketingMissionControl.jsx` (ruta `/marketing`) | **✅ Operativo** | — |
 | **Ariadne Data Panel** | `src/pages/admin/AriadnePanel.jsx` (ruta `/ariadne`) | **✅ Operativo** | — |
-| **War Room** | `src/components/marketing/WarRoomV41.jsx` (ruta `/warroom`) | **✅ Operativo** | — |
+| **War Room / Mission Control (CCC)** | `src/components/marketing/WarRoomV50.jsx` (ruta `/warroom`) | **✅ Operativo** (v1.6 — Constitutional Control Center - CCC) | **REGLA DE INMUTABILIDAD:** Vista de solo lectura, no realiza modificaciones directamente, solo observa evidencia. |
 | **Integrity Monitor** | Ruta `/integrity` | **✅ Operativo** | — |
 | **Hoteles Admin** | `src/pages/admin/AdminHotelsPage.jsx` (ruta `/admin/hotels`) | **✅ Operativo** | — |
 | **Excursiones Admin** | `src/pages/admin/AdminExcursionsPage.jsx` (ruta `/admin/excursions`) | **✅ Operativo** | — |
