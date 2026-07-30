@@ -1297,4 +1297,21 @@ Plataforma de automatización  →  Sistema Operativo Comercial Cognitivo
 `origen: antigravity | evento: CONSTITUTIONAL_READINESS_UPDATED | 30 Jul 2026`
 
 
+---
+
+## Sección 24 — Diagnóstico y Resolución "Not Found / Página en Blanco" · 30 JUL 2026 (sesión actual)
+
+**Commit:** `c02b98a` (frontend)
+**Tareas completadas en Mission Control:** `[ATL-121]` (Resolución de enrutamiento y resiliencia)
+
+### Resumen de Cambios e Integraciones
+*   **Vinculación del Componente 404 Formal:** En el enrutador principal [App.jsx](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/src/App.jsx) de la web de reservas, se reemplazó la definición inline básica por el componente lazy `NotFoundPage` (`src/pages/NotFoundPage.jsx`), que incluye una cabecera y pie de página y botones interactivos de redirección.
+*   **Implementación de Resiliencia ante Excepciones:** Se importó y montó el componente `GlobalErrorBoundary` (`src/components/GlobalErrorBoundary.jsx`) envolviendo a `AppContent`. Esto evita que cualquier excepción en runtime o fallos al cargar chunks asíncronos (`ChunkLoadError`) dejen la aplicación con una pantalla en blanco, mostrando una interfaz de recuperación de emergencia y diagnóstico.
+*   **Creación del Manual de Operaciones de Reservas:** Creado el manual [`docs/MANUAL_DE_OPERACIONES_Y_VERSIONES.md`](file:///C:/Users/Admin/Downloads/atlas-booking-frontend-v2/docs/MANUAL_DE_OPERACIONES_Y_VERSIONES.md) detallando las políticas de versión, mitigación de errores de CORS/MIME y el comportamiento de la reescritura en Apache (`.htaccess`).
+
+> *"La web de reservas cuenta ahora con un arnés de resiliencia completo ante pantallas en blanco y una interfaz de error 404 integrada con el diseño del ecosistema."*
+
+`origen: antigravity | evento: FRONTEND_ROUTING_FIXED | 30 Jul 2026`
+
+
 
