@@ -1332,4 +1332,21 @@ Plataforma de automatización  →  Sistema Operativo Comercial Cognitivo
 `origen: antigravity | evento: DEPENDENCY_INTELLIGENCE_LIVE | 30 Jul 2026`
 
 
+---
+
+## Sección 26 — Formalización de la Familia Arquitectónica MC-RM · 30 JUL 2026 (sesión actual)
+
+**Commit:** `7ec29e8` (guía)
+**Tareas completadas en Mission Control:** Creación de especificación arquitectónica contra el acoplamiento de lógica de negocio en React.
+
+### Resumen de Cambios e Integraciones
+*   **Creación del Documento MC-RM:** Se creó el archivo de doctrina [`docs/MC-RM.md`](file:///C:/Users/Admin/Downloads/atlas-antigravity-guide/docs/MC-RM.md) para formalizar la separación entre Write Models (acciones de Swarm/agentes), SSOT y Certified Read Models consumidos por la UI.
+*   **Institución de la Regla MC-RM-001:** Bloquea de forma constitucional a futuro cualquier inyección de lógica de negocio o queries directas a tablas transaccionales desde el frontend en Mission Control.
+*   **Mapeo de la Familia de Telemetría:** Registrados los 7 miembros de la familia de Read Models (4 activos, 3 planificados).
+
+> *"Se ha establecido el marco formal del Kernel Visual de Mission Control, consolidando la separación definitiva entre ejecución, conocimiento, gobernanza y presentación en el plano de datos."*
+
+`origen: antigravity | evento: MC_RM_FORMALIZATION | 30 Jul 2026`
+
+
 
