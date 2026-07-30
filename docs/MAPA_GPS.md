@@ -1349,4 +1349,20 @@ Plataforma de automatización  →  Sistema Operativo Comercial Cognitivo
 `origen: antigravity | evento: MC_RM_FORMALIZATION | 30 Jul 2026`
 
 
+---
+
+## Sección 27 — Unificación de Ejecutores y Visualización del Swarm Completo · 30 JUL 2026 (sesión actual)
+
+**Commit:** `41af5d7` (admin)
+**Tareas completadas en Mission Control:** Corrección y normalización de la telemetría de distribución por ejecutor en el backlog.
+
+### Resumen de Cambios e Integraciones
+*   **Unificación Canónica de Identidades:** Se modificó [AtlasExecutionPulse.jsx](file:///C:/Users/Admin/Downloads/-atlas-admin-v2/src/components/marketing/AtlasExecutionPulse.jsx) para consolidar los nombres equivalentes del principal agente (`claude` y `computer` se agrupan bajo su alias canónico `atlas-tech`, y los sub-aliases de Ariadne se unifican en `ariadne-data`).
+*   **Visualización del Equipo Completo:** Se eliminó el recorte restrictivo (`.slice(0, 6)`) y se pre-poblaron con `0` tareas los 7 ejecutores oficiales del ecosistema (incluyendo `hermes-qa` y `ariadne-data`), de modo que el panel "Por ejecutor" expone siempre el Swarm completo con datos verídicos y sin ausencias.
+
+> *"El panel Execution Pulse muestra ahora la carga de trabajo real y unificada del Swarm, eliminando duplicaciones de identidades de agentes e integrando a todo el staff en la visualización."*
+
+`origen: antigravity | evento: SWARM_EXECUTORS_NORMALIZED | 30 Jul 2026`
+
+
 
