@@ -1314,4 +1314,22 @@ Plataforma de automatización  →  Sistema Operativo Comercial Cognitivo
 `origen: antigravity | evento: FRONTEND_ROUTING_FIXED | 30 Jul 2026`
 
 
+---
+
+## Sección 25 — Integración Live "Dependency Intelligence" · 30 JUL 2026 (sesión actual)
+
+**Commit:** `d916f60` (admin)
+**Tareas completadas en Mission Control:** Integración de telemetría de dependencias del backlog.
+
+### Resumen de Cambios e Integraciones
+*   **Componente Autogestionado `DependencyIntelligence.jsx`:** Creado bajo [DependencyIntelligence.jsx](file:///C:/Users/Admin/Downloads/-atlas-admin-v2/src/components/marketing/mission-control/DependencyIntelligence.jsx) y configurado para consultar autónomamente la RPC `mc_dependency_intelligence` de Supabase cada 30 segundos, manteniendo la interfaz fresca con datos de dependencias en vivo.
+*   **Remoción de Componente Estático Antiguo:** Se eliminó el antiguo archivo estático redundante en `src/components/marketing/DependencyIntelligence.jsx` y se actualizó `MissionControlLive.jsx` para importar el nuevo componente autogestionado en el path correcto.
+*   **Integración en el Plano Operativo de la War Room:** Inyectado el componente `<DependencyIntelligence />` dentro del Plano Operativo en [WarRoomV50.jsx](file:///C:/Users/Admin/Downloads/-atlas-admin-v2/src/components/marketing/WarRoomV50.jsx) para completar el dashboard CCC de control de cuellos de botella del Swarm en tiempo real.
+*   **Manual de Operación de la War Room:** Actualizado el manual [`docs/MANUAL_OPERACION_WAR_ROOM_V50.md`](file:///C:/Users/Admin/Downloads/atlas-antigravity-guide/docs/MANUAL_OPERACION_WAR_ROOM_V50.md) (versión `v5.0.4` activa) registrando el mapeo de dependencias de la nueva RPC.
+
+> *"La War Room integra ahora el Plano Operativo de control de dependencias en vivo, detectando cuellos de botella activos (prioridades críticas/altas) y tareas liberadas recientemente de forma autónoma."*
+
+`origen: antigravity | evento: DEPENDENCY_INTELLIGENCE_LIVE | 30 Jul 2026`
+
+
 

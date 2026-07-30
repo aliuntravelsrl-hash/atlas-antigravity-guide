@@ -14,7 +14,8 @@
 | **v5.0.0** | 25 Jul 2026 | Antigravity | Primera implementación real de la especificación con Promise.allSettled y RPCs de Supabase. | Reemplazado 🔄 |
 | **v5.0.1** | 26 Jul 2026 (AM) | Antigravity | Reparación de bucles infinitos e inyección de mecanismos de resiliencia (`withTimeout` de 4s y `safetyTimeout` de 5s). | Reemplazado 🔄 |
 | **v5.0.2** | 26 Jul 2026 (PM) | Antigravity | Integración de filtros locales en memoria con `timeFilter` ('24h'/'7d'/'all'), ampliación de la ventana de incidentes de Hermes a 7 días y reescritura absoluta `/index.html` en `.htaccess` contra 403/404. | Reemplazado 🔄 |
-| **v5.0.3** | 30 Jul 2026 | Antigravity | Refactorización de `ConstitutionalReadiness.jsx` para adaptarla a la nueva respuesta JSON de `mc_constitutional_readiness()`, implementando puertas (gates), barras de dimensiones y motivos de bloqueo. | **ACTIVO (En producción) ✅** |
+| **v5.0.3** | 30 Jul 2026 | Antigravity | Refactorización de `ConstitutionalReadiness.jsx` para adaptarla a la nueva respuesta JSON de `mc_constitutional_readiness()`, implementando puertas (gates), barras de dimensiones y motivos de bloqueo. | Reemplazado 🔄 |
+| **v5.0.4** | 30 Jul 2026 | Antigravity | Integración en el Plano Operativo del nuevo componente autogestionado `DependencyIntelligence.jsx` que consume `mc_dependency_intelligence()` con refresco en vivo cada 30 segundos. | **ACTIVO (En producción) ✅** |
 
 ---
 
@@ -38,6 +39,7 @@ Toda llamada de red se encapsula de forma individual en promesas individuales re
 9. **mc_execution_readiness():** Entrega el nivel de integridad KBP por agente del Swarm (ej. `hermes-commercial`), ordenando para mostrar el último evento de rehidratación.
 10. **mc_pipeline_health():** Proporciona métricas en tiempo real de la cola de tareas del pipeline (pending, ready, executing, completed_today, failed, sla_breached).
 11. **mc_swarm_health():** Proporciona la telemetría en vivo del Swarm (ejecutando, pendientes, completadas hoy y estatus de última actividad para los 6 agentes).
+12. **mc_dependency_intelligence():** Retorna las estadísticas del backlog de dependencias, cuellos de botella activos (prioridad crítica/alta) y tareas recién resueltas y desbloqueadas en vivo. Consumido dinámicamente y con refresco automático de 30s por `DependencyIntelligence.jsx`.
 
 ---
 
