@@ -1241,3 +1241,22 @@ Plataforma de automatización  →  Sistema Operativo Comercial Cognitivo
 
 `origen: computer | evento: COS_V3_1_SELLADO | 27 Jul 2026`
 
+---
+
+## Sección 21 — Hitos ATLAS & SEO-005 · Cierre de Hitos · 29 JUL 2026 (cierre de sesión)
+
+**Commit Hitos ATLAS:** `7cf40ac` (frontend) & `d23d02f` (admin)
+**Tareas completadas en Mission Control:** `[ATL-116]`, `[ATL-079]`, `[SEO-ANALYTICS-001]`, `[ATL-120]`, `[ATL-001]`
+
+### Resumen de Refactorizaciones y QA
+*   **Multimoneda Dinámica (`[ATL-116]`):** Desacoplado el símbolo de precio `$` y la divisa `USD` estática en `GroupedOfferCard.jsx` para leerlos dinámicamente desde el Read Model (`moneda` / `simbolo_moneda`) de Supabase.
+*   **Certificación MCP v1.3.0 (`[ATL-079]`):** Ejecutada prueba exitosa de la matriz de estados 5x5 (`REGISTERED` ➔ `DISCOVERABLE` ➔ `CALLABLE` ➔ `RETURN` ➔ `ERROR`) sobre las 5 herramientas críticas de `atlas-sales-mcp`.
+*   **Inyección Dinámica de Analytics (`[SEO-ANALYTICS-001]`):** Eliminación total de scripts de tracking estáticos en `index.html` e inyección por javascript encapsulado en `analytics.js`, desactivada por completo al detectar hosts de desarrollo o pre-renderizado SSG de Puppeteer (`ReactSnap`), evitando errores en consola.
+*   **Supplier Health (`[ATL-120]`):** Consolidación visual de la salud e integración de proveedores (Ratehawk, TBO, GoGlobal) en el Plano Governance de `WarRoomV50.jsx`.
+*   **Migración Supabase Auth (`[ATL-001]`):** Preparación del script SQL DDL de migración para asociar la autenticación real con RLS en `public.admin_users`.
+
+> *"La web pública y el panel operativo se comunican dinámicamente, asegurando consistencia multimoneda y analíticas limpias sin interferencias del renderizador estático."*
+
+`origen: antigravity | evento: HITOS_ATLAS_Y_SEO_COMPLETADOS | 29 Jul 2026`
+
+

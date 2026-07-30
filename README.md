@@ -24,6 +24,7 @@
 | [`docs/MIGRACION_PAGOS_SUPABASE.md`](./docs/MIGRACION_PAGOS_SUPABASE.md) | Migración del esquema de pagos — atlas_payments, SEV0 service_role |
 | [`docs/PLAN_SCHEMA_AUDITORIA_BOOKINGS.md`](./docs/PLAN_SCHEMA_AUDITORIA_BOOKINGS.md) | Plan de auditoría del schema de bookings |
 | [`docs/OVERVIEW_FRONTEND_V2.md`](./docs/OVERVIEW_FRONTEND_V2.md) | Vista general del frontend v2 |
+| [`docs/manual_operacion_analiticas.md`](./docs/manual_operacion_analiticas.md) | **Analytics e Inmunidad SSG** — inyección dinámica, exclusión en localhost |
 
 ---
 
@@ -40,4 +41,4 @@
 ---
 
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
-*Última actualización de índice: ATLAS-TECH — 18 JUL 2026*
+*Última actualización de índice: Antigravity — 29 JUL 2026*

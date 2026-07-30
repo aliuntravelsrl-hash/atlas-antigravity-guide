@@ -170,18 +170,18 @@ Comunicar al Director el resumen de lo completado para que ATLAS-TECH sincronice
 
 ---
 
-## 📅 8. Schedule de Tareas Activo (18 Jul 2026)
+## 📅 8. Schedule de Tareas Activo (29 Jul 2026)
 
-| Código | Tarea | Prioridad | Sprint |
-|--------|-------|-----------|--------|
-| **AG-001** | Adoptar protocolo de cierre en sesiones | Alta | Esta semana |
-| **B-5** | Fix abonos DOP interpretados como USD en BookingOpsPanel | Alta | Esta semana |
-| **FIN-003** | Panel conciliación contable en Mission Control | Alta | Sprint-1 |
-| **F3-MKT-UI-001** | Marketing + Ariadne datos reales ampliados | Alta | Backlog |
-| **I-7** | Botón PDF cotización desde RoomSelection | Baja | Este mes |
+| Código | Tarea | Prioridad | Sprint | Estado |
+|--------|-------|-----------|--------|--------|
+| **ATL-116** | Precios Canónicos Multimoneda Dinámica en Catalogo | Crítica | Esta sesión | **✅ Completada** |
+| **ATL-079** | Certificación Matriz 5x5 Servidor MCP | Alta | Esta sesión | **✅ Completada** |
+| **SEO-ANALYTICS-001** | Inyección Dinámica Analytics (GTM/Meta Pixel) libre de SSG | Crítica | Esta sesión | **✅ Completada** |
+| **ATL-120** | Supplier Health en Plano Governance (WarRoomV50) | Alta | Esta sesión | **✅ Completada** |
+| **ATL-001** | Migración Supabase Auth Real + DDL RLS en admin_users | Alta | Esta sesión | **⚠️ DDL Escrito, listo para Run** |
 
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
-*Última actualización: ATLAS-TECH — 18 JUL 2026*
+*Última actualización: Antigravity — 29 JUL 2026*
 
 ---
 
@@ -203,6 +203,6 @@ Contiene todos los documentos vivos del ecosistema:
 - F1: Canales reactivos (Instagram ✅, Chatwoot ❌)
 - F2: Capa operativa (staging ✅, limpieza ✅)
 - F3: LISTEN/NOTIFY ✅ completado
-- F4: GitOps — 90 días
+- F4: GitOps — 90 días (Fases 1 a 5 completadas en staging local y listas)
 
 > Si vas a crear algo nuevo, verifica primero si ya existe en MASTER-INDEX.
