@@ -2,7 +2,7 @@
 **Código de Componente:** `WarRoomV50.jsx`
 **Ruta en Admin:** `/warroom`
 **Ecosistema:** ATLAS
-**Última actualización:** 26 Jul 2026 (Fase 11 - Integración de Toggle Temporal y Resiliencia en Red)
+**Última actualización:** 30 Jul 2026 (Fase 12 - Incorporación de Readiness Gates y Dimensiones Constitucionales)
 
 ---
 
@@ -13,7 +13,8 @@
 | **v4.1** | Legacy | Swarm | Logs hardcodeados, sin conexión real de base de datos ni semáforos de cables. | Deprecado ❌ |
 | **v5.0.0** | 25 Jul 2026 | Antigravity | Primera implementación real de la especificación con Promise.allSettled y RPCs de Supabase. | Reemplazado 🔄 |
 | **v5.0.1** | 26 Jul 2026 (AM) | Antigravity | Reparación de bucles infinitos e inyección de mecanismos de resiliencia (`withTimeout` de 4s y `safetyTimeout` de 5s). | Reemplazado 🔄 |
-| **v5.0.2** | 26 Jul 2026 (PM) | Antigravity | Integración de filtros locales en memoria con `timeFilter` ('24h'/'7d'/'all'), ampliación de la ventana de incidentes de Hermes a 7 días y reescritura absoluta `/index.html` en `.htaccess` contra 403/404. | **ACTIVO (En producción) ✅** |
+| **v5.0.2** | 26 Jul 2026 (PM) | Antigravity | Integración de filtros locales en memoria con `timeFilter` ('24h'/'7d'/'all'), ampliación de la ventana de incidentes de Hermes a 7 días y reescritura absoluta `/index.html` en `.htaccess` contra 403/404. | Reemplazado 🔄 |
+| **v5.0.3** | 30 Jul 2026 | Antigravity | Refactorización de `ConstitutionalReadiness.jsx` para adaptarla a la nueva respuesta JSON de `mc_constitutional_readiness()`, implementando puertas (gates), barras de dimensiones y motivos de bloqueo. | **ACTIVO (En producción) ✅** |
 
 ---
 
@@ -33,6 +34,10 @@ Toda llamada de red se encapsula de forma individual en promesas individuales re
 5. **ledger (Integridad Ledger):** `supabase.rpc('get_payment_ledger_breakdown')`
 6. **hotel_knowledge (Registros HK):** `supabase.from('hotel_knowledge').select(...)`
 7. **SSOT individuales (Hoteles/Habitaciones/Tarifas/Temporadas/Leads/Ledger):** Consultas independientes por conteo (`count: 'exact', head: true`).
+8. **mc_constitutional_readiness():** Retorna el estatus de las puertas constitucionales (gates: AGF, EVO, TPP, KBP, OVR, CRP), dimensiones de madurez (pipeline, execution, knowledge, governance, evidence) y el listado de razones de bloqueo.
+9. **mc_execution_readiness():** Entrega el nivel de integridad KBP por agente del Swarm (ej. `hermes-commercial`), ordenando para mostrar el último evento de rehidratación.
+10. **mc_pipeline_health():** Proporciona métricas en tiempo real de la cola de tareas del pipeline (pending, ready, executing, completed_today, failed, sla_breached).
+11. **mc_swarm_health():** Proporciona la telemetría en vivo del Swarm (ejecutando, pendientes, completadas hoy y estatus de última actividad para los 6 agentes).
 
 ---
 

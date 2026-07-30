@@ -1279,4 +1279,22 @@ Plataforma de automatización  →  Sistema Operativo Comercial Cognitivo
 `origen: antigravity | evento: EXECUTION_READINESS_INTEGRATED | 30 Jul 2026`
 
 
+---
+
+## Sección 23 — Update Constitutional Readiness · 30 JUL 2026 (sesión actual)
+
+**Commit:** `25f7f06` (admin)
+**Tareas completadas en Mission Control:** Refactorización de `ConstitutionalReadiness.jsx`
+
+### Resumen de Cambios e Integraciones
+*   **Actualización del Widget Constitutional Readiness:** Adaptado para soportar el nuevo formato JSON devuelto por la función `mc_constitutional_readiness()`, que ahora distribuye la información en:
+    *   **Constitutional Gates (`gates`):** Mapa que detalla el estatus de madurez para AGF, EVO, TPP, KBP, OVR, CRP con sus respectivos estados (`PASS`, `FAIL`, `PENDING`, `PLANNED`).
+    *   **Dimension Analysis (`dimensions`):** Desglose numérico de las 5 dimensiones clave de madurez (Pipeline, Execution, Knowledge, Governance, Evidence), cada una puntuada sobre un máximo de 20 pts y sumando el total acumulado de `/100`.
+    *   **Motivos del Bloqueo (`blocking`):** Lista dinámica de cadenas de texto detallando las razones de suspensión de ejecución en el plano constitucional.
+
+> *"El panel de Readiness del Plano Constitucional ahora mapea directamente las 6 puertas de control y las 5 dimensiones del COS, ofreciendo una visualización granular y semáforos específicos de habilitación en caliente."*
+
+`origen: antigravity | evento: CONSTITUTIONAL_READINESS_UPDATED | 30 Jul 2026`
+
+
 
