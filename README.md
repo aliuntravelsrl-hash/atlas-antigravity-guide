@@ -28,6 +28,19 @@
 
 ---
 
+
+---
+
+## 🚀 Execution Workspace
+
+> Registro de ejecución de programas activos. Información operativa mutable — separada de los documentos de orientación.
+
+| Archivo | Propósito |
+|---|---|
+| [`docs/execution/README.md`](./docs/execution/README.md) | Índice general del Execution Workspace |
+| [`docs/execution/portfolio.md`](./docs/execution/portfolio.md) | Estado consolidado de todos los programas activos |
+| [`docs/execution/programs/KPS/`](./docs/execution/programs/KPS/) | **Kernel Projection System** — programa activo, autorizado por `UI-OVR-002` |
+
 ## ⚙️ Reglas de uso
 
 - Leer `CONTEXT.md` **completo** al inicio de cada sesión antes de tocar cualquier archivo.
@@ -41,4 +54,4 @@
 ---
 
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
-*Última actualización de índice: Antigravity — 29 JUL 2026*
+*Última actualización de índice: computer-perplexity — 03 AGO 2026 · KPS-EXP-001-v3 instanciado*
