@@ -8,6 +8,7 @@
 
 | Archivo | Propósito |
 |---|---|
+| [`REHYDRATION-ANTIGRAVITY.md`](./REHYDRATION-ANTIGRAVITY.md) | **Rehidratación específica del rol Antigravity** — identidad, autoridad, estado PAUSADO y criterio de reanudación |
 | [`CONTEXT.md`](./CONTEXT.md) | Identidad, infraestructura, repos, estado actual y reglas de desarrollo |
 | [`ROADMAP_B2B_PAGOS.md`](./ROADMAP_B2B_PAGOS.md) | Integración APIs B2B (Ratehawk, TBO) y pasarelas de pago (AZUL) |
 | [`docs/MAPA_GPS.md`](./docs/MAPA_GPS.md) | **SSOT de rutas de código** — qué tocar, qué no, estado operativo por componente |
@@ -25,9 +26,6 @@
 | [`docs/PLAN_SCHEMA_AUDITORIA_BOOKINGS.md`](./docs/PLAN_SCHEMA_AUDITORIA_BOOKINGS.md) | Plan de auditoría del schema de bookings |
 | [`docs/OVERVIEW_FRONTEND_V2.md`](./docs/OVERVIEW_FRONTEND_V2.md) | Vista general del frontend v2 |
 | [`docs/manual_operacion_analiticas.md`](./docs/manual_operacion_analiticas.md) | **Analytics e Inmunidad SSG** — inyección dinámica, exclusión en localhost |
-
----
-
 
 ---
 
@@ -54,4 +52,4 @@
 ---
 
 *Mantenido por: Director Aldo Hilario | Aliun Travel SRL | República Dominicana*
-*Última actualización de índice: computer-perplexity — 03 AGO 2026 · KPS-EXP-001-v3 instanciado*
+*Última actualización de índice: 8 AGO 2026 · REHYDRATION-ANTIGRAVITY añadido · estado PAUSADO preservado desde 30 JUL 2026*
