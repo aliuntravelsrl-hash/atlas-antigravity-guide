@@ -6,7 +6,7 @@
 **Autoridad constitucional:** NO
 **Responsable institucional:** Director Aldo Hilario
 **Estado actual:** PAUSADO / DETENIDO
-**Último estado operativo confirmado en este repo:** 30 JUL 2026
+**Último estado operativo confirmado en este repo:** 31 JUL 2026 — como mínimo (ver nota de auditoría, Sección 10)
 **Estado del protocolo anterior:** VIGENTE PARA ESTE REPO HASTA MIGRACIÓN FORMAL
 
 > Este documento adapta el contrato general de rehidratación al rol específico de Antigravity. No crea una autoridad nueva ni reemplaza la doctrina de `atlas-cos-v1`.
@@ -26,7 +26,7 @@ Certificación: NO.
 Canonización: NO.
 
 Estado: PAUSADO.
-Último estado operativo registrado: 30 JUL 2026.
+Último estado operativo registrado: 31 JUL 2026 (corregido — ver Sección 10).
 ```
 
 Antigravity no debe interpretar su capacidad técnica como autoridad constitucional. Puede ejecutar dentro de una directiva autorizada, pero no puede convertir una necesidad técnica en autorización institucional.
@@ -207,3 +207,31 @@ Hasta entonces, la respuesta correcta ante una tarea antigua o ambigua es **dete
 
 **Mantenido por:** Director Aldo Hilario · Aliun Travel SRL · República Dominicana
 **Estado:** SELLADO COMO ACTUALIZACIÓN DE REHIDRATACIÓN DEL REPO
+
+
+---
+
+## 10. Nota de auditoría — corrección factual (8 Ago 2026)
+
+**La fecha "Último estado operativo: 30 JUL 2026" fue corregida a 31 JUL 2026 tras verificación directa contra GitHub.**
+
+```
+Evidencia: commits reales de Sprint 2 (HITO-EVO-CONCIENCIA-v1.md,
+OVR Contract Interpreter v1, OVR Evidence Card v1) fechados 31 Jul 2026,
+un día después del corte que este documento declaraba al sellarse.
+```
+
+Esta corrección es **factual, no una decisión de autoridad** — no altera el estado `PAUSADO/DETENIDO` de Antigravity, que sigue vigente hasta que exista evidencia explícita y verificable de reanudación (Sección 9). Cambiar la fecha no equivale a cambiar el estado operacional.
+
+**Cadena aplicada:**
+```
+GitHub (evidencia objetiva)
+        ↓
+corrección factual (este documento)
+        ↓
+Curator / Director
+        ↓
+decisiones de autoridad, si las hubiera — ninguna tomada aquí
+```
+
+**Lección para el Sync Layer:** este caso confirma que el Sync Layer no sustituye la verificación contra la fuente primaria — solo evita que una decisión/restricción relevante quede invisible entre actores. La verificación factual directa (Sección "VERIFICACIÓN DIRECTA" del flujo de rehidratación) sigue siendo indispensable incluso con Sync Layer implementado.
